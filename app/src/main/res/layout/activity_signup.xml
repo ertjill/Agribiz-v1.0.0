@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:context=".SignupActivity">
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:contentDescription="@string/app_name"
+        app:srcCompat="@drawable/ellipse_two"
+        tools:ignore="ImageContrastCheck" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="324dp"
+        android:layout_height="130dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="60dp"
+        android:contentDescription="@string/app_name"
+        app:srcCompat="@drawable/agribiz_logo_green" />
+
+    <LinearLayout
+        android:id="@+id/linear_tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="200dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/haveAcc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_regular"
+                android:text="Already have an account?"
+                android:textColor="@color/army_green"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="3dp"
+                android:fontFamily="@font/montserrat_semibold"
+                android:text="Login"
+                android:textColor="@color/yellow_orange"
+                android:textSize="15sp"
+                android:onClick="goToLogin"
+                tools:ignore="TextContrastCheck,UsingOnClickInXml,TouchTargetSizeCheck" />
+
+        </LinearLayout>
+        <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="false">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="30dp"
+                tools:context=".signup.CustomerFragment"
+                tools:ignore="ScrollViewSize">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textInputLayout_usernameCustomer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/army_green"
+                    app:boxBackgroundColor="@color/transparent"
+                    app:boxBackgroundMode="outline"
+                    app:boxCornerRadiusBottomEnd="15dp"
+                    app:boxCornerRadiusBottomStart="15dp"
+                    app:boxCornerRadiusTopEnd="15dp"
+                    app:boxCornerRadiusTopStart="15dp"
+                    app:boxStrokeColor="@color/army_green"
+                    app:hintTextColor="@color/army_green"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:layout_editor_absoluteY="40dp">
+
+                    <EditText
+                        android:id="@+id/editText_usernameCustomer"
+                        style="TextAppearance.App.TextIn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/montserrat_medium"
+                        android:hint="Username"
+                        android:importantForAutofill="no"
+                        android:inputType="text"
+                        android:paddingTop="20dp"
+                        android:textColorHint="@color/color_hint"
+                        android:textCursorDrawable="@null"
+                        android:textSize="16sp"
+                        tools:ignore="SpeakableTextPresentCheck" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textInputLayout_numberCustomer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:backgroundTint="@color/army_green"
+                    app:boxBackgroundColor="@color/transparent"
+                    app:boxBackgroundMode="outline"
+                    app:boxCornerRadiusBottomEnd="15dp"
+                    app:boxCornerRadiusBottomStart="15dp"
+                    app:boxCornerRadiusTopEnd="15dp"
+                    app:boxCornerRadiusTopStart="15dp"
+                    app:boxStrokeColor="@color/army_green"
+                    app:hintTextColor="@color/army_green"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/textInputLayout_usernameCustomer"
+                    tools:layout_editor_absoluteY="40dp"
+                    >
+                    <EditText
+                        android:id="@+id/editText_numberCustomer"
+                        style="TextAppearance.App.TextIn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/montserrat_medium"
+                        android:hint="Phone number"
+                        android:importantForAutofill="no"
+                        android:maxLength="10"
+                        android:inputType="phone"
+                        android:paddingTop="20dp"
+                        android:textColorHint="@color/color_hint"
+                        android:textCursorDrawable="@null"
+                        android:textSize="16sp"
+                        tools:ignore="TextFields,SpeakableTextPresentCheck"
+                        android:drawableStart="@drawable/number_prefix"
+                        android:digits="0123456789"
+                        android:drawablePadding="2dp"
+                        android:drawableTint="@color/color_hint"
+                        android:gravity="center_vertical"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textInputLayout_emailCustomer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:backgroundTint="@color/army_green"
+                    app:boxBackgroundColor="@color/transparent"
+                    app:boxBackgroundMode="outline"
+                    app:boxCornerRadiusBottomEnd="15dp"
+                    app:boxCornerRadiusBottomStart="15dp"
+                    app:boxCornerRadiusTopEnd="15dp"
+                    app:boxCornerRadiusTopStart="15dp"
+                    app:boxStrokeColor="@color/army_green"
+                    app:hintTextColor="@color/army_green"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/textInputLayout_numberCustomer"
+                    tools:layout_editor_absoluteY="40dp">
+
+                    <EditText
+                        android:id="@+id/editText_emailCustomer"
+                        style="TextAppearance.App.TextIn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/montserrat_medium"
+                        android:hint="Email"
+                        android:importantForAutofill="no"
+                        android:inputType="text"
+                        android:paddingTop="20dp"
+                        android:textColorHint="@color/color_hint"
+                        android:textCursorDrawable="@null"
+                        android:textSize="16sp"
+                        tools:ignore="TextFields,SpeakableTextPresentCheck" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textInputLayout_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:backgroundTint="@color/army_green"
+                    app:boxBackgroundColor="@color/transparent"
+                    app:boxBackgroundMode="outline"
+                    app:boxCornerRadiusBottomEnd="15dp"
+                    app:boxCornerRadiusBottomStart="15dp"
+                    app:boxCornerRadiusTopEnd="15dp"
+                    app:boxCornerRadiusTopStart="15dp"
+                    app:boxStrokeColor="@color/army_green"
+                    app:hintTextColor="@color/army_green"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textInputLayout_emailCustomer"
+                    tools:layout_editor_absoluteY="40dp"
+                    app:passwordToggleEnabled="true">
+
+                    <EditText
+                        android:id="@+id/editText_passwordCustomer"
+                        style="TextAppearance.App.TextIn"
+                        android:layout_width="match_parent"
+                        android:layout_height="57dp"
+                        android:fontFamily="@font/montserrat_medium"
+                        android:hint="Password"
+                        android:importantForAutofill="no"
+                        android:inputType="textPassword"
+                        android:paddingTop="20dp"
+                        android:textColorHint="@color/color_hint"
+                        android:textCursorDrawable="@null"
+                        android:textSize="16sp"
+                        tools:ignore="SpeakableTextPresentCheck" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textInputLayout_conPasswordCustomer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:backgroundTint="@color/army_green"
+                    app:boxBackgroundColor="@color/transparent"
+                    app:boxBackgroundMode="outline"
+                    app:boxCornerRadiusBottomEnd="15dp"
+                    app:boxCornerRadiusBottomStart="15dp"
+                    app:boxCornerRadiusTopEnd="15dp"
+                    app:boxCornerRadiusTopStart="15dp"
+                    app:boxStrokeColor="@color/army_green"
+                    app:hintTextColor="@color/army_green"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/textInputLayout_password"
+                    app:passwordToggleEnabled="true">
+
+                    <EditText
+                        android:id="@+id/editText_conPasswordCustomer"
+                        style="TextAppearance.App.TextIn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="45dp"
+                        android:fontFamily="@font/montserrat_medium"
+                        android:hint="Confirm password"
+                        android:importantForAutofill="no"
+                        android:inputType="textPassword"
+                        android:paddingTop="20dp"
+                        android:textColorHint="@color/color_hint"
+                        android:textCursorDrawable="@null"
+                        android:textSize="16sp"
+                        tools:ignore="SpeakableTextPresentCheck" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Button
+                    android:id="@+id/signupCustomer_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginEnd="30dp"
+                    android:backgroundTint="@color/yellow_orange"
+                    android:fontFamily="@font/montserrat_bold"
+                    android:minHeight="55dp"
+                    android:text="Signup"
+                    android:textAllCaps="false"
+                    android:textColor="@color/army_green"
+                    android:textSize="16sp"
+                    app:cornerRadius="24dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textInputLayout_conPasswordCustomer" />
+
+                <TextView
+                    android:id="@+id/termsConditions"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:gravity="center"
+                    android:text="By clicking Signup, you agree to our User\nAgreement and Privacy Policy"
+                    android:layout_marginTop="10dp"
+                    android:textColor="@color/army_green"
+                    android:textSize="15sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/signupCustomer_btn" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </ScrollView>
+
+
+    </LinearLayout>
+
+
+</RelativeLayout>

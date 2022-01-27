@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".customer.Basket">
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/topAppBar_cl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/topAppBar"
+                style="@style/Widget.App.Toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/white"
+                app:title="My Basket"
+                app:titleTextColor="@color/brown" />
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <LinearLayout
+        android:id="@+id/empty_basket_ll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/topAppBar_cl"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="188dp"
+            android:layout_height="190.94dp"
+            android:layout_marginBottom="34.06dp"
+            android:src="@drawable/empty_basket" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/montserrat_regular"
+            android:text="Your basket is empty"
+            android:textColor="@color/brown"
+            android:textFontWeight="400"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/mid_rl"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/topAppBar_cl"
+        android:layout_above="@+id/bottom_rl"
+        android:layout_alignParentBottom="true"
+        android:visibility="visible"
+        android:layout_marginBottom="67dp">
+
+        <ListView
+            android:id="@+id/basket_item_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </ListView>
+
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/bottom_rl"
+        android:layout_width="match_parent"
+        android:layout_height="67dp"
+        android:layout_alignParentBottom="true"
+        android:paddingLeft="15dp"
+        android:background="@color/white"
+        android:outlineSpotShadowColor="@color/black"
+        android:outlineAmbientShadowColor="@color/black">
+
+        <CheckBox
+            android:id="@+id/select_all_cb"
+            android:layout_width="65dp"
+            android:layout_height="match_parent"
+            android:buttonTint="@color/army_green"
+            android:checked="false"
+            android:fontFamily="@font/montserrat_semibold"
+            android:text="All"
+            android:textAlignment="center"
+            android:textColor="@color/brown"
+            android:textFontWeight="600"
+            android:textSize="15sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="11dp"
+            android:layout_toStartOf="@+id/checkout_btn"
+            android:fontFamily="@font/montserrat_semibold"
+            android:text="Total: ₱0.00"
+            android:textColor="@color/yellow_orange"
+            android:textFontWeight="600"
+            android:textSize="14sp" />
+
+
+        <Button
+            android:id="@+id/checkout_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="28dp"
+            android:backgroundTint="@color/yellow_orange"
+            android:fontFamily="@font/montserrat_semibold"
+            android:text="Checkout"
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textColor="@color/army_green"
+            android:textFontWeight="600"
+            android:textSize="14sp"
+            app:cornerRadius="20dp" />
+
+    </RelativeLayout>
+
+
+
+</RelativeLayout>

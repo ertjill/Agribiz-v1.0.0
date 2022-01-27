@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_margin="30dp"
+    android:gravity="center">
+
+    <ImageView
+        android:id="@+id/imageOnboarding"
+        android:layout_width="260dp"
+        android:layout_height="260dp"
+        android:layout_margin="15dp"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/app_name"/>
+
+    <TextView
+        android:id="@+id/onboardingTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:fontFamily="@font/montserrat_semibold"/>
+
+    <TextView
+        android:id="@+id/textDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textColor="@color/yellow_orange"
+        android:textSize="17sp"
+        android:paddingTop="15dp"
+        android:fontFamily="@font/montserrat_medium"/>
+
+
+</LinearLayout>

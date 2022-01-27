@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".farmer.MyProduct">
+
+    <ListView
+        android:id="@+id/farmer_product_lv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@null"/>
+
+    <LinearLayout
+        android:id="@+id/no_product_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="51dp"
+        android:gravity="center_horizontal"
+        android:visibility="gone">
+        <ImageView
+            android:layout_width="181dp"
+            android:layout_height="195dp"
+            android:src="@drawable/farmer_no_produce"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:text="No produce added yet"
+            android:fontFamily="@font/montserrat_regular"
+            android:textFontWeight="400"
+            android:textSize="14sp"
+            android:textColor="#5E381932"/>
+
+
+
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/add_product_ib"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="10dp"
+        android:background="@color/transparent"
+        android:src="@drawable/ic_baseline_add_circle_24"
+        app:tint="@color/army_green" />
+
+</RelativeLayout>

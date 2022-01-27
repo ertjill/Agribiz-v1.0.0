@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".customer.CustomerMainActivity">
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/customerMain_vp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/customer_tab"
+         />
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/customer_tab"
+        android:layout_width="match_parent"
+        android:layout_height="58dp"
+        android:layout_alignParentBottom="true"
+        android:outlineAmbientShadowColor="@color/black"
+        android:outlineSpotShadowColor="@color/black"
+        app:tabIconTint="@color/army_green"
+        app:tabIndicatorColor="@color/transparent"
+        app:tabSelectedTextColor="@color/yellow_orange"
+        app:tabTextAppearance="@style/CustomTabText"
+        app:tabTextColor="@color/army_green">
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:icon="@drawable/ic_baseline_store_24"
+            android:text="Store" />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:icon="@drawable/ic_baseline_search_24"
+            android:text="Search" />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:icon="@drawable/ic_round_monetization_on_24"
+            android:text="Donate" />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:icon="@drawable/ic_baseline_shopping_basket_24"
+            android:text="Basket"
+            />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:icon="@drawable/ic_round_account_circle_24"
+            android:text="Profile" />
+    </com.google.android.material.tabs.TabLayout>
+
+
+
+
+
+
+</RelativeLayout>

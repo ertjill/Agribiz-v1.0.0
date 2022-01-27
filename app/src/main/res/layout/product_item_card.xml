@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp"
+    android:paddingTop="5dp"
+    android:paddingBottom="10dp">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="185dp"
+        android:layout_height="185dp"
+        android:backgroundTint="@color/army_green"
+        app:cardCornerRadius="10dp">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="2dp"
+            app:cardCornerRadius="10dp">
+
+            <ImageView
+                android:id="@+id/product_iv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:background="@color/white" />
+        </androidx.cardview.widget.CardView>
+    </androidx.cardview.widget.CardView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/product_name_tv"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:fontFamily="@font/montserrat_semibold"
+            android:lineHeight="12.19dp"
+            android:singleLine="true"
+            android:text="Product Name"
+            android:textColor="@color/brown"
+            android:textFontWeight="600"
+            android:textSize="11sp" />
+
+        <TextView
+            android:id="@+id/productUnit_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="2dp"
+            android:layout_toEndOf="@+id/product_name_tv"
+            android:fontFamily="@font/montserrat_semibold"
+            android:lineHeight="12.19dp"
+            android:text="(per kg)"
+            android:textColor="@color/brown"
+            android:textFontWeight="600"
+            android:textSize="11sp" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/productPrice_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:fontFamily="@font/montserrat_regular"
+        android:lineHeight="10.97dp"
+        android:text="Php 87.00"
+        android:textColor="@color/army_green"
+        android:textFontWeight="700"
+        android:textSize="12sp"
+        android:layout_gravity="start"/>
+
+</LinearLayout>

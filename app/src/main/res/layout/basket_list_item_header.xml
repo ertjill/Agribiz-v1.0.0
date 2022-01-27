@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="15dp"
+
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@color/highlight_back"
+        android:paddingLeft="10dp">
+        <CheckBox
+            android:id="@+id/header_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/yellow_orange"
+            android:buttonTint="@color/army_green"
+            />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_store_24"/>
+        <TextView
+            android:id="@+id/farmer_hub_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Farmers"
+            android:textColor="@color/brown"
+            android:layout_marginLeft="5dp"
+            android:fontFamily="@font/montserrat_semibold"
+            android:textFontWeight="600"
+            android:textSize="14sp"/>
+    </LinearLayout>
+</LinearLayout>
