@@ -64,7 +64,7 @@ public class ProductGridAdapter extends BaseAdapter {
                 .load(product.get(position).getProductImage())
                 .into(imageView);
         productName.setText(product.get(position).getProductName());
-        productUnit.setText("per "+product.get(position).getProductUnit());
+        productUnit.setText("(per "+product.get(position).getProductQuantity()+" "+product.get(position).getProductUnit()+")");
         productPrice.setText("Php "+product.get(position).getProductPrice());
 
         return convertView;

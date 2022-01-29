@@ -60,7 +60,8 @@ public class ViewAllProductsActivity extends AppCompatActivity {
                                         dc.getDocument().getData().get("productImage").toString(),
                                         Integer.parseInt(dc.getDocument().getData().get("productStocks").toString()),
                                         dc.getDocument().getData().get("productDescription").toString(),
-                                        dc.getDocument().getData().get("productCategory").toString()));
+                                        dc.getDocument().getData().get("productCategory").toString(),
+                                        Integer.parseInt(dc.getDocument().getData().get("productQuantity").toString())));
                                 Log.d(TAG, "Number of Item: "+productItems.size());
 
                             }

@@ -13,9 +13,8 @@ public class FarmerProductItem extends ProductItem {
     public void setProductSold(int productSold) {
         this.productSold = productSold;
     }
-
-    public FarmerProductItem(String productId, String productFarmId, String productName, Double productPrice, String productUnit, String productImage, int productStocks, String productDescription, String productCategory) {
-        super(productId, productFarmId, productName, productPrice, productUnit, productImage, productDescription, productCategory);
+    public FarmerProductItem(String productId, String productFarmId, String productName, Double productPrice, String productUnit, String productImage, int productStocks, String productDescription, String productCategory, int productQuantity) {
+        super(productId, productFarmId, productName, productPrice, productUnit, productQuantity, productImage, productDescription, productCategory);
         this.productStocks=productStocks;
     }
 

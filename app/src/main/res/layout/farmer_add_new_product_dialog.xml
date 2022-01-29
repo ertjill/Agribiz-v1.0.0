@@ -10,6 +10,7 @@
     android:background="@drawable/whitebackground_roundedcorner">
 
     <TextView
+        android:id="@+id/top_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="34dp"
@@ -20,10 +21,12 @@
         android:textSize="17sp"
         android:gravity="center"
         />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/bottom_ll"
+        android:layout_below="@+id/top_tv"
         android:scrollbars="none">
 
         <LinearLayout
@@ -35,25 +38,26 @@
             >
 
 
-
             <ImageView
                 android:id="@+id/product_image_iv"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
                 android:layout_marginTop="25dp"
-                android:src="@drawable/ic_baseline_add_photo_alternate_24"
-                android:scaleType="centerCrop"/>
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_baseline_add_photo_alternate_24" />
+
             <ImageView
                 android:id="@+id/real_product_image"
                 android:layout_width="170dp"
                 android:layout_height="170dp"
                 android:layout_marginTop="25dp"
+                android:scaleType="centerCrop"
                 android:src="@drawable/ic_baseline_add_photo_alternate_24"
-                android:visibility="gone"
-                android:scaleType="centerCrop"/>
+                android:visibility="gone" />
 
 
             <TextView
+                android:id="@+id/add_product_pic_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/montserrat_regular"
@@ -62,6 +66,7 @@
                 android:textSize="10sp" />
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/productName_til"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
@@ -73,11 +78,11 @@
                 app:boxCornerRadiusTopEnd="15dp"
                 app:boxCornerRadiusTopStart="15dp"
                 app:boxStrokeColor="@color/army_green"
+                app:errorEnabled="true"
                 app:hintTextColor="@color/army_green">
 
                 <EditText
                     android:id="@+id/productName_et"
-
                     style="TextAppearance.App.TextIn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -85,6 +90,7 @@
                     android:hint="Produce name"
                     android:importantForAutofill="no"
                     android:inputType="text"
+                    android:maxLength="50"
                     android:paddingTop="20dp"
                     android:textColorHint="@color/color_hint"
                     android:textCursorDrawable="@null"
@@ -94,6 +100,45 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/productDescription_til"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/army_green"
+                app:boxBackgroundColor="@color/transparent"
+                app:boxBackgroundMode="outline"
+                app:boxCornerRadiusBottomEnd="15dp"
+                app:boxCornerRadiusBottomStart="15dp"
+                app:boxCornerRadiusTopEnd="15dp"
+                app:boxCornerRadiusTopStart="15dp"
+                app:boxStrokeColor="@color/army_green"
+                app:hintTextColor="@color/army_green">
+
+                <EditText
+                    android:id="@+id/productDescription_et"
+                    style="TextAppearance.App.TextIn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_medium"
+                    android:gravity="top"
+                    android:hint="Produce name"
+                    android:importantForAutofill="no"
+                    android:inputType="textMultiLine"
+                    android:lines="5"
+                    android:maxLength="50"
+                    android:overScrollMode="always"
+                    android:paddingTop="20dp"
+                    android:scrollbarStyle="insideInset"
+                    android:scrollbars="vertical"
+                    android:scrollHorizontally="false"
+                    android:textColorHint="@color/color_hint"
+                    android:textCursorDrawable="@null"
+                    android:textSize="16sp"
+                    tools:ignore="SpeakableTextPresentCheck" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/productCategory_til"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -106,7 +151,7 @@
                 app:boxCornerRadiusTopEnd="15dp"
                 app:boxCornerRadiusTopStart="15dp"
                 app:boxStrokeColor="@color/army_green"
-
+                app:endIconTint="@color/army_green"
                 app:hintTextColor="@color/army_green">
 
                 <AutoCompleteTextView
@@ -119,68 +164,77 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:backgroundTint="@color/army_green"
-                app:boxBackgroundColor="@color/transparent"
-                app:boxBackgroundMode="outline"
-                app:boxCornerRadiusBottomEnd="15dp"
-                app:boxCornerRadiusBottomStart="15dp"
-                app:boxCornerRadiusTopEnd="15dp"
-                app:boxCornerRadiusTopStart="15dp"
-                app:boxStrokeColor="@color/army_green"
-                app:hintTextColor="@color/army_green">
+                android:layout_marginTop="10dp">
 
-                <EditText
-                    android:id="@+id/productStocks_et"
-                    style="TextAppearance.App.TextIn"
-                    android:layout_width="match_parent"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/productStocks_til"
+                    android:layout_width="120dp"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/montserrat_medium"
-                    android:hint="Stock"
-                    android:importantForAutofill="no"
-                    android:inputType="number"
-                    android:paddingTop="20dp"
-                    android:textColorHint="@color/color_hint"
-                    android:textCursorDrawable="@null"
-                    android:textSize="16sp"
-                    tools:ignore="SpeakableTextPresentCheck" />
+                    android:backgroundTint="@color/army_green"
+                    app:boxBackgroundColor="@color/transparent"
+                    app:boxBackgroundMode="outline"
+                    app:boxCornerRadiusBottomEnd="15dp"
+                    app:boxCornerRadiusBottomStart="15dp"
+                    app:boxCornerRadiusTopEnd="15dp"
+                    app:boxCornerRadiusTopStart="15dp"
+                    app:boxStrokeColor="@color/army_green"
+                    app:hintTextColor="@color/army_green">
 
-            </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/productStocks_et"
+                        style="TextAppearance.App.TextIn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/montserrat_medium"
+                        android:hint="Stocks"
+                        android:maxLength="5"
+                        android:paddingTop="20dp"
+                        android:textColorHint="@color/color_hint"
+                        android:textCursorDrawable="@null"
+                        android:textSize="16sp"
+                        android:inputType="number"/>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:backgroundTint="@color/army_green"
-                app:boxBackgroundColor="@color/transparent"
-                app:boxBackgroundMode="outline"
-                app:boxCornerRadiusBottomEnd="15dp"
-                app:boxCornerRadiusBottomStart="15dp"
-                app:boxCornerRadiusTopEnd="15dp"
-                app:boxCornerRadiusTopStart="15dp"
-                app:boxStrokeColor="@color/army_green"
-                app:hintTextColor="@color/army_green">
+                </com.google.android.material.textfield.TextInputLayout>
 
-                <EditText
-                    android:id="@+id/productPrice_et"
-
-                    style="TextAppearance.App.TextIn"
-                    android:layout_width="match_parent"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/productPrice_til"
+                    android:layout_width="120dp"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/montserrat_medium"
-                    android:hint="Price"
-                    android:importantForAutofill="no"
-                    android:inputType="number"
-                    android:paddingTop="20dp"
-                    android:textColorHint="@color/color_hint"
-                    android:textCursorDrawable="@null"
-                    android:textSize="16sp"
-                    tools:ignore="SpeakableTextPresentCheck" />
+                    android:layout_alignParentEnd="true"
+                    android:backgroundTint="@color/army_green"
+                    app:boxBackgroundColor="@color/transparent"
+                    app:boxBackgroundMode="outline"
+                    app:boxCornerRadiusBottomEnd="15dp"
+                    app:boxCornerRadiusBottomStart="15dp"
+                    app:boxCornerRadiusTopEnd="15dp"
+                    app:boxCornerRadiusTopStart="15dp"
+                    app:boxStrokeColor="@color/army_green"
+                    app:hintTextColor="@color/army_green">
 
-            </com.google.android.material.textfield.TextInputLayout>
+                    <EditText
+                        android:id="@+id/productPrice_et"
+
+                        style="TextAppearance.App.TextIn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:digits="0123456789."
+                        android:fontFamily="@font/montserrat_medium"
+                        android:hint="Price"
+                        android:importantForAutofill="no"
+                        android:inputType="number"
+                        android:maxLength="10"
+                        android:paddingTop="20dp"
+                        android:textColorHint="@color/color_hint"
+                        android:textCursorDrawable="@null"
+                        android:textSize="16sp"
+                        tools:ignore="SpeakableTextPresentCheck" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -188,6 +242,7 @@
                 android:layout_marginTop="10dp">
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/productQuantity_til"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
@@ -212,6 +267,7 @@
                         android:hint="Quantity"
                         android:importantForAutofill="no"
                         android:inputType="number"
+                        android:maxLength="5"
                         android:paddingTop="20dp"
                         android:textColorHint="@color/color_hint"
                         android:textSize="16sp"
@@ -220,6 +276,7 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/productUnit_til"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -232,6 +289,7 @@
                     app:boxCornerRadiusTopEnd="15dp"
                     app:boxCornerRadiusTopStart="15dp"
                     app:boxStrokeColor="@color/army_green"
+                    app:endIconTint="@color/army_green"
                     app:hintTextColor="@color/army_green">
 
                     <AutoCompleteTextView
@@ -267,7 +325,7 @@
             app:cornerRadius="25dp" />
 
         <Button
-            android:id="@+id/cancel_btn"
+            android:id="@+id/add_product_btn"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
