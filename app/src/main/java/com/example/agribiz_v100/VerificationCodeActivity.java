@@ -132,7 +132,7 @@ public class VerificationCodeActivity extends AppCompatActivity {
                                                 Log.d("SIGN_UP", "linkWithCredential:success");
                                                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                                                 UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                                                        .setDisplayName(displayName+"-f").build();
+                                                        .setDisplayName(displayName+"-a").build();
                                                 user.updateProfile(profileUpdates);
                                                 startActivity(new Intent(getApplicationContext(), CustomerMainActivity.class));
                                                 finish();

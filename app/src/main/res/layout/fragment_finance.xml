@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="25dp"
+    android:paddingRight="25dp"
+    tools:context=".farmer.Finance">
+
+
+    <ImageView
+        android:layout_width="119dp"
+        android:layout_height="57dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="17dp"
+        android:src="@drawable/agribiz_logo_green" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/productCategory_til"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:backgroundTint="@color/army_green"
+        app:boxBackgroundColor="@color/transparent"
+        app:boxBackgroundMode="outline"
+        app:boxCornerRadiusBottomEnd="15dp"
+        app:boxCornerRadiusBottomStart="15dp"
+        app:boxCornerRadiusTopEnd="15dp"
+        app:boxCornerRadiusTopStart="15dp"
+        app:boxStrokeColor="@color/army_green"
+        app:endIconTint="@color/army_green"
+        app:hintTextColor="@color/army_green">
+
+        <AutoCompleteTextView
+            android:id="@+id/finance_category"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/montserrat_medium"
+            android:hint="Choose Category"
+            android:inputType="none"
+            android:text="AgriFinance"
+            android:textColor="@color/army_green"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+    <LinearLayout
+        android:id="@+id/agri_finance_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="19dp">
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/army_green"
+            app:cardCornerRadius="10dp"
+            android:layout_marginBottom="12dp"
+            >
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:text="Total revenue"
+                    android:textColor="@color/yellow_orange"
+                    android:textSize="14sp"
+                    android:layout_centerVertical="true"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:text="₱ 0.00"
+                    android:textColor="@color/yellow_orange"
+                    android:textFontWeight="700"
+                    android:textSize="20sp"
+                    android:layout_centerVertical="true"/>
+            </RelativeLayout>
+
+        </androidx.cardview.widget.CardView>
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/army_green"
+            app:cardCornerRadius="10dp"
+            android:layout_marginBottom="12dp"
+            >
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:text="Expenses"
+                    android:textColor="@color/yellow_orange"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:text="₱ 0.00"
+                    android:textColor="@color/yellow_orange"
+                    android:textFontWeight="700"
+                    android:textSize="20sp"
+                    android:layout_centerVertical="true"/>
+            </RelativeLayout>
+
+        </androidx.cardview.widget.CardView>
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/army_green"
+            app:cardCornerRadius="10dp"
+            android:layout_marginBottom="12dp"
+            >
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:text="Net income"
+                    android:textColor="@color/yellow_orange"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:text="₱ 0.00"
+                    android:textColor="@color/yellow_orange"
+                    android:textFontWeight="700"
+                    android:textSize="20sp"
+                    android:layout_centerVertical="true"/>
+            </RelativeLayout>
+
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/sold_product_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="19dp"
+        android:visibility="gone">
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/army_green"
+            app:cardCornerRadius="10dp"
+            android:layout_marginBottom="12dp"
+            >
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:text="Fruits"
+                    android:textColor="@color/yellow_orange"
+                    android:textSize="14sp"
+                    android:textFontWeight="700"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:text="0"
+                    android:textColor="@color/yellow_orange"
+                    android:textFontWeight="700"
+                    android:textSize="20sp" />
+            </RelativeLayout>
+
+        </androidx.cardview.widget.CardView>
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/army_green"
+            app:cardCornerRadius="10dp"
+            android:layout_marginBottom="12dp"
+            >
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:text="Vegetables"
+                    android:textColor="@color/yellow_orange"
+                    android:textSize="14sp"
+                    android:textFontWeight="700"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:text="0"
+                    android:textColor="@color/yellow_orange"
+                    android:textFontWeight="700"
+                    android:textSize="20sp" />
+            </RelativeLayout>
+
+        </androidx.cardview.widget.CardView>
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/army_green"
+            app:cardCornerRadius="10dp"
+            android:layout_marginBottom="12dp"
+            >
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:text="Poultry"
+                    android:textColor="@color/yellow_orange"
+                    android:textSize="14sp"
+                    android:textFontWeight="700"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:text="0"
+                    android:textColor="@color/yellow_orange"
+                    android:textFontWeight="700"
+                    android:textSize="20sp" />
+            </RelativeLayout>
+
+        </androidx.cardview.widget.CardView>
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/army_green"
+            app:cardCornerRadius="10dp"
+            android:layout_marginBottom="12dp"
+            >
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:text="Livestock"
+                    android:textColor="@color/yellow_orange"
+                    android:textSize="14sp"
+                    android:textFontWeight="700"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:text="0"
+                    android:textColor="@color/yellow_orange"
+                    android:textFontWeight="700"
+                    android:textSize="20sp" />
+            </RelativeLayout>
+
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+    <Button
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:text="Add expense"
+        android:textAllCaps="false"
+        android:textColor="@color/army_green"
+        android:backgroundTint="@color/yellow_orange"
+        app:cornerRadius="25dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/montserrat_semibold"
+        android:textSize="15sp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Recently added expences"
+        android:textColor="@color/brown"
+        android:textSize="16sp"
+        android:textFontWeight="600"
+        android:fontFamily="@font/montserrat_regular"
+        android:layout_marginTop="30dp"/>
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none"
+        />
+
+
+</LinearLayout>

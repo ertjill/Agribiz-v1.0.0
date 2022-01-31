@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.example.agribiz_v100.agrovit.AgrovitMainActivity;
 import com.example.agribiz_v100.customer.CustomerMainActivity;
 import com.example.agribiz_v100.farmer.FarmerMainActivity;
 import com.google.firebase.auth.FirebaseAuth;
@@ -36,12 +37,23 @@ public class OnBoard extends AppCompatActivity {
         super.onStart();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
-            if(user.getDisplayName()!=null){
-                char c = user.getDisplayName().charAt(user.getDisplayName().length()-1);
-                if(c=='c')
+            if (user.getDisplayName() != null && !user.getDisplayName().equals("")) {
+                char c = user.getDisplayName().charAt(user.getDisplayName().length() - 1);
+                if (c == 'c') {
                     startActivity(new Intent(getBaseContext(), CustomerMainActivity.class));
-                else
+                    finish();
+                } else if (c == 'f') {
                     startActivity(new Intent(getBaseContext(), FarmerMainActivity.class));
+                    finish();
+                } else {
+                    startActivity(new Intent(getBaseContext(), AgrovitMainActivity.class));
+                    finish();
+                }
+
+            }
+            else {
+                startActivity(new Intent(getBaseContext(), AgrovitMainActivity.class));
+                finish();
             }
         }
     }

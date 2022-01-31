@@ -4,57 +4,52 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".farmer.Shipment">
+    android:orientation="vertical"
+    tools:context=".agrovit.AgrovitMainActivity">
 
-    <ImageView
-        android:id="@+id/logo"
-        android:layout_width="119dp"
-        android:layout_height="57dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="15dp"
-        android:src="@drawable/agribiz_logo_green" />
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/customerMain_vp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/customer_tab" />
 
     <com.google.android.material.tabs.TabLayout
-        android:id="@+id/farmer_product_tab"
+        android:id="@+id/customer_tab"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_below="@+id/logo"
-        android:layout_marginTop="20dp"
+        android:layout_height="58dp"
+        android:layout_alignParentBottom="true"
         android:outlineAmbientShadowColor="@color/black"
         android:outlineSpotShadowColor="@color/black"
         app:tabIconTint="@color/army_green"
-        app:tabIndicatorColor="@color/army_green"
-        app:tabMode="auto"
-        app:tabSelectedTextColor="@color/army_green"
-        app:tabTextAppearance="@style/CustomFarmerProductTabText"
-        app:tabTextColor="@color/brown">
+        app:tabIndicatorColor="@color/transparent"
+        app:tabSelectedTextColor="@color/yellow_orange"
+        app:tabTextAppearance="@style/CustomTabText"
+        app:tabTextColor="@color/army_green">
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="To Prepare" />
+            android:icon="@drawable/ic_baseline_shopping_basket_24"
+            android:text="Product" />
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="To Ship" />
+            android:icon="@drawable/ic_outline_local_shipping_24"
+            android:text="Shipment" />
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Shipping" />
+            android:icon="@drawable/ic_baseline_auto_graph_24"
+            android:text="Finance" />
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Completed" />
-
+            android:icon="@drawable/ic_round_account_circle_24"
+            android:text="Profile" />
     </com.google.android.material.tabs.TabLayout>
 
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/farmer_product_vp"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/farmer_product_tab" />
 
 </RelativeLayout>

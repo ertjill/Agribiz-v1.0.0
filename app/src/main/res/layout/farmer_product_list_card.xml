@@ -32,7 +32,8 @@
             android:layout_height="wrap_content"
             android:text="Fresh Tomato (per kg)"
             android:fontFamily="@font/montserrat_semibold"
-            android:textColor="@color/brown"/>
+            android:textColor="@color/brown"
+            android:singleLine="true"/>
             <TextView
                 android:id="@+id/product_stocks"
                 android:layout_width="wrap_content"

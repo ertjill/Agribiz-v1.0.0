@@ -2,9 +2,20 @@ package com.example.agribiz_v100.farmer;
 
 import com.example.agribiz_v100.ProductItem;
 
+import java.io.Serializable;
+
 public class FarmerProductItem extends ProductItem {
     private int productStocks;
     private int productSold=0;
+    private String productFarmProfile="";
+
+    public String getProductFarmProfile() {
+        return productFarmProfile;
+    }
+
+    public void setProductFarmProfile(String productFarmProfile) {
+        this.productFarmProfile = productFarmProfile;
+    }
 
     public int getProductSold() {
         return productSold;

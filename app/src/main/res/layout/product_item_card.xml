@@ -11,8 +11,8 @@
     android:paddingBottom="10dp">
 
     <androidx.cardview.widget.CardView
-        android:layout_width="185dp"
-        android:layout_height="185dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:backgroundTint="@color/army_green"
         app:cardCornerRadius="10dp">
 
@@ -32,12 +32,12 @@
     </androidx.cardview.widget.CardView>
 
     <RelativeLayout
-        android:layout_width="match_parent"
+        android:layout_width="150dp"
         android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/product_name_tv"
-            android:layout_width="100dp"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
             android:fontFamily="@font/montserrat_semibold"
@@ -50,10 +50,11 @@
 
         <TextView
             android:id="@+id/productUnit_tv"
-            android:layout_width="wrap_content"
+            android:layout_width="70dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="2dp"
+            android:singleLine="true"
             android:layout_toEndOf="@+id/product_name_tv"
             android:fontFamily="@font/montserrat_semibold"
             android:lineHeight="12.19dp"
@@ -66,7 +67,7 @@
 
     <TextView
         android:id="@+id/productPrice_tv"
-        android:layout_width="match_parent"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
         android:fontFamily="@font/montserrat_regular"
@@ -74,7 +75,6 @@
         android:text="Php 87.00"
         android:textColor="@color/army_green"
         android:textFontWeight="700"
-        android:textSize="12sp"
-        android:layout_gravity="start"/>
+        android:textSize="12sp"/>
 
 </LinearLayout>

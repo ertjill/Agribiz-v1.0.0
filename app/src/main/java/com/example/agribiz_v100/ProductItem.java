@@ -1,6 +1,8 @@
 package com.example.agribiz_v100;
 
-public class ProductItem {
+import java.io.Serializable;
+
+public class ProductItem implements Serializable {
     private String productId;
     private String productFarmId;
     private String productName;
@@ -10,6 +12,15 @@ public class ProductItem {
     private String productImage;
     private String productDescription;
     private String productCategory;
+    private int productRating=0;
+
+    public int getProductRating() {
+        return productRating;
+    }
+
+    public void setProductRating(int productRating) {
+        this.productRating = productRating;
+    }
 
     public int getProductQuantity() {
         return productQuantity;

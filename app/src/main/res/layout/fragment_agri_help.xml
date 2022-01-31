@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="25dp"
+    android:paddingRight="25dp"
+    tools:context=".farmer.AgriHelp">
+
+    <ImageView
+        android:layout_width="119dp"
+        android:layout_height="57dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="17dp"
+        android:src="@drawable/agribiz_logo_green" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="130dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="31dp"
+        android:src="@drawable/group_of_farmers" />
+<Button
+    android:layout_width="240dp"
+    android:layout_height="wrap_content"
+    android:text="Request Assistance"
+    android:backgroundTint="@color/yellow_orange"
+    app:cornerRadius="25dp"
+    android:textColor="@color/army_green"
+    android:textAllCaps="false"
+    android:fontFamily="@font/montserrat_semibold"
+    android:textSize="13sp"
+    android:layout_gravity="center_horizontal"
+    android:layout_marginTop="100dp"
+    android:textFontWeight="600"/>
+
+
+</LinearLayout>

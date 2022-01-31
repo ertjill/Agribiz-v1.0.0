@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import androidx.fragment.app.Fragment;
 
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,6 +67,7 @@ public class MyProduct extends Fragment {
     ActivityResultLauncher<Intent> selectFromGallery, selectFromCamera;
     ImageView real_product_image;
     FirebaseUser user;
+    Toast successAddProductToast;
     @Override
     public void onStart() {
         super.onStart();
@@ -76,6 +79,13 @@ public class MyProduct extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+       successAddProductToast = new Toast(getContext());
+        LayoutInflater inflater1=getLayoutInflater();
+        View successToast = inflater1.inflate(R.layout.success_toast,null);
+        successAddProductToast.setView(successToast);
+        successAddProductToast.setDuration(Toast.LENGTH_LONG);
+        successAddProductToast.setGravity(Gravity.CENTER,0,0);
+        Toast.makeText(getActivity(), "Successfully added produce", Toast.LENGTH_SHORT).show();
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_my_product, container, false);
         addProductDialog = new Dialog(getContext());
@@ -89,9 +99,6 @@ public class MyProduct extends Fragment {
             @Override
             public void onActivityResult(ActivityResult result) {
                 if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
-//                    Bundle bundle = result.getData().getExtras();
-//                    Bitmap bitmap =(Bitmap) bundle.get("data");
-//                    product_image_iv.setImageBitmap(bitmap);
                     product_image_iv.setImageURI(result.getData().getData());
                 }
             }
@@ -109,6 +116,7 @@ public class MyProduct extends Fragment {
         });
 
         db.collection("products")
+                .whereEqualTo("productFarmId", user.getUid().toString())
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot snapshots,
@@ -198,7 +206,10 @@ public class MyProduct extends Fragment {
                     itemSpecs.add(new Integer(Integer.parseInt(productQuantity)));
                     itemSpecs.add(new String(productUnit));
                     itemSpecs.add(new String(user.getUid()));
-                    FirebaseHelper.addProduct(getContext(),itemSpecs,data);
+                    if(FirebaseHelper.addProduct(getContext(),itemSpecs,data)){
+                        addProductDialog.dismiss();
+                        successAddProductToast.show();
+                    }
                 }
 
             });
@@ -273,6 +284,7 @@ public class MyProduct extends Fragment {
     public void addFromGallery() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 //                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        intent.setType("image/*");
         if (intent.resolveActivity(getContext().getPackageManager()) != null) {
             selectFromGallery.launch(intent);
         } else {

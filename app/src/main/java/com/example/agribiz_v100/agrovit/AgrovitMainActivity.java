@@ -1,4 +1,4 @@
-package com.example.agribiz_v100.farmer;
+package com.example.agribiz_v100.agrovit;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,24 +13,23 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.example.agribiz_v100.R;
-import com.example.agribiz_v100.customer.Basket;
-import com.example.agribiz_v100.customer.CustomerMainActivity;
-import com.example.agribiz_v100.customer.Donate;
-import com.example.agribiz_v100.customer.Profile;
-import com.example.agribiz_v100.customer.Search;
-import com.example.agribiz_v100.customer.Store;
+import com.example.agribiz_v100.farmer.AgriHelp;
+import com.example.agribiz_v100.farmer.FarmerMainActivity;
+import com.example.agribiz_v100.farmer.FarmerProfile;
+import com.example.agribiz_v100.farmer.Finance;
+import com.example.agribiz_v100.farmer.Product;
+import com.example.agribiz_v100.farmer.Shipment;
 import com.google.android.material.tabs.TabLayout;
 
-public class FarmerMainActivity extends AppCompatActivity {
+public class AgrovitMainActivity extends AppCompatActivity {
     ViewPager2 customerMain_vp;
     TabLayout customer_tab;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_farmer_main);
-
+        setContentView(R.layout.activity_agrovit_main);
         //view pager setup
-        FarmerMainActivity.ViewPagerAdapter adpater = new FarmerMainActivity.ViewPagerAdapter(this);
+        AgrovitMainActivity.ViewPagerAdapter adpater = new AgrovitMainActivity.ViewPagerAdapter(this);
         customerMain_vp = findViewById(R.id.customerMain_vp);
         customerMain_vp.setUserInputEnabled(false);
         customerMain_vp.setAdapter(adpater);
@@ -82,7 +81,7 @@ public class FarmerMainActivity extends AppCompatActivity {
     @SuppressLint("ResourceAsColor")
     private void selectedTab(int position) {
         customer_tab.selectTab(customer_tab.getTabAt(position));
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 4; i++) {
             if (i == position) {
 //                customer_tab.getTabAt(i).getIcon().setTint(R.color.yellow_orange);
                 customer_tab.getTabAt(i).getIcon().setColorFilter(getResources().getColor(R.color.yellow_orange), PorterDuff.Mode.SRC_IN);
@@ -101,30 +100,14 @@ public class FarmerMainActivity extends AppCompatActivity {
         @NonNull
         @Override
         public Fragment createFragment(int position) {
-//            switch (position) {
-//                case 0:
-//                    return new Store();
-//                case 1:
-//                    return new Search();
-//                case 2:
-//                    return new Store();
-//                case 3:
-//                    return new Basket();
-//                case 4:
-//                    return new Profile();
-//                default:
-//                    return null;
 
             if(position==0){
-                return new Product();
+                return new AgrovitProduct();
             }
             else if(position==1){
                 return new Shipment();
             }
             else if(position==2){
-                return new AgriHelp();
-            }
-            else if(position==3){
                 return new Finance();
             }
             else {
@@ -135,7 +118,7 @@ public class FarmerMainActivity extends AppCompatActivity {
 
         @Override
         public int getItemCount() {
-            return 5;
+            return 4;
         }
     }
 }

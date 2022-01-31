@@ -74,13 +74,13 @@ public class Shipment extends Fragment {
         public Fragment createFragment(int position) {
 
             if (position == 0) {
-                return new MyProduct();
+                return new ToPrepare();
             } else if (position == 1) {
-                return new Store();
+                return new ToShip();
             } else if (position == 2) {
-                return new Store();
+                return new Shipping();
             } else {
-                return new Search();
+                return new CompletedOrder();
             }
 
         }

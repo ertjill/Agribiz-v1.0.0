@@ -1,8 +1,12 @@
 package com.example.agribiz_v100.customer;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -12,13 +16,19 @@ import android.widget.Toast;
 import com.example.agribiz_v100.ProductItem;
 import com.example.agribiz_v100.R;
 import com.example.agribiz_v100.farmer.FarmerProductItem;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageMetadata;
+import com.google.firebase.storage.StorageReference;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import javax.annotation.Nullable;
@@ -34,6 +44,7 @@ public class ViewAllProductsActivity extends AppCompatActivity {
     ProductGridAdapter productGridAdapter;
     ArrayList<ProductItem> productItems;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,8 +62,7 @@ public class ViewAllProductsActivity extends AppCompatActivity {
 
                         for (DocumentChange dc : snapshots.getDocumentChanges()) {
                             if (dc.getType() == DocumentChange.Type.ADDED) {
-                                Log.d(TAG, "New city: " + dc.getDocument().getId());
-                                productItems.add(new FarmerProductItem(dc.getDocument().getId(),
+                                FarmerProductItem farmerProductItem = new FarmerProductItem(dc.getDocument().getId(),
                                         dc.getDocument().getData().get("productFarmId").toString(),
                                         dc.getDocument().getData().get("productName").toString(),
                                         Double.parseDouble(dc.getDocument().getData().get("productPrice").toString()),
@@ -61,9 +71,9 @@ public class ViewAllProductsActivity extends AppCompatActivity {
                                         Integer.parseInt(dc.getDocument().getData().get("productStocks").toString()),
                                         dc.getDocument().getData().get("productDescription").toString(),
                                         dc.getDocument().getData().get("productCategory").toString(),
-                                        Integer.parseInt(dc.getDocument().getData().get("productQuantity").toString())));
-                                Log.d(TAG, "Number of Item: "+productItems.size());
+                                        Integer.parseInt(dc.getDocument().getData().get("productQuantity").toString()));
 
+                                productItems.add(farmerProductItem);
                             }
 
                         }
@@ -82,14 +92,16 @@ public class ViewAllProductsActivity extends AppCompatActivity {
         viewAll_gv = findViewById(R.id.viewAll_gv);
         viewAll_gv.setAdapter(productGridAdapter);
         topAppBar = findViewById(R.id.topAppBar);
-        topAppBar.setNavigationOnClickListener(v->{
+        topAppBar.setNavigationOnClickListener(v -> {
             finish();
         });
 
         viewAll_gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getBaseContext(), "Product item", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getApplicationContext(), ProductView.class);
+                intent.putExtra("item", productItems.get(position));
+                startActivity(intent);
             }
         });
     }
