@@ -15,10 +15,12 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.provider.MediaStore;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,15 +39,20 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.agribiz_v100.FirebaseHelper;
+import com.example.agribiz_v100.ProductItem;
 import com.example.agribiz_v100.R;
 import com.example.agribiz_v100.Verification;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.ByteArrayOutputStream;
@@ -57,7 +64,7 @@ public class MyProduct extends Fragment {
     String TAG = "MyProduct";
     ListView farmer_product_lv;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-    ArrayList<FarmerProductItem> productItems;
+    SparseArray<ProductItem> productItems;
     FarmerProductAdapter farmerProductAdapter;
     LinearLayout no_product_ll;
     ImageButton add_product_ib;
@@ -68,6 +75,7 @@ public class MyProduct extends Fragment {
     ImageView real_product_image;
     FirebaseUser user;
     Toast successAddProductToast;
+
     @Override
     public void onStart() {
         super.onStart();
@@ -79,12 +87,12 @@ public class MyProduct extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-       successAddProductToast = new Toast(getContext());
-        LayoutInflater inflater1=getLayoutInflater();
-        View successToast = inflater1.inflate(R.layout.success_toast,null);
+        successAddProductToast = new Toast(getContext());
+        LayoutInflater inflater1 = getLayoutInflater();
+        View successToast = inflater1.inflate(R.layout.success_toast, null);
         successAddProductToast.setView(successToast);
         successAddProductToast.setDuration(Toast.LENGTH_LONG);
-        successAddProductToast.setGravity(Gravity.CENTER,0,0);
+        successAddProductToast.setGravity(Gravity.CENTER, 0, 0);
         Toast.makeText(getActivity(), "Successfully added produce", Toast.LENGTH_SHORT).show();
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_my_product, container, false);
@@ -93,7 +101,7 @@ public class MyProduct extends Fragment {
         farmer_product_lv = view.findViewById(R.id.farmer_product_lv);
         no_product_ll = view.findViewById(R.id.no_product_ll);
         add_product_ib = view.findViewById(R.id.add_product_ib);
-        productItems = new ArrayList<>();
+        productItems = new SparseArray<>();
         user = FirebaseAuth.getInstance().getCurrentUser();
         selectFromGallery = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
             @Override
@@ -115,39 +123,87 @@ public class MyProduct extends Fragment {
             }
         });
 
+//        db.collection("products")
+//                .whereEqualTo("productFarmId", user.getUid().toString())
+//                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onEvent(@Nullable QuerySnapshot snapshots,
+//                                        @Nullable FirebaseFirestoreException e) {
+//                        if (e != null) {
+//                            Log.w(TAG, "listen:error", e);
+//                            return;
+//                        }
+//
+//                        for (DocumentChange dc : snapshots.getDocumentChanges()) {
+//                            if (dc.getType() == DocumentChange.Type.ADDED) {
+////                                productItems.add(new FarmerProductItem(dc.getDocument().getId(),
+////                                        dc.getDocument().getData().get("productFarmId").toString(),
+////                                        dc.getDocument().getData().get("productName").toString(),
+////                                        Double.parseDouble(dc.getDocument().getData().get("productPrice").toString()),
+////                                        dc.getDocument().getData().get("productUnit").toString(),
+////                                        dc.getDocument().getData().get("productImage").toString(),
+////                                        Integer.parseInt(dc.getDocument().getData().get("productStocks").toString()),
+////                                        dc.getDocument().getData().get("productDescription").toString(),
+////                                        dc.getDocument().getData().get("productCategory").toString(),
+////                                        Integer.parseInt(dc.getDocument().getData().get("productQuantity").toString())));
+//                                ProductItem item = new ProductItem(
+//                                        dc.getDocument().getId(),
+//                                        dc.getDocument().getData().get("productFarmId").toString(),
+//                                        dc.getDocument().getData().get("productName").toString(),
+//                                        Double.parseDouble(dc.getDocument().getData().get("productPrice").toString()),
+//                                        dc.getDocument().getData().get("productUnit").toString(),
+//                                        Integer.parseInt(dc.getDocument().getData().get("productQuantity").toString()),
+//                                        dc.getDocument().getData().get("productImage").toString(),
+//                                        dc.getDocument().getData().get("productDescription").toString(),
+//                                        dc.getDocument().getData().get("productCategory").toString());
+//                                productItems.add(item);
+//                            }
+//                        }
+//                        if (productItems.isEmpty()) {
+//                            no_product_ll.setVisibility(View.VISIBLE);
+//                            farmer_product_lv.setVisibility(View.GONE);
+//                        } else {
+//                            no_product_ll.setVisibility(View.GONE);
+//                            farmer_product_lv.setVisibility(View.VISIBLE);
+//                        }
+//                        farmerProductAdapter.notifyDataSetChanged();
+//                    }
+//                });
         db.collection("products")
-                .whereEqualTo("productFarmId", user.getUid().toString())
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
-                    public void onEvent(@Nullable QuerySnapshot snapshots,
-                                        @Nullable FirebaseFirestoreException e) {
-                        if (e != null) {
-                            Log.w(TAG, "listen:error", e);
-                            return;
-                        }
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            final int[] i = {0};
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                //Log.d(TAG, document.getId() + " => " + document.getData());
+                                ProductItem item = new ProductItem(document);
 
-                        for (DocumentChange dc : snapshots.getDocumentChanges()) {
-                            if (dc.getType() == DocumentChange.Type.ADDED) {
-                                productItems.add(new FarmerProductItem(dc.getDocument().getId(),
-                                        dc.getDocument().getData().get("productFarmId").toString(),
-                                        dc.getDocument().getData().get("productName").toString(),
-                                        Double.parseDouble(dc.getDocument().getData().get("productPrice").toString()),
-                                        dc.getDocument().getData().get("productUnit").toString(),
-                                        dc.getDocument().getData().get("productImage").toString(),
-                                        Integer.parseInt(dc.getDocument().getData().get("productStocks").toString()),
-                                        dc.getDocument().getData().get("productDescription").toString(),
-                                        dc.getDocument().getData().get("productCategory").toString(),
-                                        Integer.parseInt(dc.getDocument().getData().get("productQuantity").toString())));
+                                db.collection("users").document(document.getData().get("productFarmId").toString())
+                                        .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                        if (task.isSuccessful()) {
+                                            DocumentSnapshot doc = task.getResult();
+                                            if (doc.exists()) {
+                                                //Log.d(TAG, "DocumentSnapshot data: " + doc.getData());
+                                                item.setProductFarmImage(doc.getData().get("userImage").toString());
+                                                item.setProductFarmName(doc.getData().get("username").toString());
+                                            } else {
+                                                Log.d(TAG, "No such document");
+                                            }
+                                            productItems.append((i[0]++), item);
+                                        } else {
+                                            Log.d(TAG, "get failed with ", task.getException());
+                                        }
+                                    }
+                                });
                             }
-                        }
-                        if (productItems.isEmpty()) {
-                            no_product_ll.setVisibility(View.VISIBLE);
-                            farmer_product_lv.setVisibility(View.GONE);
+
                         } else {
-                            no_product_ll.setVisibility(View.GONE);
-                            farmer_product_lv.setVisibility(View.VISIBLE);
+                            Log.d(TAG, "Error getting documents: ", task.getException());
                         }
-                        farmerProductAdapter.notifyDataSetChanged();
                     }
                 });
         farmerProductAdapter = new FarmerProductAdapter(getContext(), productItems);
@@ -165,38 +221,38 @@ public class MyProduct extends Fragment {
 
             product_image_iv = addProductDialog.findViewById(R.id.product_image_iv);
 
-            TextInputLayout productName_til=addProductDialog.findViewById(R.id.productName_til);
-            TextInputLayout productDescription_til=addProductDialog.findViewById(R.id.productDescription_til);
-            TextInputLayout productCategory_til=addProductDialog.findViewById(R.id.productCategory_til);
-            TextInputLayout productStocks_til=addProductDialog.findViewById(R.id.productStocks_til);
-            TextInputLayout productPrice_til=addProductDialog.findViewById(R.id.productPrice_til);
-            TextInputLayout productQuantity_til=addProductDialog.findViewById(R.id.productQuantity_til);
-            TextInputLayout productUnit_til=addProductDialog.findViewById(R.id.productUnit_til);
+            TextInputLayout productName_til = addProductDialog.findViewById(R.id.productName_til);
+            TextInputLayout productDescription_til = addProductDialog.findViewById(R.id.productDescription_til);
+            TextInputLayout productCategory_til = addProductDialog.findViewById(R.id.productCategory_til);
+            TextInputLayout productStocks_til = addProductDialog.findViewById(R.id.productStocks_til);
+            TextInputLayout productPrice_til = addProductDialog.findViewById(R.id.productPrice_til);
+            TextInputLayout productQuantity_til = addProductDialog.findViewById(R.id.productQuantity_til);
+            TextInputLayout productUnit_til = addProductDialog.findViewById(R.id.productUnit_til);
             AutoCompleteTextView productCategory_at = addProductDialog.findViewById(R.id.productCategory_at);
             AutoCompleteTextView productUnit_at = addProductDialog.findViewById(R.id.productUnit_at);
             Button add_product_btn = addProductDialog.findViewById(R.id.add_product_btn);
             add_product_btn.setOnClickListener(v13 -> {
-                if(Verification.verifyPorductName(productName_til) &&
+                if (Verification.verifyPorductName(productName_til) &&
                         Verification.verifyPorductDescription(productDescription_til) &&
-                        Verification.verifyPorductCategory(productCategory_til,productCategory_at.getText().toString()) &&
+                        Verification.verifyPorductCategory(productCategory_til, productCategory_at.getText().toString()) &&
                         Verification.verifyPorductStocks(productStocks_til) &&
                         Verification.verifyPorductPrice(productPrice_til) &&
                         Verification.verifyPorductQuantity(productQuantity_til) &&
-                        Verification.verifyPorductUnit(productUnit_til,productUnit_at.getText().toString())
-                ){
+                        Verification.verifyPorductUnit(productUnit_til, productUnit_at.getText().toString())
+                ) {
                     product_image_iv.setDrawingCacheEnabled(true);
                     product_image_iv.buildDrawingCache();
                     Bitmap bitmap = ((BitmapDrawable) product_image_iv.getDrawable()).getBitmap();
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                     byte[] data = baos.toByteArray();
-                    String productName=productName_til.getEditText().getText().toString(),
-                            productDescription=productDescription_til.getEditText().getText().toString(),
-                            productCategory=productCategory_at.getText().toString(),
-                            productStocks=productStocks_til.getEditText().getText().toString(),
-                            productPrice=productPrice_til.getEditText().getText().toString(),
-                            productQuantity=productQuantity_til.getEditText().getText().toString(),
-                            productUnit=productUnit_at.getText().toString();
+                    String productName = productName_til.getEditText().getText().toString(),
+                            productDescription = productDescription_til.getEditText().getText().toString(),
+                            productCategory = productCategory_at.getText().toString(),
+                            productStocks = productStocks_til.getEditText().getText().toString(),
+                            productPrice = productPrice_til.getEditText().getText().toString(),
+                            productQuantity = productQuantity_til.getEditText().getText().toString(),
+                            productUnit = productUnit_at.getText().toString();
                     ArrayList<Object> itemSpecs = new ArrayList<>();
                     itemSpecs.add(new String(productName));
                     itemSpecs.add(new String(productDescription));
@@ -206,7 +262,7 @@ public class MyProduct extends Fragment {
                     itemSpecs.add(new Integer(Integer.parseInt(productQuantity)));
                     itemSpecs.add(new String(productUnit));
                     itemSpecs.add(new String(user.getUid()));
-                    if(FirebaseHelper.addProduct(getContext(),itemSpecs,data)){
+                    if (FirebaseHelper.addProduct(getContext(), itemSpecs, data)) {
                         addProductDialog.dismiss();
                         successAddProductToast.show();
                     }
@@ -295,10 +351,10 @@ public class MyProduct extends Fragment {
     public class FarmerProductAdapter extends BaseAdapter {
 
         Context context;
-        ArrayList<FarmerProductItem> productList;
+        SparseArray<ProductItem> productList;
         LayoutInflater layoutInflater;
 
-        public FarmerProductAdapter(Context context, ArrayList<FarmerProductItem> productList) {
+        public FarmerProductAdapter(Context context, SparseArray<ProductItem> productList) {
             this.context = context;
             this.productList = productList;
             layoutInflater = LayoutInflater.from(context);
@@ -342,7 +398,7 @@ public class MyProduct extends Fragment {
             Glide.with(context)
                     .load(productList.get(position).getProductImage())
                     .into(product_image_iv);
-            product_name_unit.setText(productList.get(position).getProductName() + " (per "+productList.get(position).getProductQuantity()+" " + productList.get(position).getProductUnit()+")");
+            product_name_unit.setText(productList.get(position).getProductName() + " (per " + productList.get(position).getProductQuantity() + " " + productList.get(position).getProductUnit() + ")");
             product_stocks.setText("Stocks: " + productList.get(position).getProductStocks());
             product_sold.setText("Sold: " + productList.get(position).getProductSold());
             product_category.setText("Category: " + productList.get(position).getProductCategory());

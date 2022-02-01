@@ -40,7 +40,9 @@ public class OnBoard extends AppCompatActivity {
             if (user.getDisplayName() != null && !user.getDisplayName().equals("")) {
                 char c = user.getDisplayName().charAt(user.getDisplayName().length() - 1);
                 if (c == 'c') {
-                    startActivity(new Intent(getBaseContext(), CustomerMainActivity.class));
+                    Intent intent = new Intent(getBaseContext(), CustomerMainActivity.class);
+                    intent.putExtra("user",user);
+                    startActivity(intent);
                     finish();
                 } else if (c == 'f') {
                     startActivity(new Intent(getBaseContext(), FarmerMainActivity.class));

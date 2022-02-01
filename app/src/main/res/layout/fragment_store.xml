@@ -90,34 +90,38 @@
                     android:textSize="10sp" />
             </RelativeLayout>
 
-            <!--            <RelativeLayout-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="500dp"-->
-            <!--                >-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="600dp"
+                android:orientation="vertical">
 
-            <!--                <GridView-->
-            <!--                    android:id="@+id/topProduce_gv"-->
-            <!--                    android:layout_width="match_parent"-->
-            <!--                    android:layout_height="match_parent"-->
-            <!--                    android:gravity="center_horizontal"-->
-            <!--                    android:numColumns="2"-->
-            <!--                    android:scrollbars="none"/>-->
-            <!--            </RelativeLayout>-->
-            <GridLayout
-                android:id="@+id/topProduct_gl"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:columnCount="2"
-                android:rowCount="5"
-                android:orientation="horizontal"
-                android:useDefaultMargins="true"
-                android:layout_gravity="center_horizontal">
+                <GridView
+                    android:id="@+id/topProduce_gv"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_horizontal"
+                    android:numColumns="3"
+                    android:scrollbars="none"
+                    />
+            </LinearLayout>
 
-            </GridLayout>
+<!--            <GridLayout-->
+<!--                android:id="@+id/topProduct_gl"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="center_horizontal"-->
+<!--                android:columnCount="2"-->
+<!--                android:orientation="horizontal"-->
+<!--                android:rowCount="5"-->
+<!--                android:useDefaultMargins="true"-->
+<!--                android:visibility="gone">-->
+
+<!--            </GridLayout>-->
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_marginTop="20dp"
                 android:fontFamily="@font/montserrat_regular"
                 android:lineHeight="21.94dp"
                 android:text="You Might Also Like"

@@ -3,9 +3,12 @@ package com.example.agribiz_v100.customer;
 import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +17,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.agribiz_v100.R;
 
@@ -22,10 +26,37 @@ import java.util.ArrayList;
 
 public class Basket extends Fragment {
 
+    private static final String TAG = "Basket";
     ListView basket_item_list;
     CheckBox select_all_cb;
     ArrayList<Object> list;
     BasketListAdapter basketListAdapter;
+    SparseArray<BasketProductItem> items;
+    Bundle bundle;
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+            list = new ArrayList<>();
+        if (getArguments() != null) {
+            bundle = getArguments();
+            items = bundle.getParcelable("basketProductItems");
+
+        }
+        for(int i=0;i<items.size();i++){
+                    Log.d(TAG,i+"");
+                }
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//
+//            }
+//        },2000);
+
+
+
+        
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -34,30 +65,42 @@ public class Basket extends Fragment {
         View view = inflater.inflate(R.layout.fragment_basket, container, false);
         select_all_cb = view.findViewById(R.id.select_all_cb);
         basket_item_list = view.findViewById(R.id.basket_item_list);
-        list = new ArrayList<>();
-        list.add(new BasketHeader("1102", "Emerson's Farm"));
-        list.add(new BasketProduct("Sweet Tomato", 87.00, 1, "1102"));
-        list.add(new BasketProduct("Sweet Tomato", 87.00, 1, "1102"));
-        list.add(new BasketProduct("Sweet Tomato", 87.00, 1, "1102"));
+        
+        
+        
+//        list.add(new BasketHeader("1102", "Emerson's Farm"));
+//        list.add(new BasketProduct("Sweet Tomato", 87.00, 1, "1102"));
+//        list.add(new BasketProduct("Sweet Tomato", 87.00, 1, "1102"));
+//        list.add(new BasketProduct("Sweet Tomato", 87.00, 1, "1102"));
+//
+//        list.add(new BasketHeader("1103", "Jack Farm"));
+//        list.add(new BasketProduct("Sweet Tomato", 87.00, 1, "1103"));
+//        list.add(new BasketProduct("Sweet Tomato", 87.00, 1, "1103"));
+//
+//        list.add(new BasketHeader("1105", "Skye's Farm"));
+//        list.add(new BasketProduct("Sweet Tomato", 87.00, 1, "1105"));
+//        list.add(new BasketProduct("Sweet Tomato", 87.00, 1, "1105"));
+//        list.add(new BasketProduct("Sweet Tomato", 87.00, 1, "1105"));
+//
+//        list.add(new BasketHeader("1106", "Venice Farm"));
+//        list.add(new BasketProduct("Sweet Tomato", 87.00, 1, "1106"));
+//        list.add(new BasketProduct("Sweet Tomato", 87.00, 1, "1106"));
+//        list.add(new BasketProduct("Sweet Tomato", 87.00, 1, "1106"));
+//        list.add(new BasketProduct("Sweet Tomato", 87.00, 1, "1106"));
+//        list.add(new BasketProduct("Sweet Tomato", 87.00, 1, "1106"));
+//        list.add(new BasketProduct("Sweet Tomato", 87.00, 1, "1106"));
 
-        list.add(new BasketHeader("1103", "Jack Farm"));
-        list.add(new BasketProduct("Sweet Tomato", 87.00, 1, "1103"));
-        list.add(new BasketProduct("Sweet Tomato", 87.00, 1, "1103"));
-
-        list.add(new BasketHeader("1105", "Skye's Farm"));
-        list.add(new BasketProduct("Sweet Tomato", 87.00, 1, "1105"));
-        list.add(new BasketProduct("Sweet Tomato", 87.00, 1, "1105"));
-        list.add(new BasketProduct("Sweet Tomato", 87.00, 1, "1105"));
-
-        list.add(new BasketHeader("1106", "Venice Farm"));
-        list.add(new BasketProduct("Sweet Tomato", 87.00, 1, "1106"));
-        list.add(new BasketProduct("Sweet Tomato", 87.00, 1, "1106"));
-        list.add(new BasketProduct("Sweet Tomato", 87.00, 1, "1106"));
-        list.add(new BasketProduct("Sweet Tomato", 87.00, 1, "1106"));
-        list.add(new BasketProduct("Sweet Tomato", 87.00, 1, "1106"));
-        list.add(new BasketProduct("Sweet Tomato", 87.00, 1, "1106"));
-
-
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (list.size() > 0)
+                    basketListAdapter.notifyDataSetChanged();
+                else
+                    Toast.makeText(getContext(), "No Internet Access!", Toast.LENGTH_SHORT).show();
+                //Log.d(TAG, "wALAY SULOD GIHAPON");
+                //Log.d(TAG,items.size()+"");
+            }
+        }, 5000);
         basketListAdapter = new BasketListAdapter(getContext(), list);
         basket_item_list.setAdapter(basketListAdapter);
 

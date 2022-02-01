@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -15,21 +16,25 @@ import android.widget.Toast;
 
 import com.example.agribiz_v100.ProductItem;
 import com.example.agribiz_v100.R;
-import com.example.agribiz_v100.farmer.FarmerProductItem;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.Map;
 
 import javax.annotation.Nullable;
 
@@ -42,42 +47,12 @@ public class ViewAllProductsActivity extends AppCompatActivity {
     String[] productPrice = {"87.00", "87.00", "87.00", "87.00", "87.00", "87.00", "87.00", "87.00", "87.00", "87.00"};
     int[] image = {R.drawable.sample_product, R.drawable.sample_product, R.drawable.sample_product, R.drawable.sample_product, R.drawable.sample_product, R.drawable.sample_product, R.drawable.sample_product, R.drawable.sample_product, R.drawable.sample_product, R.drawable.sample_product};
     ProductGridAdapter productGridAdapter;
-    ArrayList<ProductItem> productItems;
+    SparseArray<ProductItem> productItems;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+    FirebaseUser user;
+    Bundle bundle;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_all_products);
-        productItems = new ArrayList<>();
-        db.collection("products")
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable QuerySnapshot snapshots,
-                                        @Nullable FirebaseFirestoreException e) {
-                        if (e != null) {
-                            Log.w(TAG, "listen:error", e);
-                            return;
-                        }
-
-                        for (DocumentChange dc : snapshots.getDocumentChanges()) {
-                            if (dc.getType() == DocumentChange.Type.ADDED) {
-                                FarmerProductItem farmerProductItem = new FarmerProductItem(dc.getDocument().getId(),
-                                        dc.getDocument().getData().get("productFarmId").toString(),
-                                        dc.getDocument().getData().get("productName").toString(),
-                                        Double.parseDouble(dc.getDocument().getData().get("productPrice").toString()),
-                                        dc.getDocument().getData().get("productUnit").toString(),
-                                        dc.getDocument().getData().get("productImage").toString(),
-                                        Integer.parseInt(dc.getDocument().getData().get("productStocks").toString()),
-                                        dc.getDocument().getData().get("productDescription").toString(),
-                                        dc.getDocument().getData().get("productCategory").toString(),
-                                        Integer.parseInt(dc.getDocument().getData().get("productQuantity").toString()));
-
-                                productItems.add(farmerProductItem);
-                            }
-
-                        }
-//                        if(productItems.isEmpty()){
+    //                        if(productItems.isEmpty()){
 //                            no_product_ll.setVisibility(View.VISIBLE);
 //                            farmer_product_gv.setVisibility(View.GONE);
 //                        }
@@ -85,9 +60,57 @@ public class ViewAllProductsActivity extends AppCompatActivity {
 //                            no_product_ll.setVisibility(View.GONE);
 //                            farmer_product_gv.setVisibility(View.VISIBLE);
 //                        }
-                        productGridAdapter.notifyDataSetChanged();
-                    }
-                });
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_view_all_products);
+        productItems = new SparseArray<>();
+        if (getIntent().getExtras() != null) {
+            bundle = getIntent().getExtras();
+            productItems = bundle.getSparseParcelableArray("productItems");
+            user = bundle.getParcelable("user");
+            Log.d(TAG,user.getDisplayName().toString());
+        }
+//        db.collection("products")
+//                .get()
+//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                        if (task.isSuccessful()) {
+//                            final int[] i = {0};
+//                            for (QueryDocumentSnapshot document : task.getResult()) {
+//                                //Log.d(TAG, document.getId() + " => " + document.getData());
+//                                ProductItem item = new ProductItem(document);
+//
+//                                db.collection("users").document(document.getData().get("productFarmId").toString())
+//                                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//                                    @Override
+//                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                                        if (task.isSuccessful()) {
+//                                            DocumentSnapshot doc = task.getResult();
+//
+//                                            if (doc.exists()) {
+//                                                //Log.d(TAG, "DocumentSnapshot data: " + doc.getData());
+//                                                item.setProductFarmImage(doc.getData().get("userImage").toString());
+//                                                item.setProductFarmName(doc.getData().get("username").toString());
+//                                            } else {
+//                                                Log.d(TAG, "No such document");
+//                                            }
+//                                            productItems.append(i[0]++,item);
+//                                            productGridAdapter.notifyDataSetChanged();
+//                                        } else {
+//                                            Log.d(TAG, "get failed with ", task.getException());
+//                                        }
+//                                    }
+//                                });
+//                            }
+//
+//                        } else {
+//                            Log.d(TAG, "Error getting documents: ", task.getException());
+//                        }
+//                    }
+//                });
+
         productGridAdapter = new ProductGridAdapter(getApplicationContext(), productItems);
         viewAll_gv = findViewById(R.id.viewAll_gv);
         viewAll_gv.setAdapter(productGridAdapter);
@@ -99,8 +122,9 @@ public class ViewAllProductsActivity extends AppCompatActivity {
         viewAll_gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getApplicationContext(), ProductView.class);
+                Intent intent = new Intent(ViewAllProductsActivity.this, ProductView.class);
                 intent.putExtra("item", productItems.get(position));
+                intent.putExtra("user",user);
                 startActivity(intent);
             }
         });

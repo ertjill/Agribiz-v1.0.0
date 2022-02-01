@@ -86,7 +86,9 @@ public class LoginActivity extends AppCompatActivity {
                                     if (user.getDisplayName() != null) {
                                         char c = user.getDisplayName().charAt(user.getDisplayName().length() - 1);
                                         if (c == 'c') {
-                                            startActivity(new Intent(getBaseContext(), CustomerMainActivity.class));
+                                            Intent intent = new Intent(getBaseContext(), CustomerMainActivity.class);
+                                            intent.putExtra("user",user);
+                                            startActivity(intent);
                                             finish();
                                         } else if(c=='f') {
                                             startActivity(new Intent(getBaseContext(), FarmerMainActivity.class));
@@ -96,7 +98,10 @@ public class LoginActivity extends AppCompatActivity {
                                             finish();
                                         }
                                     } else {
-                                        startActivity(new Intent(getBaseContext(), AgrovitMainActivity.class));
+                                        Intent intent =new Intent(getBaseContext(), AgrovitMainActivity.class);
+                                        //Bundle bundle = new Bundle();
+                                        intent.putExtra("user",user);
+                                        startActivity(intent);
                                         finish();
                                     }
 

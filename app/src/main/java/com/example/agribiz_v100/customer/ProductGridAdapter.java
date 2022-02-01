@@ -1,6 +1,7 @@
 package com.example.agribiz_v100.customer;
 
 import android.content.Context;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,17 +12,14 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.agribiz_v100.ProductItem;
 import com.example.agribiz_v100.R;
-import com.example.agribiz_v100.farmer.FarmerProductItem;
-
-import java.util.ArrayList;
 
 public class ProductGridAdapter extends BaseAdapter {
     Context context;
-    ArrayList<ProductItem> product;
+    SparseArray<ProductItem> product;
 
     LayoutInflater layoutInflater;
 
-    public ProductGridAdapter(Context context, ArrayList<ProductItem> product) {
+    public ProductGridAdapter(Context context, SparseArray<ProductItem> product) {
         this.context = context;
         this.product = product;
     }
@@ -61,7 +59,7 @@ public class ProductGridAdapter extends BaseAdapter {
         TextView productPrice = convertView.findViewById(R.id.productPrice_tv);
 
         Glide.with(context)
-                .load(product.get(position).getProductImage())
+                .load(product.get(position).getProductImage().get(0))
                 .into(imageView);
         productName.setText(product.get(position).getProductName());
         productUnit.setText("(per "+product.get(position).getProductQuantity()+" "+product.get(position).getProductUnit()+")");
