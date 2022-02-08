@@ -1,32 +1,29 @@
-package com.example.agribiz_v100;
+package com.example.agribiz_v100.customer;
 
-import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.SparseArray;
 
+import com.example.agribiz_v100.ProductItem;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ProductItem implements Parcelable{
-    //Product needed information
+public class ProductModel {
     private String productId;
     private String productName;
     private Double productPrice;
     private String productUnit;
     private int productQuantity;
-    private  ArrayList<String> productImage;
+    private ArrayList<String> productImage;
     private String productDescription;
     private String productCategory;
     private String productCoverImage;
 
-    private int productRating=0;
-    private int productStocks=0;
-    private int productSold=0;
+    private int productRating = 0;
+    private int productStocks = 0;
+    private int productSold = 0;
 
     private String productFarmId;
     private String productFarmImage;
@@ -38,53 +35,20 @@ public class ProductItem implements Parcelable{
     private Double productOldPrice;
     private int productSalesTo;
 
-    public ProductItem(){
-
-    }
-    protected ProductItem(Parcel in) {
-        productId = in.readString();
-        productName = in.readString();
-        if (in.readByte() == 0) {
-            productPrice = null;
-        } else {
-            productPrice = in.readDouble();
-        }
-        productUnit = in.readString();
-        productQuantity = in.readInt();
-        productImage = in.createStringArrayList();
-        productDescription = in.readString();
-        productCategory = in.readString();
-        productRating = in.readInt();
-        productStocks = in.readInt();
-        productSold = in.readInt();
-        productFarmId = in.readString();
-        productFarmImage = in.readString();
-        productFarmName = in.readString();
-        productFarmLocation = in.readString();
-        if (in.readByte() == 0) {
-            productShippingFee = null;
-        } else {
-            productShippingFee = in.readDouble();
-        }
-        if (in.readByte() == 0) {
-            productOldPrice = null;
-        } else {
-            productOldPrice = in.readDouble();
-        }
-        productSalesTo = in.readInt();
+    public ProductModel(String productId, String productName, Double productPrice, String productUnit, int productQuantity, ArrayList<String> productImage, String productDescription, String productCategory, int productStocks) {
+        this.productId = productId;
+        this.productName = productName;
+        this.productPrice = productPrice;
+        this.productUnit = productUnit;
+        this.productQuantity = productQuantity;
+        this.productImage = productImage;
+        this.productDescription = productDescription;
+        this.productCategory = productCategory;
+        this.productStocks = productStocks;
     }
 
-    public static final Creator<ProductItem> CREATOR = new Creator<ProductItem>() {
-        @Override
-        public ProductItem createFromParcel(Parcel in) {
-            return new ProductItem(in);
-        }
-
-        @Override
-        public ProductItem[] newArray(int size) {
-            return new ProductItem[size];
-        }
-    };
+    public ProductModel() {
+    }
 
     public String getProductCoverImage() {
         return productCoverImage;
@@ -94,26 +58,27 @@ public class ProductItem implements Parcelable{
         this.productCoverImage = productCoverImage;
     }
 
-    public Map<String,Object> getProductMap(){
-        Map<String,Object> prod = new HashMap<>();
-        prod.put("productId",getProductId());
-        prod.put("productName",getProductName());
-        prod.put("productPrice",getProductPrice());
-        prod.put("productUnit",getProductUnit());
-        prod.put("productQuantity",getProductQuantity());
-        prod.put("productImage",getProductImage());
-        prod.put("productDescription",getProductDescription());
-        prod.put("productCategory",getProductCategory());
-        prod.put("productRating",getProductRating());
-        prod.put("productStocks",getProductStocks());
-        prod.put("productSold",getProductSold());
-        prod.put("productFarmId",getProductFarmId());
-        prod.put("productFarmName",getProductFarmName());
-        prod.put("productFarmImage",getProductFarmImage());
-        prod.put("productFarmLocation",getProductFarmLocation());
-        prod.put("productShippingFee",getProductShippingFee());
+    public Map<String, Object> getProductMap() {
+        Map<String, Object> prod = new HashMap<>();
+        prod.put("productId", getProductId());
+        prod.put("productName", getProductName());
+        prod.put("productPrice", getProductPrice());
+        prod.put("productUnit", getProductUnit());
+        prod.put("productQuantity", getProductQuantity());
+        prod.put("productImage", getProductImage());
+        prod.put("productDescription", getProductDescription());
+        prod.put("productCategory", getProductCategory());
+        prod.put("productRating", getProductRating());
+        prod.put("productStocks", getProductStocks());
+        prod.put("productSold", getProductSold());
+        prod.put("productFarmId", getProductFarmId());
+        prod.put("productFarmName", getProductFarmName());
+        prod.put("productFarmImage", getProductFarmImage());
+        prod.put("productFarmLocation", getProductFarmLocation());
+        prod.put("productShippingFee", getProductShippingFee());
         return prod;
     }
+
     public Double getProductShippingFee() {
         return productShippingFee;
     }
@@ -220,7 +185,7 @@ public class ProductItem implements Parcelable{
         this.productDescription = productDescription;
     }
 
-    public ProductItem( QueryDocumentSnapshot product ){
+    public ProductModel(QueryDocumentSnapshot product) {
         this.productImage = new ArrayList<>();
         this.productId = product.getId();
         this.productFarmId = product.getData().get("productFarmId").toString();
@@ -228,11 +193,11 @@ public class ProductItem implements Parcelable{
         this.productPrice = (Double) product.getData().get("productPrice");
         this.productUnit = product.getData().get("productUnit").toString();
         this.productQuantity = Integer.parseInt(product.getData().get("productQuantity").toString());
-        this.productImage = (ArrayList<String>) product.getData().get("productImage");
+        this.productImage.add(product.getData().get("productImage").toString());
         this.productDescription = product.getData().get("productDescription").toString();
         this.productCategory = product.getData().get("productCategory").toString();
         this.productStocks = Integer.parseInt(product.getData().get("productStocks").toString());
-        this.productCoverImage=product.getData().get("productImage")+"";
+        this.productCoverImage = product.getData().get("productImage") + "";
         //this.productSold = Integer.parseInt(product.getData().get("productSold").toString());
     }
 
@@ -276,45 +241,5 @@ public class ProductItem implements Parcelable{
         this.productUnit = productUnit;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(productId);
-        dest.writeString(productName);
-        if (productPrice == null) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeDouble(productPrice);
-        }
-        dest.writeString(productUnit);
-        dest.writeInt(productQuantity);
-        dest.writeStringList(productImage);
-        dest.writeString(productDescription);
-        dest.writeString(productCategory);
-        dest.writeInt(productRating);
-        dest.writeInt(productStocks);
-        dest.writeInt(productSold);
-        dest.writeString(productFarmId);
-        dest.writeString(productFarmImage);
-        dest.writeString(productFarmName);
-        dest.writeString(productFarmLocation);
-        if (productShippingFee == null) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeDouble(productShippingFee);
-        }
-        if (productOldPrice == null) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeDouble(productOldPrice);
-        }
-        dest.writeInt(productSalesTo);
-    }
 }

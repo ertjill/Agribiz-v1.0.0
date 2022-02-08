@@ -21,8 +21,8 @@
             android:layout_marginBottom="10dp"
             app:cardCornerRadius="35dp">
 
-
             <ImageView
+                android:id="@+id/userImage_iv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"

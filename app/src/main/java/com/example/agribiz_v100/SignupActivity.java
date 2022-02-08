@@ -14,7 +14,6 @@ public class SignupActivity extends AppCompatActivity {
 
     EditText editText_usernameCustomer, editText_numberCustomer, editText_emailCustomer, editText_passwordCustomer, editText_conPasswordCustomer;
     Button signupCustomer_btn;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,10 +63,10 @@ public class SignupActivity extends AppCompatActivity {
             else {
                 Toast.makeText(getApplicationContext(), "Create an account", Toast.LENGTH_SHORT).show();
                 Intent intent =new Intent(getApplicationContext(), VerificationCodeActivity.class);
-                intent.putExtra("phoneNo",phone);
-                intent.putExtra("email",email);
-                intent.putExtra("password",password);
-                intent.putExtra("displayName",username);
+                intent.putExtra("userPhoneNo",phone);
+                intent.putExtra("userEmail",email);
+                intent.putExtra("userPassword",password);
+                intent.putExtra("userName",username);
                 startActivity(intent);
             }
         });

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Handler;
 import android.os.Parcelable;
@@ -48,137 +49,113 @@ import java.util.Map;
 
 public class Store extends Fragment {
 
-
     private static final String TAG = "Store";
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
     HorizontalScrollView farmersHub_hv;
     LinearLayout farmersHub_ll;
-    //    GridLayout topProduct_gl;
     ListView item_may_like_lv;
     TextView viewAll_tv;
     GridView topProduce_gv;
     String[] item_may_like = {"Sweet Tomato", "Sweet Tomato", "Sweet Tomato", "Sweet Tomato", "Sweet Tomato"};
     SparseArray<ProductItem> productItems, topProducts;
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
     ProductGridAdapter productGridAdapter;
-    Process one;
     FirebaseUser user;
     Bundle bundle;
-    public synchronized void setProducts() {
-
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        productItems = new SparseArray<>();
         topProducts = new SparseArray<>();
-
+        productGridAdapter = new ProductGridAdapter(getContext(), topProducts);
+        Log.d(TAG, "Creating Store...");
         if (getArguments() != null) {
             bundle = getArguments();
-            productItems = bundle.getSparseParcelableArray("productItems");
-            topProducts = bundle.getSparseParcelableArray("topProducts");
-            //productGridAdapter.notifyDataSetChanged();
-            user=bundle.getParcelable("user");
+        } else {
+            Log.d(TAG, "No data!");
         }
 
+    }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.d(TAG, "Store is Starting...");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(TAG, "Store is resuming...");
+        productGridAdapter.notifyDataSetChanged();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_store, container, false);
+        synchronized (this) {
+            Log.d(TAG, "Creating Store view...");
+        }
+        synchronized (this) {
+            View view = inflater.inflate(R.layout.fragment_store, container, false);
+            SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refreshLayout);
 
-        farmersHub_hv = view.findViewById(R.id.farmersHub_hv);
-        farmersHub_ll = view.findViewById(R.id.farmersHub_ll);
-        topProduce_gv = view.findViewById(R.id.topProduce_gv);
-        item_may_like_lv = view.findViewById(R.id.item_may_like_lv);
-        viewAll_tv = view.findViewById(R.id.viewAll_tv);
+            swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    Toast.makeText(getContext(), "Refreshing...", Toast.LENGTH_SHORT).show();
+                    swipeRefreshLayout.setRefreshing(false);
+                }
+            });
+            farmersHub_hv = view.findViewById(R.id.farmersHub_hv);
+            farmersHub_ll = view.findViewById(R.id.farmersHub_ll);
+            topProduce_gv = view.findViewById(R.id.topProduce_gv);
+            item_may_like_lv = view.findViewById(R.id.item_may_like_lv);
+            viewAll_tv = view.findViewById(R.id.viewAll_tv);
+            productGridAdapter = new ProductGridAdapter(getContext(), topProducts);
+            topProduce_gv.setAdapter(productGridAdapter);
 
-        topProduce_gv.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
+            topProduce_gv.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    return event.getAction() == MotionEvent.ACTION_MOVE;
+                }
+            });
 
-                return event.getAction() == MotionEvent.ACTION_MOVE;
-            }
-        });
-
-        viewAll_tv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Log.d(TAG, productItems.size() + "");
-                Intent i = new Intent(getContext(), ViewAllProductsActivity.class);
-//                Bundle bundle = new Bundle();
-//                bundle.putSparseParcelableArray("productItems", productItems);
-
-                i.putExtras(bundle);
-                startActivity(i);
-            }
-        });
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (productItems.size() > 0)
-                    productGridAdapter.notifyDataSetChanged();
-                else
-                    Toast.makeText(getContext(), "No Internet Access!", Toast.LENGTH_SHORT).show();
-                    //Log.d(TAG, "wALAY SULOD GIHAPON");
-            }
-        }, 2000);
-
-        topProduce_gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getContext(), ProductView.class);
-                intent.putExtra("item", productItems.get(position));
-                intent.putExtra("user",user);
-                startActivity(intent);
-            }
-        });
-        setupTopProduce();
-        setupFarmerHubs();
-        setupItemsYouLike();
-
-        return view;
+            viewAll_tv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //Log.d(TAG, productItems.size() + "");
+//                    Intent i = new Intent(getContext(), ViewAllProductsActivity.class);
+//                    i.putExtras(bundle);
+//                    startActivity(i);
+                    Intent intent=new Intent();
+                    intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                    intent.setClassName(getContext(),"com.example.agribiz_v100.customer.ViewAllProductsActivity");
+                    startActivity(intent);
+                }
+            });
 
 
-//        ProductGridAdapter productGridAdapter = new ProductGridAdapter(getContext(),productName,productUnit,productPrice,image);
-//        GridView topProduct_gv = view.findViewById(R.id.topProduce_gv);
-//        topProduct_gv.setAdapter(productGridAdapter);
-
-//        topProduct_gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Toast.makeText(getContext(), "Product item", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-
-
-//        topProduct_gl = view.findViewById(R.id.topProduct_gl);
-
-
-//        for (int i = 0; i < productItems.size(); i++) {
-//            if (i < 10){
-//                topProducts.append(i, productItems.get(i));
-//            }
-//        }
-
-
+            topProduce_gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Intent intent = new Intent(getContext(), ProductView.class);
+                    intent.putExtra("item", topProducts.get(position));
+                    intent.putExtra("user", user);
+                    startActivity(intent);
+                }
+            });
+            setupFarmerHubs();
+            displayTopProducts();
+            setupItemsYouLike();
+            return view;
+        }
     }
 
     private void setupItemsYouLike() {
         ItemMayLikeAdapter itemMayLikeAdapter = new ItemMayLikeAdapter(getContext(), item_may_like);
         item_may_like_lv.setAdapter(itemMayLikeAdapter);
-    }
-
-    public void setupTopProduce() {
-        productGridAdapter = new ProductGridAdapter(getContext(), topProducts);
-        topProduce_gv.setAdapter(productGridAdapter);
     }
 
     public void setupFarmerHubs() {
@@ -213,60 +190,46 @@ public class Store extends Fragment {
                 });
 
     }
+    public void displayTopProducts(){
+        db.collection("products").limit(6)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            final int[] i = {0};
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                int size = task.getResult().size();
+                                Log.d(TAG, "TASK SIZE: " + size);
+                                ProductItem item = new ProductItem(document);
+                                db.collection("users").document(document.getData().get("productFarmId").toString())
+                                        .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                        if (task.isSuccessful()) {
+                                            DocumentSnapshot doc = task.getResult();
+                                            if (doc.exists()) {
+                                                item.setProductFarmImage(doc.getData().get("userImage").toString());
+                                                item.setProductFarmName(doc.getData().get("username").toString());
+                                            } else {
+                                                Log.d(TAG, "No such document");
+                                            }
+                                            topProducts.append(i[0]++, item);
+                                            productGridAdapter.notifyDataSetChanged();
+                                            Log.d(TAG, topProducts.size() + " : topProductsItems size");
 
-    public class ProductGridAdapter extends BaseAdapter {
-        Context context;
-        SparseArray<ProductItem> product;
+                                        } else {
+                                            Log.d(TAG, "get failed with ", task.getException());
+                                        }
+                                    }
+                                });
+                            }
 
-        LayoutInflater layoutInflater;
-
-        public ProductGridAdapter(Context context, SparseArray<ProductItem> product) {
-            this.context = context;
-            this.product = product;
-        }
-
-        @Override
-        public int getCount() {
-            return product.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return null;
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return 0;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-
-
-            if (layoutInflater == null) {
-                layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-            }
-
-            if (convertView == null) {
-                convertView = layoutInflater.inflate(R.layout.top_product_item_card, null);
-            }
-
-            ImageView imageView = convertView.findViewById(R.id.product_iv);
-            TextView productName = convertView.findViewById(R.id.product_name_tv);
-            TextView productRating = convertView.findViewById(R.id.productRating_tv);
-            TextView productPrice = convertView.findViewById(R.id.productPrice_tv);
-
-            Glide.with(context)
-                    .load(product.get(position).getProductImage().get(0))
-                    .into(imageView);
-            productName.setText(product.get(position).getProductName());
-            productRating.setText("0");
-            productPrice.setText("Php " + product.get(position).getProductPrice());
-
-            return convertView;
-        }
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
     }
 
 

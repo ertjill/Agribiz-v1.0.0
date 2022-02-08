@@ -11,9 +11,36 @@
         android:id="@+id/customerMain_vp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/customer_tab"
-         />
+        android:layout_above="@+id/bottom_ll"
+        />
 
+    <FrameLayout
+        android:id="@+id/fragment_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/bottom_ll"
+        android:visibility="gone">
+
+    </FrameLayout>
+    <LinearLayout
+        android:id="@+id/bottom_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true">
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottom_navigation"
+            style="@style/Widget.App.BottomNavigationView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:itemIconTint="@drawable/bottom_navigation_tab_selector"
+            app:itemTextColor="@drawable/bottom_navigation_tab_selector"
+            app:labelVisibilityMode="labeled"
+            app:menu="@menu/customer_bottom_navigation_menu"
+            app:itemTextAppearanceInactive="@style/bottom_navigation_textApperance"/>
+
+    </LinearLayout>
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/customer_tab"
         android:layout_width="match_parent"
@@ -25,7 +52,9 @@
         app:tabIndicatorColor="@color/transparent"
         app:tabSelectedTextColor="@color/yellow_orange"
         app:tabTextAppearance="@style/CustomTabText"
-        app:tabTextColor="@color/army_green">
+        app:tabTextColor="@color/army_green"
+        android:visibility="gone">
+
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -48,8 +77,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:icon="@drawable/ic_baseline_shopping_basket_24"
-            android:text="Basket"
-            />
+            android:text="Basket" />
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"

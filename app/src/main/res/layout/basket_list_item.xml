@@ -4,6 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/highlight_back"
+    android:paddingTop="10dp"
+    android:paddingBottom="14dp"
     android:paddingLeft="10dp">
     <CheckBox
         android:id="@+id/item_checkbox"
@@ -24,29 +26,31 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:layout_marginLeft="18dp">
+
         <TextView
             android:id="@+id/item_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/montserrat_semibold"
+            android:lineHeight="17.07dp"
+
             android:text="Fresh Tomato (per kg)"
             android:textColor="@color/brown"
-
-            android:fontFamily="@font/montserrat_semibold"
             android:textFontWeight="600"
-            android:textSize="14sp"
-            android:lineHeight="17.07dp"/>
+            android:textSize="14sp" />
+
         <TextView
             android:id="@+id/item_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/item_name"
             android:layout_marginTop="4dp"
+            android:fontFamily="@font/montserrat_regular"
+            android:lineHeight="12.19sp"
             android:text="Php 87.00"
             android:textColor="@color/brown"
-            android:fontFamily="@font/montserrat_regular"
             android:textFontWeight="400"
-            android:textSize="10sp"
-            android:lineHeight="12.19sp"/>
+            android:textSize="10sp" />
         <TextView
             android:id="@+id/item_qty"
             android:layout_width="wrap_content"

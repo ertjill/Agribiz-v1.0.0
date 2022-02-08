@@ -1,6 +1,7 @@
 package com.example.agribiz_v100.customer;
 
 import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.example.agribiz_v100.ProductItem;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -8,10 +9,16 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.util.HashMap;
 import java.util.Map;
 
-public class BasketProductItem extends ProductItem {
+public class BasketProductItem extends ProductItem implements Parcelable {
     private int productBasketQuantity;
-    protected BasketProductItem(Parcel in) {
-        super(in);
+    private boolean checked=false;
+
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked = checked;
     }
 
     public BasketProductItem(QueryDocumentSnapshot product) {

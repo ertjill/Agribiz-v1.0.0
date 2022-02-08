@@ -22,7 +22,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="@color/white"
-                app:navigationIcon="@drawable/ic_baseline_arrow_back_24" />
+                app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
+                app:menu="@menu/product_view_menu"/>
         </com.google.android.material.appbar.AppBarLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
@@ -36,7 +37,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
             <ImageView
                 android:id="@+id/product_image_iv"
                 android:layout_width="match_parent"
@@ -112,6 +112,7 @@
                         android:id="@+id/hub_profile_image"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent" />
+
                 </androidx.cardview.widget.CardView>
 
                 <LinearLayout

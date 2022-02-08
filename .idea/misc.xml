@@ -3,7 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Emerson Agribiz/app/src/main/res/drawable/badge.xml" value="0.1" />
         <entry key="..\:/Emerson Agribiz/app/src/main/res/drawable/basket_checkbox.xml" value="0.2545045045045045" />
+        <entry key="..\:/Emerson Agribiz/app/src/main/res/drawable/bottom_navigation_selector.xml" value="0.23" />
+        <entry key="..\:/Emerson Agribiz/app/src/main/res/drawable/bottom_navigation_tab_selector.xml" value="0.222" />
         <entry key="..\:/Emerson Agribiz/app/src/main/res/drawable/ic_baseline_add_circle_24.xml" value="0.20945945945945946" />
         <entry key="..\:/Emerson Agribiz/app/src/main/res/drawable/ic_baseline_add_photo_alternate_24.xml" value="0.1891891891891892" />
         <entry key="..\:/Emerson Agribiz/app/src/main/res/drawable/ic_baseline_camera_alt_24.xml" value="0.1965" />
@@ -25,18 +28,20 @@
         <entry key="..\:/Emerson Agribiz/app/src/main/res/font/montserrat_semibold.xml" value="0.3035897435897436" />
         <entry key="..\:/Emerson Agribiz/app/src/main/res/layout/activity_.xml" value="0.24054054054054055" />
         <entry key="..\:/Emerson Agribiz/app/src/main/res/layout/activity_agrovit_main.xml" value="0.23733333333333334" />
-        <entry key="..\:/Emerson Agribiz/app/src/main/res/layout/activity_customer_main.xml" value="0.5" />
+        <entry key="..\:/Emerson Agribiz/app/src/main/res/layout/activity_customer_main.xml" value="0.25" />
         <entry key="..\:/Emerson Agribiz/app/src/main/res/layout/activity_farmer_main.xml" value="0.24054054054054055" />
         <entry key="..\:/Emerson Agribiz/app/src/main/res/layout/activity_login.xml" value="0.25" />
         <entry key="..\:/Emerson Agribiz/app/src/main/res/layout/activity_main.xml" value="0.25" />
-        <entry key="..\:/Emerson Agribiz/app/src/main/res/layout/activity_product_view.xml" value="0.25" />
+        <entry key="..\:/Emerson Agribiz/app/src/main/res/layout/activity_product_view.xml" value="0.33" />
         <entry key="..\:/Emerson Agribiz/app/src/main/res/layout/activity_profile.xml" value="0.18468468468468469" />
         <entry key="..\:/Emerson Agribiz/app/src/main/res/layout/activity_signup.xml" value="0.33" />
+        <entry key="..\:/Emerson Agribiz/app/src/main/res/layout/activity_splash.xml" value="0.25" />
         <entry key="..\:/Emerson Agribiz/app/src/main/res/layout/activity_verification_code.xml" value="0.33" />
         <entry key="..\:/Emerson Agribiz/app/src/main/res/layout/activity_view_all_product.xml" value="0.23733333333333334" />
         <entry key="..\:/Emerson Agribiz/app/src/main/res/layout/activity_view_all_products.xml" value="0.24054054054054055" />
         <entry key="..\:/Emerson Agribiz/app/src/main/res/layout/add_product_picture_dialog.xml" value="0.33" />
         <entry key="..\:/Emerson Agribiz/app/src/main/res/layout/add_to_basket_dialog.xml" value="0.33" />
+        <entry key="..\:/Emerson Agribiz/app/src/main/res/layout/badge.xml" value="0.9" />
         <entry key="..\:/Emerson Agribiz/app/src/main/res/layout/basket_list_item.xml" value="0.33" />
         <entry key="..\:/Emerson Agribiz/app/src/main/res/layout/basket_list_item_header.xml" value="0.33" />
         <entry key="..\:/Emerson Agribiz/app/src/main/res/layout/dropdown_item.xml" value="0.33" />
@@ -69,7 +74,11 @@
         <entry key="..\:/Emerson Agribiz/app/src/main/res/layout/top_product_item_card.xml" value="0.44831223628691985" />
         <entry key="..\:/Emerson Agribiz/app/src/main/res/layout/you.xml" value="0.24054054054054055" />
         <entry key="..\:/Emerson Agribiz/app/src/main/res/layout/you_might_also_like_item_card.xml" value="0.24054054054054055" />
+        <entry key="..\:/Emerson Agribiz/app/src/main/res/menu/customer_bottom_navigation_menu.xml" value="0.17882882882882883" />
+        <entry key="..\:/Emerson Agribiz/app/src/main/res/menu/product_view_menu.xml" value="1.0" />
         <entry key="..\:/Emerson Agribiz/app/src/main/res/menu/search_filter_menu.xml" value="0.33" />
+        <entry key="..\:/Emerson Agribiz/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1315" />
+        <entry key="..\:/Emerson Agribiz/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.1315" />
       </map>
     </option>
   </component>

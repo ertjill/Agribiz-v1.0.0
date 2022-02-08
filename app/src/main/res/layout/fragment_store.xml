@@ -7,145 +7,136 @@
     android:paddingRight="17dp"
     tools:context=".customer.Store">
 
-    <ScrollView
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/refreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scrollbars="none">
+        android:layout_height="match_parent">
 
-
-        <LinearLayout
-            android:id="@+id/top_linear"
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:scrollbars="none">
 
             <LinearLayout
-                android:layout_width="119dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="15dp"
+                android:id="@+id/top_linear"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:orientation="vertical">
 
-                <ImageView
-                    android:layout_width="119dp"
-                    android:layout_height="57dp"
-                    android:src="@drawable/agribiz_logo_green" />
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="12dp"
-                android:fontFamily="@font/montserrat_regular"
-                android:lineHeight="21.94dp"
-                android:text="Farmers Hubs"
-                android:textColor="@color/brown"
-                android:textFontWeight="600"
-                android:textSize="18sp" />
-
-            <HorizontalScrollView
-                android:id="@+id/farmersHub_hv"
-                android:layout_width="match_parent"
-                android:layout_height="82dp"
-                android:scrollbars="none">
-
                 <LinearLayout
-                    android:id="@+id/farmersHub_ll"
-                    android:layout_width="wrap_content"
+                    android:layout_width="119dp"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"></LinearLayout>
-            </HorizontalScrollView>
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="15dp"
+                    android:orientation="vertical">
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="27dp"
-                android:layout_marginBottom="14dp"
-                android:gravity="center_vertical">
+                    <ImageView
+                        android:layout_width="119dp"
+                        android:layout_height="57dp"
+                        android:src="@drawable/agribiz_logo_green" />
+                </LinearLayout>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="12dp"
                     android:fontFamily="@font/montserrat_regular"
                     android:lineHeight="21.94dp"
-                    android:text="Top Produce for You"
+                    android:text="Farmers Hubs"
                     android:textColor="@color/brown"
-                    android:textFontWeight="700"
+                    android:textFontWeight="600"
+                    android:textSize="18sp" />
+
+                <HorizontalScrollView
+                    android:id="@+id/farmersHub_hv"
+                    android:layout_width="match_parent"
+                    android:layout_height="82dp"
+                    android:scrollbars="none">
+
+                    <LinearLayout
+                        android:id="@+id/farmersHub_ll"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"></LinearLayout>
+                </HorizontalScrollView>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="27dp"
+                    android:layout_marginBottom="14dp"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:fontFamily="@font/montserrat_regular"
+                        android:lineHeight="21.94dp"
+                        android:text="Top Produce for You"
+                        android:textColor="@color/brown"
+                        android:textFontWeight="700"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/viewAll_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:fontFamily="@font/montserrat_regular"
+                        android:lineHeight="12.19dp"
+                        android:text="View All"
+                        android:textColor="@color/army_green"
+                        android:textFontWeight="600"
+                        android:textSize="10sp" />
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="846dp"
+                    android:orientation="vertical">
+
+                    <GridView
+                        android:id="@+id/topProduce_gv"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_horizontal"
+                        android:numColumns="2"
+                        android:scrollbars="none"
+                        />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="20dp"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:lineHeight="21.94dp"
+                    android:text="You Might Also Like"
+                    android:textColor="@color/brown"
+                    android:textFontWeight="400"
                     android:textSize="18sp" />
 
                 <TextView
-                    android:id="@+id/viewAll_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
                     android:fontFamily="@font/montserrat_regular"
-                    android:lineHeight="12.19dp"
-                    android:text="View All"
-                    android:textColor="@color/army_green"
-                    android:textFontWeight="600"
-                    android:textSize="10sp" />
-            </RelativeLayout>
+                    android:text="Most Wanted"
+                    android:textColor="@color/brown"
+                    android:textFontWeight="400"
+                    android:textSize="12sp" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="600dp"
-                android:orientation="vertical">
-
-                <GridView
-                    android:id="@+id/topProduce_gv"
+                <ListView
+                    android:id="@+id/item_may_like_lv"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center_horizontal"
-                    android:numColumns="3"
-                    android:scrollbars="none"
-                    />
+                    android:layout_height="395dp"
+                    android:divider="#F1EEEE"
+                    android:dividerHeight="1dp"></ListView>
+
             </LinearLayout>
-
-<!--            <GridLayout-->
-<!--                android:id="@+id/topProduct_gl"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_gravity="center_horizontal"-->
-<!--                android:columnCount="2"-->
-<!--                android:orientation="horizontal"-->
-<!--                android:rowCount="5"-->
-<!--                android:useDefaultMargins="true"-->
-<!--                android:visibility="gone">-->
-
-<!--            </GridLayout>-->
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginTop="20dp"
-                android:fontFamily="@font/montserrat_regular"
-                android:lineHeight="21.94dp"
-                android:text="You Might Also Like"
-                android:textColor="@color/brown"
-                android:textFontWeight="400"
-                android:textSize="18sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/montserrat_regular"
-                android:text="Most Wanted"
-                android:textColor="@color/brown"
-                android:textFontWeight="400"
-                android:textSize="12sp" />
-
-            <ListView
-                android:id="@+id/item_may_like_lv"
-                android:layout_width="match_parent"
-                android:layout_height="395dp"
-                android:divider="#F1EEEE"
-                android:dividerHeight="1dp"></ListView>
-
-        </LinearLayout>
-    </ScrollView>
-
+        </ScrollView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </RelativeLayout>

@@ -1,9 +1,15 @@
 package com.example.agribiz_v100.customer;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 public class BasketHeader {
-    String farmId;
-    String farmName;
+    String farmId="defaul";
+    String farmName="default";
     boolean checked=false;
+
+    public BasketHeader() {
+    }
 
     public BasketHeader(String farmId, String farmName) {
         this.farmId = farmId;
@@ -33,4 +39,5 @@ public class BasketHeader {
     public void setChecked(boolean checked) {
         this.checked = checked;
     }
+
 }

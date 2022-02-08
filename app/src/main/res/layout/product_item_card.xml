@@ -19,7 +19,7 @@
         android:background="@color/white"
         android:padding="5dp">
         <androidx.cardview.widget.CardView
-            android:layout_width="170dp"
+            android:layout_width="match_parent"
             android:layout_height="200dp"
             android:backgroundTint="@color/army_green"
             app:cardCornerRadius="10dp">
@@ -41,7 +41,7 @@
         </androidx.cardview.widget.CardView>
 
         <RelativeLayout
-            android:layout_width="170dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp">
 
@@ -74,7 +74,7 @@
 
         <TextView
             android:id="@+id/productPrice_tv"
-            android:layout_width="170dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/montserrat_regular"
             android:text="Php 87.00"
@@ -82,7 +82,7 @@
             android:textFontWeight="400"
             android:textSize="12sp"/>
         <RelativeLayout
-            android:layout_width="170dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <TextView
@@ -90,15 +90,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawableStart="@drawable/product_display_card_location"
+                android:drawablePadding="3dp"
                 android:drawableTint="@color/brown"
                 android:fontFamily="@font/montserrat_regular"
+                android:maxWidth="100dp"
                 android:singleLine="true"
                 android:text="Adlaon"
-                android:maxWidth="100dp"
                 android:textColor="@color/brown"
                 android:textFontWeight="400"
-                android:textSize="10sp"
-                android:drawablePadding="3dp"/>
+                android:textSize="10sp" />
 
 <!--            <TextView-->
 <!--                android:id="@+id/productUnit_tv"-->

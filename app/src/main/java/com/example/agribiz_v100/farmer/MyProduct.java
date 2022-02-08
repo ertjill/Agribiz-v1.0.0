@@ -77,17 +77,10 @@ public class MyProduct extends Fragment {
     Toast successAddProductToast;
 
     @Override
-    public void onStart() {
-        super.onStart();
-
-
-    }
-
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         successAddProductToast = new Toast(getContext());
+
         LayoutInflater inflater1 = getLayoutInflater();
         View successToast = inflater1.inflate(R.layout.success_toast, null);
         successAddProductToast.setView(successToast);
@@ -103,6 +96,7 @@ public class MyProduct extends Fragment {
         add_product_ib = view.findViewById(R.id.add_product_ib);
         productItems = new SparseArray<>();
         user = FirebaseAuth.getInstance().getCurrentUser();
+        displayMyProducts();
         selectFromGallery = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
             @Override
             public void onActivityResult(ActivityResult result) {
@@ -122,92 +116,6 @@ public class MyProduct extends Fragment {
                 }
             }
         });
-
-//        db.collection("products")
-//                .whereEqualTo("productFarmId", user.getUid().toString())
-//                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onEvent(@Nullable QuerySnapshot snapshots,
-//                                        @Nullable FirebaseFirestoreException e) {
-//                        if (e != null) {
-//                            Log.w(TAG, "listen:error", e);
-//                            return;
-//                        }
-//
-//                        for (DocumentChange dc : snapshots.getDocumentChanges()) {
-//                            if (dc.getType() == DocumentChange.Type.ADDED) {
-////                                productItems.add(new FarmerProductItem(dc.getDocument().getId(),
-////                                        dc.getDocument().getData().get("productFarmId").toString(),
-////                                        dc.getDocument().getData().get("productName").toString(),
-////                                        Double.parseDouble(dc.getDocument().getData().get("productPrice").toString()),
-////                                        dc.getDocument().getData().get("productUnit").toString(),
-////                                        dc.getDocument().getData().get("productImage").toString(),
-////                                        Integer.parseInt(dc.getDocument().getData().get("productStocks").toString()),
-////                                        dc.getDocument().getData().get("productDescription").toString(),
-////                                        dc.getDocument().getData().get("productCategory").toString(),
-////                                        Integer.parseInt(dc.getDocument().getData().get("productQuantity").toString())));
-//                                ProductItem item = new ProductItem(
-//                                        dc.getDocument().getId(),
-//                                        dc.getDocument().getData().get("productFarmId").toString(),
-//                                        dc.getDocument().getData().get("productName").toString(),
-//                                        Double.parseDouble(dc.getDocument().getData().get("productPrice").toString()),
-//                                        dc.getDocument().getData().get("productUnit").toString(),
-//                                        Integer.parseInt(dc.getDocument().getData().get("productQuantity").toString()),
-//                                        dc.getDocument().getData().get("productImage").toString(),
-//                                        dc.getDocument().getData().get("productDescription").toString(),
-//                                        dc.getDocument().getData().get("productCategory").toString());
-//                                productItems.add(item);
-//                            }
-//                        }
-//                        if (productItems.isEmpty()) {
-//                            no_product_ll.setVisibility(View.VISIBLE);
-//                            farmer_product_lv.setVisibility(View.GONE);
-//                        } else {
-//                            no_product_ll.setVisibility(View.GONE);
-//                            farmer_product_lv.setVisibility(View.VISIBLE);
-//                        }
-//                        farmerProductAdapter.notifyDataSetChanged();
-//                    }
-//                });
-        db.collection("products")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            final int[] i = {0};
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                //Log.d(TAG, document.getId() + " => " + document.getData());
-                                ProductItem item = new ProductItem(document);
-
-                                db.collection("users").document(document.getData().get("productFarmId").toString())
-                                        .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                        if (task.isSuccessful()) {
-                                            DocumentSnapshot doc = task.getResult();
-                                            if (doc.exists()) {
-                                                //Log.d(TAG, "DocumentSnapshot data: " + doc.getData());
-                                                item.setProductFarmImage(doc.getData().get("userImage").toString());
-                                                item.setProductFarmName(doc.getData().get("username").toString());
-                                            } else {
-                                                Log.d(TAG, "No such document");
-                                            }
-                                            productItems.append((i[0]++), item);
-                                        } else {
-                                            Log.d(TAG, "get failed with ", task.getException());
-                                        }
-                                    }
-                                });
-                            }
-
-                        } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
-                        }
-                    }
-                });
-        farmerProductAdapter = new FarmerProductAdapter(getContext(), productItems);
-        farmer_product_lv.setAdapter(farmerProductAdapter);
 
         add_product_ib.setOnClickListener(v -> {
 
@@ -325,6 +233,27 @@ public class MyProduct extends Fragment {
 
         return view;
     }
+    public void displayMyProducts(){
+        db.collection("products").whereEqualTo("productFarmId", user.getUid())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            final int[] i = {0};
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                //Log.d(TAG, document.getId() + " => " + document.getData());
+                                ProductItem item = new ProductItem(document);
+                                productItems.append((i[0]++), item);
+                            }
+                            farmerProductAdapter = new FarmerProductAdapter(getContext(), productItems);
+                            farmer_product_lv.setAdapter(farmerProductAdapter);
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+    }
 
     public void addFromCamera() {
 //        Intent intent = new Intent(Intent.ACTION_PICK,MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -396,7 +325,7 @@ public class MyProduct extends Fragment {
 
 
             Glide.with(context)
-                    .load(productList.get(position).getProductImage())
+                    .load(productList.get(position).getProductImage().get(0))
                     .into(product_image_iv);
             product_name_unit.setText(productList.get(position).getProductName() + " (per " + productList.get(position).getProductQuantity() + " " + productList.get(position).getProductUnit() + ")");
             product_stocks.setText("Stocks: " + productList.get(position).getProductStocks());

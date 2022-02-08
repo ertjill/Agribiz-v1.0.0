@@ -38,7 +38,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/topAppBar_cl"
         android:layout_marginLeft="17dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginRight="17dp"
         android:background="@drawable/rectangle_green_border"
         android:fontFamily="@font/montserrat_regular"
@@ -55,6 +56,20 @@
         android:layout_below="@+id/searchProduct_et"
         android:layout_marginTop="16dp"
         android:numColumns="2"
-        android:scrollbars="none" />
+        android:scrollbars="none"
+        android:visibility="gone"/>
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/refreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/searchProduct_et">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/viewAll_rv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></androidx.recyclerview.widget.RecyclerView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
 
 </RelativeLayout>

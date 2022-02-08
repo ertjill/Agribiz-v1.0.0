@@ -31,33 +31,9 @@ public class OnBoard extends AppCompatActivity {
     private OnboardingAdapter onboardingAdapter;
     private LinearLayout layoutOnboardingIndicators;
     private Button getStartedBtn;
-
     //redirect screen to customer main screen once already logged in
     protected void onStart() {
         super.onStart();
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-            if (user.getDisplayName() != null && !user.getDisplayName().equals("")) {
-                char c = user.getDisplayName().charAt(user.getDisplayName().length() - 1);
-                if (c == 'c') {
-                    Intent intent = new Intent(getBaseContext(), CustomerMainActivity.class);
-                    intent.putExtra("user",user);
-                    startActivity(intent);
-                    finish();
-                } else if (c == 'f') {
-                    startActivity(new Intent(getBaseContext(), FarmerMainActivity.class));
-                    finish();
-                } else {
-                    startActivity(new Intent(getBaseContext(), AgrovitMainActivity.class));
-                    finish();
-                }
-
-            }
-            else {
-                startActivity(new Intent(getBaseContext(), AgrovitMainActivity.class));
-                finish();
-            }
-        }
     }
 
     @Override

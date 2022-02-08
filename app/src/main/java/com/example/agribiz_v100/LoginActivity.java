@@ -99,7 +99,6 @@ public class LoginActivity extends AppCompatActivity {
                                         }
                                     } else {
                                         Intent intent =new Intent(getBaseContext(), AgrovitMainActivity.class);
-                                        //Bundle bundle = new Bundle();
                                         intent.putExtra("user",user);
                                         startActivity(intent);
                                         finish();

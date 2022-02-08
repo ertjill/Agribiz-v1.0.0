@@ -1,6 +1,7 @@
 package com.example.agribiz_v100.customer;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
@@ -9,6 +10,9 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.SparseArray;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -16,7 +20,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
 import com.example.agribiz_v100.FirebaseHelper;
@@ -24,6 +27,7 @@ import com.example.agribiz_v100.ProductItem;
 import com.example.agribiz_v100.R;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.badge.BadgeUtils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.FirebaseStorage;
@@ -44,6 +48,9 @@ public class ProductView extends AppCompatActivity implements FirebaseHelper.Fir
     Dialog addProductToBasket;
     FirebaseUser user;
     FirebaseHelper firebaseHelper;
+    TextView basketBadge;
+    int itemsCount=0;
+    TextView itemCounter;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -58,6 +65,28 @@ public class ProductView extends AppCompatActivity implements FirebaseHelper.Fir
                 finish();
             }
         });
+        MenuItem menuItem = topAppBar.getMenu().findItem(R.id.basket_menu);
+        if(itemsCount == 0){
+            menuItem.setActionView(null);
+        }
+        else{
+            menuItem.setActionView(R.layout.badge);
+            View vi = menuItem.getActionView();
+            itemCounter = vi.findViewById(R.id.badge_tv);
+            itemCounter.setText(String.valueOf(itemsCount));
+        }
+        topAppBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.basket_menu:
+
+                        break;
+                }
+                return true;
+            }
+        });
+
         addProductToBasket = new Dialog(this);
         addProductToBasket.setContentView(R.layout.add_to_basket_dialog);
         addProductToBasket.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -90,6 +119,7 @@ public class ProductView extends AppCompatActivity implements FirebaseHelper.Fir
                         String productId = product.get("productId").toString();
                         Log.d(TAG, product.get("productBasketQuantity").toString() + " " + user.getUid());
                         firebaseHelper.addProductToBasket(product, productId, user.getUid(),hubId);
+//                        CustomerMainActivity cm = (CustomerMainActivity)
                         addProductToBasket.dismiss();
                     }
                 });
@@ -182,4 +212,20 @@ public class ProductView extends AppCompatActivity implements FirebaseHelper.Fir
         else
             Toast.makeText(this, "Failed to add product on basket!", Toast.LENGTH_LONG).show();
     }
+
+    @Override
+    public void getProductFromBasket(SparseArray<Object> productFromBasket) {
+
+    }
+
+    @Override
+    public void getProducts(SparseArray<ProductItem> products, SparseArray<ProductItem> topProducst) {
+
+    }
+
+    @Override
+    public void getToProducst(SparseArray<ProductItem> topProducts) {
+
+    }
+
 }
