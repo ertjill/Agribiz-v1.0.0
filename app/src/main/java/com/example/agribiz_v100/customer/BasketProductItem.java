@@ -46,7 +46,7 @@ public class BasketProductItem extends ProductItem implements Parcelable {
         prod.put("productRating",getProductRating());
         prod.put("productStocks",getProductStocks());
         prod.put("productSold",getProductSold());
-        prod.put("productFarmId",getProductFarmId());
+        prod.put("productUserId",getProductUserId());
         prod.put("productFarmName",getProductFarmName());
         prod.put("productFarmImage",getProductFarmImage());
         prod.put("productFarmLocation",getProductFarmLocation());

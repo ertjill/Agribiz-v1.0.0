@@ -53,6 +53,7 @@ public class Store extends Fragment {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     HorizontalScrollView farmersHub_hv;
     LinearLayout farmersHub_ll;
+    LinearLayout no_product_ll,top_products_ll;
     ListView item_may_like_lv;
     TextView viewAll_tv;
     GridView topProduce_gv;
@@ -98,6 +99,8 @@ public class Store extends Fragment {
         }
         synchronized (this) {
             View view = inflater.inflate(R.layout.fragment_store, container, false);
+            no_product_ll = view.findViewById(R.id.no_product_ll);
+            top_products_ll=view.findViewById(R.id.top_products_ll);
             SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refreshLayout);
 
             swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -198,11 +201,19 @@ public class Store extends Fragment {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             final int[] i = {0};
+                            if(task.getResult().size()>0){
+                                no_product_ll.setVisibility(View.GONE);
+                                top_products_ll.setVisibility(View.VISIBLE);
+                            }
+                            else {
+                                no_product_ll.setVisibility(View.VISIBLE);
+                                top_products_ll.setVisibility(View.GONE);
+                            }
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 int size = task.getResult().size();
                                 Log.d(TAG, "TASK SIZE: " + size);
                                 ProductItem item = new ProductItem(document);
-                                db.collection("users").document(document.getData().get("productFarmId").toString())
+                                db.collection("users").document(document.getData().get("productUserId").toString())
                                         .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                     @Override
                                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {

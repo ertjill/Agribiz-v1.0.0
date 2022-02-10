@@ -46,7 +46,7 @@ import java.util.concurrent.TimeUnit;
 public class VerificationCodeActivity extends AppCompatActivity {
     private static final String TAG = "VerificationCode";
     TextView populatePhoneNumber;
-    EditText enterVerificationCode;
+    EditText char_code_1,char_code_2,char_code_3,char_code_4,char_code_5,char_code_6;
     Button verificationCode__nextBtn;
 
     String userPhoneNo;
@@ -61,6 +61,12 @@ public class VerificationCodeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_verification_code);
+        char_code_1 = findViewById(R.id.char_code_1);
+        char_code_2 = findViewById(R.id.char_code_2);
+        char_code_3 = findViewById(R.id.char_code_3);
+        char_code_4 = findViewById(R.id.char_code_4);
+        char_code_5 = findViewById(R.id.char_code_5);
+        char_code_6 = findViewById(R.id.char_code_6);
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference httpsReference = storage.getReferenceFromUrl("https://firebasestorage.googleapis.com/v0/b/agribiz-12cc6.appspot.com/o/profile%2F272229741_475164050669220_5648552245273002941_n.png?alt=media&token=781589bc-71bd-4b66-a647-59c0bff5f9e5");
         httpsReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
@@ -77,7 +83,6 @@ public class VerificationCodeActivity extends AppCompatActivity {
         });
         mAuth = FirebaseAuth.getInstance();
         populatePhoneNumber = findViewById(R.id.populatePhoneNumber);
-        enterVerificationCode = findViewById(R.id.enterVerificationCode);
         verificationCode__nextBtn = findViewById(R.id.verificationCode__nextBtn);
 
         userPhoneNo = getIntent().getStringExtra("userPhoneNo");
@@ -88,7 +93,12 @@ public class VerificationCodeActivity extends AppCompatActivity {
         populatePhoneNumber.setText(userPhoneNo);
 
         verificationCode__nextBtn.setOnClickListener(view -> {
-            String code = enterVerificationCode.getText().toString();
+            String code = char_code_1.getText().toString()+
+                    char_code_2.getText().toString()+
+                    char_code_3.getText().toString()+
+                    char_code_4.getText().toString()+
+                    char_code_5.getText().toString()+
+                    char_code_6.getText().toString();
             if (TextUtils.isEmpty(code)) {
                 Toast.makeText(getApplicationContext(), "Input code", Toast.LENGTH_SHORT).show();
             } else {
@@ -123,7 +133,12 @@ public class VerificationCodeActivity extends AppCompatActivity {
                     String code = phoneAuthCredential.getSmsCode();
                     Toast.makeText(getApplicationContext(), "Code : " + code, Toast.LENGTH_SHORT).show();
                     if (!TextUtils.isEmpty(code)) {
-                        enterVerificationCode.setText(code);
+                        char_code_1.setText(code.charAt(0));
+                        char_code_2.setText(code.charAt(1));
+                        char_code_3.setText(code.charAt(2));
+                        char_code_4.setText(code.charAt(3));
+                        char_code_5.setText(code.charAt(4));
+                        char_code_6.setText(code.charAt(5));
                         verifyCode(code);
                     }
                 }
@@ -162,7 +177,6 @@ public class VerificationCodeActivity extends AppCompatActivity {
 //                                                final Uri[] profileUri = {null};
                                                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 //                                                String defaultProfileImage = "https://firebasestorage.googleapis.com/v0/b/agribiz-12cc6.appspot.com/o/profile%2F272229741_475164050669220_5648552245273002941_n.png?alt=media&token=781589bc-71bd-4b66-a647-59c0bff5f9e5";
-
 
                                                 UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                                                         .setDisplayName(userName + "-c")

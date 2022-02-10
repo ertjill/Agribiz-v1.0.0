@@ -83,7 +83,7 @@ public class FirebaseHelper implements Parcelable {
                                 int size = task.getResult().size();
                                 Log.d(TAG, "TASK SIZE: " + size);
                                 ProductItem item = new ProductItem(document);
-                                db.collection("users").document(document.getData().get("productFarmId").toString())
+                                db.collection("users").document(document.getData().get("productUserId").toString())
                                         .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                     @Override
                                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -266,9 +266,10 @@ public class FirebaseHelper implements Parcelable {
     public static boolean addProduct(Context C, ArrayList<Object> a, byte[] data) {
         final boolean[] addProductReq = {true};
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        Date date = new Date();
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();
-        Date date = new Date();
         StorageReference imagesRef = storageRef.child("products/" + user.getUid() + date.toString());
         UploadTask uploadTask = imagesRef.putBytes(data);
         uploadTask.addOnFailureListener(new OnFailureListener() {

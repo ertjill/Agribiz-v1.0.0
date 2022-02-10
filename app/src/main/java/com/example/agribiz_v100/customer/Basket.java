@@ -39,8 +39,11 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -65,6 +68,7 @@ public class Basket extends Fragment {
     ListView basket_item_list;
     CheckBox select_all_cb;
     LinearLayout empty_basket_ll, mid_ll;
+    TextView totalAmount_tv;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -95,10 +99,8 @@ public class Basket extends Fragment {
 
         basket_item_list = view.findViewById(R.id.basket_item_list);
         select_all_cb = view.findViewById(R.id.select_all_cb);
-
-
+        totalAmount_tv = view.findViewById(R.id.totalAmount_tv);
         basket_item_list.setAdapter(basketListAdapter);
-
         select_all_cb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -143,52 +145,99 @@ public class Basket extends Fragment {
 
     public void displayBasketItem() {
         db.collection("users").document(user.getUid()).collection("basket")
+                .orderBy("productUserId", Query.Direction.ASCENDING)
                 .orderBy("productDateAdded", Query.Direction.DESCENDING)
-                .orderBy("productFarmId", Query.Direction.ASCENDING)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            final int[] i = {0};
-                            final String[] tempId = {""};
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                BasketProductItem item = new BasketProductItem(document);
-                                BasketHeader basketHeader = new BasketHeader();
-                                //Log.d(TAG, document.getId() + " => " + document.getData().get("productFarmId"));
-                                db.collection("users")
-                                        .document(document.getData().get("productFarmId").toString())
-                                        .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                        if (task.isSuccessful()) {
-                                            DocumentSnapshot doc = task.getResult();
-                                            if (doc.exists()) {
-                                                basketHeader.setFarmId(doc.getId());
-                                                basketHeader.setFarmName((doc.getData().get("username")).toString());
-                                                if (tempId[0].equals("") || !tempId[0].equals(doc.getId())) {
-                                                    basketItems.append(i[0]++, basketHeader);
-                                                    tempId[0] = doc.getId();
-                                                }
-                                                basketItems.append(i[0]++, item);
-                                                basketListAdapter.notifyDataSetChanged();
-                                                Log.d(TAG, "DocumentSnapshot data: " + basketItems.size());
-                                            } else {
-                                                Log.d(TAG, "No such document");
-                                            }
-                                        } else {
-                                            Log.d(TAG, "get failed with ", task.getException());
-                                        }
-                                    }
-                                });
-
-                            }
-                        } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
-                            Log.e(TAG, task.getException().getLocalizedMessage());
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
+                        if (e != null) {
+                            Log.w(TAG, "Listen failed.", e);
+                            return;
                         }
+                        final int[] i = {0};
+                        final String[] tempId = {""};
+                        for (QueryDocumentSnapshot document : value) {
+                            BasketProductItem item = new BasketProductItem(document);
+                            BasketHeader basketHeader = new BasketHeader();
+                            //Log.d(TAG, document.getId() + " => " + document.getData().get("productUserId"));
+                            db.collection("users")
+                                    .document(document.getData().get("productUserId").toString())
+                                    .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        DocumentSnapshot doc = task.getResult();
+                                        if (doc.exists()) {
+                                            basketHeader.setFarmId(doc.getId());
+                                            basketHeader.setFarmName((doc.getData().get("username")).toString());
+                                            if (tempId[0].equals("") || !tempId[0].equals(doc.getId())) {
+                                                basketItems.append(i[0]++, basketHeader);
+                                                tempId[0] = doc.getId();
+                                            }
+                                            basketItems.append(i[0]++, item);
+                                            basketListAdapter.notifyDataSetChanged();
+                                            Log.d(TAG, "DocumentSnapshot data: " + basketItems.size());
+                                        } else {
+                                            Log.d(TAG, "No such document");
+                                        }
+                                    } else {
+                                        Log.d(TAG, "get failed with ", task.getException());
+                                    }
+                                }
+                            });
+                        }
+                        Log.d(TAG, "Current cites in CA: ");
                     }
                 });
+
+
+//        db.collection("users").document(user.getUid()).collection("basket")
+//                .orderBy("productUserId", Query.Direction.ASCENDING)
+//                .orderBy("productDateAdded", Query.Direction.DESCENDING)
+//                .get()
+//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                        if (task.isSuccessful()) {
+//                            final int[] i = {0};
+//                            final String[] tempId = {""};
+//                            for (QueryDocumentSnapshot document : task.getResult()) {
+//                                BasketProductItem item = new BasketProductItem(document);
+//                                BasketHeader basketHeader = new BasketHeader();
+//                                //Log.d(TAG, document.getId() + " => " + document.getData().get("productUserId"));
+//                                db.collection("users")
+//                                        .document(document.getData().get("productUserId").toString())
+//                                        .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//                                    @Override
+//                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                                        if (task.isSuccessful()) {
+//                                            DocumentSnapshot doc = task.getResult();
+//                                            if (doc.exists()) {
+//                                                basketHeader.setFarmId(doc.getId());
+//                                                basketHeader.setFarmName((doc.getData().get("username")).toString());
+//                                                if (tempId[0].equals("") || !tempId[0].equals(doc.getId())) {
+//                                                    basketItems.append(i[0]++, basketHeader);
+//                                                    tempId[0] = doc.getId();
+//                                                }
+//                                                basketItems.append(i[0]++, item);
+//                                                basketListAdapter.notifyDataSetChanged();
+//                                                Log.d(TAG, "DocumentSnapshot data: " + basketItems.size());
+//                                            } else {
+//                                                Log.d(TAG, "No such document");
+//                                            }
+//                                        } else {
+//                                            Log.d(TAG, "get failed with ", task.getException());
+//                                        }
+//                                    }
+//                                });
+//
+//                            }
+//                        } else {
+//                            Log.d(TAG, "Error getting documents: ", task.getException());
+//                            Log.e(TAG, task.getException().getLocalizedMessage());
+//                        }
+//                    }
+//                });
     }
 
     public class BasketListAdapter extends BaseAdapter {
@@ -217,6 +266,12 @@ public class Basket extends Fragment {
                 return ITEM;
             } else
                 return HEADER;
+        }
+
+        @Override
+        public void notifyDataSetChanged() {
+            super.notifyDataSetChanged();
+            getTotal();
         }
 
         @Override
@@ -255,20 +310,29 @@ public class Basket extends Fragment {
                     convertView = layoutInflater.inflate(R.layout.basket_list_item, null);
                     ImageView item_image = convertView.findViewById(R.id.item_image);
                     TextView item_name = convertView.findViewById(R.id.item_name);
+                    TextView productBasketQuantity_tv = convertView.findViewById(R.id.productBasketQuantity_tv);
+                    TextView item_price = convertView.findViewById(R.id.item_price);
+                    TextView item_stocks = convertView.findViewById(R.id.item_stocks);
+
                     item_name.setText(((BasketProductItem) productList.valueAt(position)).getProductName());
+                    item_price.setText("Php " + String.format("%.2f", ((BasketProductItem) productList.valueAt(position)).getProductPrice()));
+                    item_stocks.setText("Stocks: " + ((BasketProductItem) productList.valueAt(position)).getProductStocks());
                     CheckBox item_checkbox = convertView.findViewById(R.id.item_checkbox);
                     item_checkbox.setChecked(((BasketProductItem) productList.valueAt(position)).isChecked());
-                    String sp[] = ((BasketProductItem) productList.valueAt(position)).getProductCoverImage().split("[\\[\\]]");
+                    String sp = ((BasketProductItem) productList.valueAt(position)).getProductImage().get(0);
+//                    .split("[\\[\\]]")
                     Glide.with(context)
-                            .load(sp[1])
+                            .load(sp)
                             .centerCrop()
                             .into(item_image);
+                    productBasketQuantity_tv.setText(String.valueOf(((BasketProductItem) productList.valueAt(position)).getProductBasketQuantity()));
                     item_checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                         @Override
                         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                             ((BasketProductItem) productList.valueAt(position)).setChecked(isChecked);
                             unCheckHeader(isChecked, position);
                             isCheckAll();
+                            notifyDataSetChanged();
                         }
                     });
                     return convertView;
@@ -277,6 +341,19 @@ public class Basket extends Fragment {
             }
 
 
+        }
+
+        private void getTotal() {
+            double total = 0;
+            for (int i = 0; i < productList.size(); i++) {
+                if (productList.get(i) instanceof BasketProductItem) {
+                    BasketProductItem pi = (BasketProductItem) productList.get(i);
+                    if (pi.isChecked())
+                        total += (pi.getProductBasketQuantity() * pi.getProductPrice());
+                }
+
+            }
+            totalAmount_tv.setText("Total: ₱" + String.format("%.2f", total));
         }
 
         private void isCheckAll() {
@@ -296,7 +373,7 @@ public class Basket extends Fragment {
             int locator = 0;
             if (!isChecked) {
                 for (int x = 0; x < productList.size(); x++) {
-                    if (getItemViewType(x) == HEADER && ((BasketProductItem) productList.valueAt(position)).getProductFarmId().equals(((BasketHeader) productList.valueAt(x)).getFarmId())) {
+                    if (getItemViewType(x) == HEADER && ((BasketProductItem) productList.valueAt(position)).getProductUserId().equals(((BasketHeader) productList.valueAt(x)).getFarmId())) {
                         ((BasketHeader) productList.valueAt(x)).setChecked(false);
                         notifyDataSetChanged();
                         break;
@@ -304,7 +381,7 @@ public class Basket extends Fragment {
                 }
             } else {
                 for (int x = 0; x < productList.size(); x++) {
-                    if (getItemViewType(x) == ITEM && ((BasketProductItem) productList.valueAt(position)).getProductFarmId().equals(((BasketProductItem) productList.valueAt(x)).getProductFarmId()) && position != x) {
+                    if (getItemViewType(x) == ITEM && ((BasketProductItem) productList.valueAt(position)).getProductUserId().equals(((BasketProductItem) productList.valueAt(x)).getProductUserId()) && position != x) {
                         if (!((BasketProductItem) productList.valueAt(x)).isChecked()) {
                             allCheckFlag = false;
                             locator = x;
@@ -315,7 +392,7 @@ public class Basket extends Fragment {
                 }
                 if (allCheckFlag)
                     for (int x = 0; x < productList.size(); x++) {
-                        if (getItemViewType(x) == HEADER && ((BasketHeader) productList.valueAt(x)).getFarmId().equals(((BasketProductItem) productList.valueAt(position)).getProductFarmId())) {
+                        if (getItemViewType(x) == HEADER && ((BasketHeader) productList.valueAt(x)).getFarmId().equals(((BasketProductItem) productList.valueAt(position)).getProductUserId())) {
                             ((BasketHeader) productList.valueAt(x)).setChecked(true);
                             //basket_item_list.setAdapter(new BasketListAdapter(getContext(), productList));
                             notifyDataSetChanged();
@@ -324,12 +401,11 @@ public class Basket extends Fragment {
                     }
 
             }
-
         }
 
         private void setCheckAll(boolean isChecked, int position) {
             for (int x = 0; x < productList.size(); x++) {
-                if (getItemViewType(x) == ITEM && ((BasketProductItem) productList.valueAt(x)).getProductFarmId().equals(((BasketHeader) productList.valueAt(position)).getFarmId())) {
+                if (getItemViewType(x) == ITEM && ((BasketProductItem) productList.valueAt(x)).getProductUserId().equals(((BasketHeader) productList.valueAt(position)).getFarmId())) {
                     ((BasketProductItem) productList.valueAt(x)).setChecked(isChecked);
                 }
             }

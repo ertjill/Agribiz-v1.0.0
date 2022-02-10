@@ -95,6 +95,7 @@
                 </RelativeLayout>
 
                 <LinearLayout
+                    android:id="@+id/top_products_ll"
                     android:layout_width="match_parent"
                     android:layout_height="846dp"
                     android:orientation="vertical">
@@ -107,6 +108,28 @@
                         android:numColumns="2"
                         android:scrollbars="none"
                         />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/no_product_ll"
+                    android:layout_width="match_parent"
+                    android:layout_height="400dp"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    android:gravity="center">
+                    <ImageView
+                        android:layout_width="181dp"
+                        android:layout_height="195dp"
+                        android:src="@drawable/farmer_no_produce"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="28dp"
+                        android:text="No product available yet"
+                        android:fontFamily="@font/montserrat_regular"
+                        android:textFontWeight="400"
+                        android:textSize="14sp"
+                        android:textColor="#5E381932"/>
+
                 </LinearLayout>
 
                 <TextView

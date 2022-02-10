@@ -48,17 +48,30 @@
         android:padding="10dp"
         android:textColor="@color/brown"
         android:textSize="16sp" />
-
-    <GridView
-        android:id="@+id/viewAll_gv"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/no_product_ll"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/searchProduct_et"
-        android:layout_marginTop="16dp"
-        android:numColumns="2"
-        android:scrollbars="none"
-        android:visibility="gone"/>
+        android:gravity="center"
+        android:orientation="vertical"
+        android:layout_below="@+id/searchProduct_et">
 
+        <ImageView
+            android:layout_width="181dp"
+            android:layout_height="195dp"
+            android:src="@drawable/farmer_no_produce" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:fontFamily="@font/montserrat_regular"
+            android:text="No product available yet"
+            android:textColor="#5E381932"
+            android:textFontWeight="400"
+            android:textSize="14sp" />
+
+    </LinearLayout>
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/refreshLayout"
         android:layout_width="match_parent"
@@ -68,7 +81,12 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/viewAll_rv"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"></androidx.recyclerview.widget.RecyclerView>
+            android:layout_height="match_parent">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+
+
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 

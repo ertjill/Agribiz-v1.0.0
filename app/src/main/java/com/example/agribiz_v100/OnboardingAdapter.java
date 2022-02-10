@@ -57,5 +57,6 @@ public class OnboardingAdapter extends RecyclerView.Adapter<OnboardingAdapter.On
             textDescription.setText(onboardingItem.getDescription());
             imageOnboarding.setImageResource(onboardingItem.getImage());
         }
+
     }
 }

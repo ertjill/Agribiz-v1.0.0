@@ -49,7 +49,6 @@ import java.util.ArrayList;
 public class CustomerMainActivity extends AppCompatActivity implements Serializable, Firebase.GetProductCallback,FirebaseHelper.FirebaseHelperCallback {
     private static final String TAG = "CustomerMainActivity";
     ViewPager2 customerMain_vp;
-    TabLayout customer_tab;
     FirebaseUser user;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     SparseArray<ProductItem>  topProducts;
@@ -131,105 +130,17 @@ public class CustomerMainActivity extends AppCompatActivity implements Serializa
         basketProductItems = new SparseArray<>();
 //        topProducts = getIntent().getExtras().getSparseParcelableArray("topProducts");
         user = getIntent().getParcelableExtra("user");
-        synchronized (this) {
-//            productItems = new SparseArray<>();
-//            topProducts = new SparseArray<>();
             customerMain_vp = findViewById(R.id.customerMain_vp);
             customerMain_vp.setUserInputEnabled(false);
             Log.d(TAG, "0");
-        }
-//        synchronized (this) {
-//
-//            db.collection("users").document(user.getUid()).collection("basket")
-//                    .orderBy("productFarmId")
-//                    .get()
-//                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                        @Override
-//                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                            if (task.isSuccessful()) {
-//                                final int[] i = {0};
-//                                for (QueryDocumentSnapshot document : task.getResult()) {
-//                                    BasketProductItem item = new BasketProductItem(document);
-//                                    //Log.d(TAG, document.getId() + " => " + document.getData().get("productFarmId"));
-//                                    db.collection("users")
-//                                            .document(document.getData().get("productFarmId").toString())
-//                                            .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//                                        @Override
-//                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                                            if (task.isSuccessful()) {
-//                                                DocumentSnapshot doc = task.getResult();
-//                                                if (doc.exists()) {
-//
-//                                                    basketProductItems.append(++i[0], item);
-//                                                    Log.d(TAG, "DocumentSnapshot data: " + basketProductItems.size());
-//                                                } else {
-//                                                    Log.d(TAG, "No such document");
-//                                                }
-//                                            } else {
-//                                                Log.d(TAG, "get failed with ", task.getException());
-//                                            }
-//                                        }
-//                                    });
-//
-//                                }
-//                            } else {
-//                                Log.d(TAG, "Error getting documents: ", task.getException());
-//                            }
-//                        }
-//                    });
-//        }
-        synchronized (this) {
+
             //view pager setup
             customerMain_vp.setOffscreenPageLimit(5);
             adpater = new ViewPagerAdapter(this);
             customerMain_vp.setAdapter(adpater);
 
-            //tab setup
-            customer_tab = findViewById(R.id.customer_tab);
-
-            customerMain_vp.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-                @Override
-                public void onPageSelected(int position) {
-                    //super.onPageSelected(position);
-                    selectedTab(position);
-                    Log.d("Tag", position + "");
-                    //customer_tab.selectTab(customer_tab.getTabAt(position));
-
-                }
-
-            });
-
-            customer_tab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-                @Override
-                public void onTabSelected(TabLayout.Tab tab) {
-                    customerMain_vp.setCurrentItem(tab.getPosition());
-                }
-
-                @Override
-                public void onTabUnselected(TabLayout.Tab tab) {
-
-                }
-
-                @Override
-                public void onTabReselected(TabLayout.Tab tab) {
-
-                }
-            });
-            Log.d(TAG, "2");
-        }
-
     }
 
-    @SuppressLint("ResourceAsColor")
-    private void selectedTab(int position) {
-        customer_tab.selectTab(customer_tab.getTabAt(position));
-        for (int i = 0; i < 5; i++) {
-            if (i == position) {
-                customer_tab.getTabAt(i).getIcon().setColorFilter(getResources().getColor(R.color.yellow_orange), PorterDuff.Mode.SRC_IN);
-            } else
-                customer_tab.getTabAt(i).getIcon().setColorFilter(getResources().getColor(R.color.army_green), PorterDuff.Mode.SRC_IN);
-        }
-    }
 
     @Override
     public void isProductAddedToBasket(boolean added) {

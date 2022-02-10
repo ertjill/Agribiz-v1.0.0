@@ -1,0 +1,23 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/Product"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_shopping_basket_24"
+        android:title="Product"/>
+    <item
+        android:id="@+id/Shipment"
+        android:enabled="true"
+        android:icon="@drawable/ic_outline_local_shipping_24"
+        android:title="Shipment"/>
+    <item
+        android:id="@+id/Finance"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_auto_graph_24"
+        android:title="Finance"/>
+    <item
+        android:id="@+id/Profile"
+        android:enabled="true"
+        android:icon="@drawable/ic_round_account_circle_24"
+        android:title="Profile"/>
+</menu>

@@ -5,33 +5,34 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.SparseArray;
 
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ProductItem implements Parcelable{
     //Product needed information
     private String productId;
+    private String productUserId;
     private String productName;
+    private String productDescription;
+    private List<String> productImage;
+    private String productCategory;
     private Double productPrice;
     private String productUnit;
     private int productQuantity;
-    private  ArrayList<String> productImage;
-    private String productDescription;
-    private String productCategory;
-    private String productCoverImage;
-
-    private int productRating=0;
     private int productStocks=0;
     private int productSold=0;
-
-    private String productFarmId;
-    private String productFarmImage;
-    private String productFarmName;
-    private String productFarmLocation;
+    private int productRating=0;
+    private int productNoCustomerRate=0;
+    private Timestamp productDateUploaded;
+    private String productUserImage;
+    private String productUserName;
+    private String productUserLocation;
 
     //extensions
     private Double productShippingFee;
@@ -57,10 +58,10 @@ public class ProductItem implements Parcelable{
         productRating = in.readInt();
         productStocks = in.readInt();
         productSold = in.readInt();
-        productFarmId = in.readString();
-        productFarmImage = in.readString();
-        productFarmName = in.readString();
-        productFarmLocation = in.readString();
+        productUserId = in.readString();
+        productUserImage = in.readString();
+        productUserName = in.readString();
+        productUserLocation = in.readString();
         if (in.readByte() == 0) {
             productShippingFee = null;
         } else {
@@ -86,13 +87,6 @@ public class ProductItem implements Parcelable{
         }
     };
 
-    public String getProductCoverImage() {
-        return productCoverImage;
-    }
-
-    public void setProductCoverImage(String productCoverImage) {
-        this.productCoverImage = productCoverImage;
-    }
 
     public Map<String,Object> getProductMap(){
         Map<String,Object> prod = new HashMap<>();
@@ -107,10 +101,10 @@ public class ProductItem implements Parcelable{
         prod.put("productRating",getProductRating());
         prod.put("productStocks",getProductStocks());
         prod.put("productSold",getProductSold());
-        prod.put("productFarmId",getProductFarmId());
-        prod.put("productFarmName",getProductFarmName());
-        prod.put("productFarmImage",getProductFarmImage());
-        prod.put("productFarmLocation",getProductFarmLocation());
+        prod.put("productUserId",getProductUserId());
+        prod.put("productUserName",getProductFarmName());
+        prod.put("productUserImage",getProductFarmImage());
+        prod.put("productUserLocation",getProductFarmLocation());
         prod.put("productShippingFee",getProductShippingFee());
         return prod;
     }
@@ -122,7 +116,7 @@ public class ProductItem implements Parcelable{
         this.productShippingFee = productShippingFee;
     }
 
-    public ArrayList<String> getProductImage() {
+    public List<String> getProductImage() {
         return productImage;
     }
 
@@ -131,11 +125,11 @@ public class ProductItem implements Parcelable{
     }
 
     public String getProductFarmLocation() {
-        return productFarmLocation;
+        return productUserLocation;
     }
 
-    public void setProductFarmLocation(String productFarmLocation) {
-        this.productFarmLocation = productFarmLocation;
+    public void setProductFarmLocation(String productUserLocation) {
+        this.productUserLocation = productUserLocation;
     }
 
     public Double getProductOldPrice() {
@@ -156,19 +150,19 @@ public class ProductItem implements Parcelable{
 
 
     public String getProductFarmImage() {
-        return productFarmImage;
+        return productUserImage;
     }
 
-    public void setProductFarmImage(String productFarmImage) {
-        this.productFarmImage = productFarmImage;
+    public void setProductFarmImage(String productUserImage) {
+        this.productUserImage = productUserImage;
     }
 
     public String getProductFarmName() {
-        return productFarmName;
+        return productUserName;
     }
 
-    public void setProductFarmName(String productFarmName) {
-        this.productFarmName = productFarmName;
+    public void setProductFarmName(String productUserName) {
+        this.productUserName = productUserName;
     }
 
     public int getProductStocks() {
@@ -223,7 +217,7 @@ public class ProductItem implements Parcelable{
     public ProductItem( QueryDocumentSnapshot product ){
         this.productImage = new ArrayList<>();
         this.productId = product.getId();
-        this.productFarmId = product.getData().get("productFarmId").toString();
+        this.productUserId = product.getData().get("productUserId").toString();
         this.productName = product.getData().get("productName").toString();
         this.productPrice = (Double) product.getData().get("productPrice");
         this.productUnit = product.getData().get("productUnit").toString();
@@ -232,7 +226,6 @@ public class ProductItem implements Parcelable{
         this.productDescription = product.getData().get("productDescription").toString();
         this.productCategory = product.getData().get("productCategory").toString();
         this.productStocks = Integer.parseInt(product.getData().get("productStocks").toString());
-        this.productCoverImage=product.getData().get("productImage")+"";
         //this.productSold = Integer.parseInt(product.getData().get("productSold").toString());
     }
 
@@ -244,12 +237,12 @@ public class ProductItem implements Parcelable{
         this.productId = productId;
     }
 
-    public String getProductFarmId() {
-        return productFarmId;
+    public String getProductUserId() {
+        return productUserId;
     }
 
-    public void setProductFarmId(String productFarmId) {
-        this.productFarmId = productFarmId;
+    public void setProductFarmId(String productUserId) {
+        this.productUserId = productUserId;
     }
 
     public String getProductName() {
@@ -299,10 +292,10 @@ public class ProductItem implements Parcelable{
         dest.writeInt(productRating);
         dest.writeInt(productStocks);
         dest.writeInt(productSold);
-        dest.writeString(productFarmId);
-        dest.writeString(productFarmImage);
-        dest.writeString(productFarmName);
-        dest.writeString(productFarmLocation);
+        dest.writeString(productUserId);
+        dest.writeString(productUserImage);
+        dest.writeString(productUserName);
+        dest.writeString(productUserLocation);
         if (productShippingFee == null) {
             dest.writeByte((byte) 0);
         } else {

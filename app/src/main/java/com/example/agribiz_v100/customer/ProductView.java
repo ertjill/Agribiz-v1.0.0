@@ -1,19 +1,26 @@
 package com.example.agribiz_v100.customer;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.SparseArray;
+import android.util.TimeFormatException;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -25,16 +32,23 @@ import com.bumptech.glide.Glide;
 import com.example.agribiz_v100.FirebaseHelper;
 import com.example.agribiz_v100.ProductItem;
 import com.example.agribiz_v100.R;
+import com.example.agribiz_v100.farmer.MyProduct;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.badge.BadgeUtils;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.zip.Inflater;
 
 public class ProductView extends AppCompatActivity implements FirebaseHelper.FirebaseHelperCallback {
 
@@ -46,11 +60,14 @@ public class ProductView extends AppCompatActivity implements FirebaseHelper.Fir
     TextView productName, productPrice, productSold, hubName, productStocks, productLocation, add_to_basket_tv;
     MaterialToolbar topAppBar;
     Dialog addProductToBasket;
-    FirebaseUser user;
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
     FirebaseHelper firebaseHelper;
-    TextView basketBadge;
-    int itemsCount=0;
+    ViewPager2 imageSlider;
+    int itemsCount = 0;
     TextView itemCounter;
+    ImageViewPagerAdapter imageViewPagerAdapter;
+    List<String> images;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -59,6 +76,9 @@ public class ProductView extends AppCompatActivity implements FirebaseHelper.Fir
         setContentView(R.layout.activity_product_view);
         firebaseHelper = new FirebaseHelper(this);
         topAppBar = findViewById(R.id.topAppBar);
+        imageSlider = findViewById(R.id.imageSlider);
+        imageViewPagerAdapter = new ImageViewPagerAdapter();
+
         topAppBar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -66,10 +86,9 @@ public class ProductView extends AppCompatActivity implements FirebaseHelper.Fir
             }
         });
         MenuItem menuItem = topAppBar.getMenu().findItem(R.id.basket_menu);
-        if(itemsCount == 0){
+        if (itemsCount == 0) {
             menuItem.setActionView(null);
-        }
-        else{
+        } else {
             menuItem.setActionView(R.layout.badge);
             View vi = menuItem.getActionView();
             itemCounter = vi.findViewById(R.id.badge_tv);
@@ -78,7 +97,7 @@ public class ProductView extends AppCompatActivity implements FirebaseHelper.Fir
         topAppBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()){
+                switch (item.getItemId()) {
                     case R.id.basket_menu:
 
                         break;
@@ -114,12 +133,16 @@ public class ProductView extends AppCompatActivity implements FirebaseHelper.Fir
                     @Override
                     public void onClick(View v) {
                         Map<String, Object> product = farmerProductItem.getProductMap();
+                        Date date =new Date();
+                        Timestamp productDateAdded = new Timestamp(date);
                         product.put("productBasketQuantity", Integer.parseInt(product_quantity_tv.getText().toString()));
-                        String hubId = product.get("productFarmId").toString();
+                        product.put("productDateAdded",productDateAdded);
+                        String hubId = product.get("productUserId").toString();
                         String productId = product.get("productId").toString();
-                        Log.d(TAG, product.get("productBasketQuantity").toString() + " " + user.getUid());
-                        firebaseHelper.addProductToBasket(product, productId, user.getUid(),hubId);
+//                        Log.d(TAG, product.get("productBasketQuantity").toString() + " " + user.getUid());
+//                        firebaseHelper.addProductToBasket(product, productId, user.getUid(), hubId);
 //                        CustomerMainActivity cm = (CustomerMainActivity)
+                        addToBasket(product);
                         addProductToBasket.dismiss();
                     }
                 });
@@ -138,8 +161,7 @@ public class ProductView extends AppCompatActivity implements FirebaseHelper.Fir
                     public void onClick(View v) {
 
                         int i = Integer.parseInt(product_quantity_tv.getText().toString());
-                        if (i < 100)
-                        {
+                        if (i < 100) {
                             product_quantity_tv.setText(++i + "");
                         }
                     }
@@ -165,7 +187,7 @@ public class ProductView extends AppCompatActivity implements FirebaseHelper.Fir
 
         if (getIntent().getExtras() != null) {
             farmerProductItem = getIntent().getParcelableExtra("item");
-            user = getIntent().getParcelableExtra("user");
+//            user = getIntent().getParcelableExtra("user");
             productName.setText(farmerProductItem.getProductName() + " ( per " + farmerProductItem.getProductQuantity() + " " + farmerProductItem.getProductUnit() + " )");
             productPrice.setText("Php " + farmerProductItem.getProductPrice());
             productSold.setText(farmerProductItem.getProductSold() + " sold");
@@ -173,6 +195,8 @@ public class ProductView extends AppCompatActivity implements FirebaseHelper.Fir
             Glide.with(getApplicationContext())
                     .load(farmerProductItem.getProductImage().get(0))
                     .into(product_image_iv);
+            images = farmerProductItem.getProductImage();
+            imageSlider.setAdapter(imageViewPagerAdapter);
             // Create a storage reference from our app
             FirebaseStorage storage = FirebaseStorage.getInstance();
             StorageReference storageRef = storage.getReference();
@@ -205,6 +229,24 @@ public class ProductView extends AppCompatActivity implements FirebaseHelper.Fir
         Log.d("ProductView", "getIntent().getExtras().toString())");
     }
 
+    public void addToBasket(Map<String,Object> product){
+        db.collection("users").document(user.getUid())
+                .collection("basket").document(product.get("productId").toString())
+                .set(product)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully written!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error writing document", e);
+                    }
+                });
+    }
+
     @Override
     public void isProductAddedToBasket(boolean added) {
         if (added)
@@ -227,5 +269,42 @@ public class ProductView extends AppCompatActivity implements FirebaseHelper.Fir
     public void getToProducst(SparseArray<ProductItem> topProducts) {
 
     }
+
+    public class ImageViewPagerAdapter extends RecyclerView.Adapter<ImageViewPagerAdapter.SlideViewHolder> {
+        LayoutInflater layoutInflater;
+        @NonNull
+        @Override
+        public ImageViewPagerAdapter.SlideViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            return new ImageViewPagerAdapter.SlideViewHolder(
+                    LayoutInflater.from(getApplicationContext()).inflate(
+                            R.layout.product_view_image_slide, parent, false
+                    )
+            );
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull ImageViewPagerAdapter.SlideViewHolder holder, int position) {
+            Glide.with(getApplicationContext())
+                    .load(images.get(position))
+                    .into(holder.product_image_iv);
+            holder.indicator_tv.setText((position + 1) + "/" + images.size());
+        }
+
+        @Override
+        public int getItemCount() {
+            return images.size();
+        }
+
+        public class SlideViewHolder extends RecyclerView.ViewHolder {
+            ImageView product_image_iv;
+            TextView indicator_tv;
+            public SlideViewHolder(@NonNull View itemView) {
+                super(itemView);
+                product_image_iv = itemView.findViewById(R.id.product_image_iv);
+                indicator_tv = itemView.findViewById(R.id.indicator_tv);
+            }
+        }
+    }
+
 
 }

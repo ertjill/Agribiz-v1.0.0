@@ -8,59 +8,29 @@
     tools:context=".farmer.FarmerMainActivity">
 
     <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/customerMain_vp"
+        android:id="@+id/farmerMain_vp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/customer_tab"
-        />
+        android:layout_above="@+id/bottom_ll" />
 
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/customer_tab"
+    <LinearLayout
+        android:id="@+id/bottom_ll"
         android:layout_width="match_parent"
-        android:layout_height="58dp"
-        android:layout_alignParentBottom="true"
-        android:outlineAmbientShadowColor="@color/black"
-        android:outlineSpotShadowColor="@color/black"
-        app:tabIconTint="@color/army_green"
-        app:tabIndicatorColor="@color/transparent"
-        app:tabSelectedTextColor="@color/yellow_orange"
-        app:tabTextAppearance="@style/CustomTabText"
-        app:tabTextColor="@color/army_green">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true">
 
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottom_navigation"
+            style="@style/Widget.App.BottomNavigationView"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:icon="@drawable/ic_baseline_shopping_basket_24"
-            android:text="Product" />
+            app:itemIconTint="@drawable/bottom_navigation_tab_selector"
+            app:itemTextColor="@drawable/bottom_navigation_tab_selector"
+            app:labelVisibilityMode="labeled"
+            app:menu="@menu/farmer_bottom_menu"
+            app:itemTextAppearanceInactive="@style/bottom_navigation_textApperance"/>
 
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:icon="@drawable/ic_outline_local_shipping_24"
-            android:text="Shipment" />
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:icon="@drawable/ic_round_monetization_on_24"
-            android:text="AgriHelp" />
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:icon="@drawable/ic_baseline_auto_graph_24"
-            android:text="Finance" />
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:icon="@drawable/ic_round_account_circle_24"
-            android:text="Profile" />
-    </com.google.android.material.tabs.TabLayout>
-
-
-
-
-
+    </LinearLayout>
 
 </RelativeLayout>

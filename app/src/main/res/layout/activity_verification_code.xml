@@ -70,7 +70,8 @@
         app:boxStrokeColor="@color/army_green"
         app:hintTextColor="@color/army_green"
         android:layout_marginLeft="33dp"
-        android:layout_marginRight="33dp">
+        android:layout_marginRight="33dp"
+        android:visibility="gone">
 
         <EditText
             android:id="@+id/enterVerificationCode"
@@ -87,6 +88,120 @@
             android:textSize="16sp"
             tools:ignore="SpeakableTextPresentCheck" />
     </com.google.android.material.textfield.TextInputLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:padding="10dp"
+        >
+        <com.google.android.material.textfield.TextInputLayout
+
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            >
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/char_code_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLength="1"
+                android:inputType="number"
+                android:textColor="@color/army_green"
+                android:fontFamily="@font/montserrat_semibold"
+                android:gravity="center"
+                android:textSize="20sp"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/char_code_2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLength="1"
+                android:inputType="number"
+                android:textColor="@color/army_green"
+                android:fontFamily="@font/montserrat_semibold"
+                android:gravity="center"
+                android:textSize="20sp"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/char_code_3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLength="1"
+                android:inputType="number"
+                android:textColor="@color/army_green"
+                android:fontFamily="@font/montserrat_semibold"
+                android:gravity="center"
+                android:textSize="20sp"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/char_code_4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLength="1"
+                android:inputType="number"
+                android:textColor="@color/army_green"
+                android:fontFamily="@font/montserrat_semibold"
+                android:gravity="center"
+                android:textSize="20sp"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/char_code_5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLength="1"
+                android:inputType="number"
+                android:textColor="@color/army_green"
+                android:fontFamily="@font/montserrat_semibold"
+                android:gravity="center"
+                android:textSize="20sp"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/char_code_6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLength="1"
+                android:inputType="number"
+                android:textColor="@color/army_green"
+                android:fontFamily="@font/montserrat_semibold"
+                android:gravity="center"
+                android:textSize="20sp"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+    </LinearLayout>
 
     <Button
         android:id="@+id/verificationCode__nextBtn"

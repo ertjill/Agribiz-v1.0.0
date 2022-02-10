@@ -11,6 +11,7 @@ import android.annotation.SuppressLint;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 
 import com.example.agribiz_v100.R;
 import com.example.agribiz_v100.farmer.AgriHelp;
@@ -19,78 +20,51 @@ import com.example.agribiz_v100.farmer.FarmerProfile;
 import com.example.agribiz_v100.farmer.Finance;
 import com.example.agribiz_v100.farmer.Product;
 import com.example.agribiz_v100.farmer.Shipment;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.tabs.TabLayout;
 
 public class AgrovitMainActivity extends AppCompatActivity {
-    ViewPager2 customerMain_vp;
-    TabLayout customer_tab;
+    static String TAG="AgrovitMainActivity";
+    ViewPager2 agrovitMain_vp;
+    BottomNavigationView bottom_navigation;
+
+    private NavigationBarView.OnItemSelectedListener navigationListener = new NavigationBarView.OnItemSelectedListener() {
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            Log.d(TAG, item.getItemId() + "");
+            int i = 0;
+            switch (item.getItemId()) {
+                case R.id.Product:
+                    i = 0;
+                    break;
+                case R.id.Shipment:
+                    i = 1;
+                    break;
+                case R.id.Finance:
+                    i = 2;
+                    break;
+                case R.id.Profile:
+                    i = 3;
+                    break;
+            }
+            agrovitMain_vp.setCurrentItem(i);
+            return true;
+        }
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_agrovit_main);
         //view pager setup
         AgrovitMainActivity.ViewPagerAdapter adpater = new AgrovitMainActivity.ViewPagerAdapter(this);
-        customerMain_vp = findViewById(R.id.customerMain_vp);
-        customerMain_vp.setUserInputEnabled(false);
-        customerMain_vp.setAdapter(adpater);
-
-
-        //tab setup
-        customer_tab = findViewById(R.id.customer_tab);
-
-        customerMain_vp.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-            @Override
-            public void onPageSelected(int position) {
-                //super.onPageSelected(position);
-
-                selectedTab(position);
-                Log.d("Tag",position+"");
-                //customer_tab.selectTab(customer_tab.getTabAt(position));
-
-            }
-
-        });
-
-
-        customer_tab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                Log.d("Tag",tab.getPosition()+"");
-                customerMain_vp.setCurrentItem(tab.getPosition());
-//               for(int i = 0;i<5;i++){
-//                    if(i==customer_tab.getSelectedTabPosition()){
-//                       customer_tab.getTabAt(i).getIcon().setColorFilter(getResources().getColor(R.color.yellow_orange), PorterDuff.Mode.SRC_IN);
-//                }
-//                   else
-//                       customer_tab.getTabAt(i).getIcon().setColorFilter(getResources().getColor(R.color.army_green), PorterDuff.Mode.SRC_IN);
-//                }
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
+        agrovitMain_vp = findViewById(R.id.agrovitMain_vp);
+        agrovitMain_vp.setUserInputEnabled(false);
+        agrovitMain_vp.setAdapter(adpater);
+        bottom_navigation = findViewById(R.id.bottom_navigation);
+        bottom_navigation.setOnItemSelectedListener(navigationListener);
 
     }
-    @SuppressLint("ResourceAsColor")
-    private void selectedTab(int position) {
-        customer_tab.selectTab(customer_tab.getTabAt(position));
-        for (int i = 0; i < 4; i++) {
-            if (i == position) {
-//                customer_tab.getTabAt(i).getIcon().setTint(R.color.yellow_orange);
-                customer_tab.getTabAt(i).getIcon().setColorFilter(getResources().getColor(R.color.yellow_orange), PorterDuff.Mode.SRC_IN);
-            } else
-                customer_tab.getTabAt(i).getIcon().setColorFilter(getResources().getColor(R.color.army_green), PorterDuff.Mode.SRC_IN);
-//                customer_tab.getTabAt(i).getIcon().setTint(R.color.army_green);
-        }
-    }
-
 
     private class ViewPagerAdapter extends FragmentStateAdapter {
         public ViewPagerAdapter(@NonNull FragmentActivity fragmentActivity) {

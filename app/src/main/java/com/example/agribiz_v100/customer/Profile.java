@@ -34,7 +34,7 @@ public class Profile extends Fragment {
         userImage_iv = view.findViewById(R.id.userImage_iv);
         if(!user.getDisplayName().equals("")) {
             String[] displayName = user.getDisplayName().split("-");
-            displayName_tv.setText(displayName[0]);
+            displayName_tv.setText(user.getDisplayName().substring(0,user.getDisplayName().length()-2));
 //            userImage_iv.setImageURI(user.getPhotoUrl());
             Glide.with(getContext())
                     .load(user.getPhotoUrl())

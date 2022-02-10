@@ -41,7 +41,14 @@
                 android:id="@+id/product_image_iv"
                 android:layout_width="match_parent"
                 android:layout_height="250dp"
-                android:src="@drawable/sample" />
+                android:src="@drawable/sample"
+                android:visibility="gone"/>
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/imageSlider"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:layout_marginTop="25dp"
+                android:visibility="visible"/>
 
             <TextView
                 android:id="@+id/productName"

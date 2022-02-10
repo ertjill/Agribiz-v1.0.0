@@ -48,21 +48,22 @@
             android:fontFamily="@font/montserrat_regular"
             android:lineHeight="12.19sp"
             android:text="Php 87.00"
-            android:textColor="@color/brown"
+            android:textColor="@color/army_green"
             android:textFontWeight="400"
             android:textSize="10sp" />
+
         <TextView
-            android:id="@+id/item_qty"
+            android:id="@+id/item_stocks"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/item_price"
             android:layout_marginTop="4dp"
-            android:text="Qty: 1"
-            android:textColor="@color/brown"
             android:fontFamily="@font/montserrat_regular"
+            android:lineHeight="12.19sp"
+            android:text="Stocks: 1"
+            android:textColor="@color/brown"
             android:textFontWeight="400"
-            android:textSize="10sp"
-            android:lineHeight="12.19sp"/>
+            android:textSize="10sp" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -86,6 +87,7 @@
                 android:gravity="center"/>
 
             <TextView
+                android:id="@+id/productBasketQuantity_tv"
                 android:layout_width="31dp"
                 android:layout_height="16dp"
                 android:background="@color/army_green"

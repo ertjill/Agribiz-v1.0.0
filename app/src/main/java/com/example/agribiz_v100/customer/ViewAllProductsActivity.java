@@ -61,7 +61,7 @@ import java.util.Map;
 
 public class ViewAllProductsActivity extends AppCompatActivity {
     String TAG = "ViewAllProductsActivity";
-    GridView viewAll_gv;
+    LinearLayout no_product_ll;
     RecyclerView viewAll_rv;
     ViewAllProductAdapter viewAllProductAdapter;
     MaterialToolbar topAppBar;
@@ -82,7 +82,7 @@ public class ViewAllProductsActivity extends AppCompatActivity {
         Log.d(TAG, "onCreate ViewAllProductsActivity");
         setContentView(R.layout.activity_view_all_products);
         firestore = FirebaseFirestore.getInstance();
-
+        no_product_ll=findViewById(R.id.no_product_ll);
         swipeRefreshLayout = findViewById(R.id.refreshLayout);
 
 
@@ -175,7 +175,7 @@ public class ViewAllProductsActivity extends AppCompatActivity {
     public void loadProduct() {
         swipeRefreshLayout.setRefreshing(true);
         if (last == null) {
-            db.collection("products").orderBy("productId", Query.Direction.ASCENDING).limit(8)
+            db.collection("products").orderBy("productDateUploaded", Query.Direction.DESCENDING).limit(8)
                     .get()
                     .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                         @Override
@@ -190,7 +190,11 @@ public class ViewAllProductsActivity extends AppCompatActivity {
                             if (documentSnapshots.getDocuments().size() > 0) {
                                 last = documentSnapshots.getDocuments()
                                         .get((documentSnapshots.size() - 1));
+                                no_product_ll.setVisibility(View.GONE);
+                                swipeRefreshLayout.setVisibility(View.VISIBLE);
                             } else {
+                                no_product_ll.setVisibility(View.VISIBLE);
+                                swipeRefreshLayout.setVisibility(View.GONE);
                                 Toast.makeText(getApplicationContext(), "Cannot load products.", Toast.LENGTH_SHORT).show();
                             }
                             productGridAdapter.notifyDataSetChanged();
@@ -200,7 +204,7 @@ public class ViewAllProductsActivity extends AppCompatActivity {
                         }
                     });
         } else {
-            db.collection("products").orderBy("productId", Query.Direction.ASCENDING).startAfter(last).limit(8)
+            db.collection("products").orderBy("productDateUploaded", Query.Direction.DESCENDING).startAfter(last).limit(8)
                     .get()
                     .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                         @Override
