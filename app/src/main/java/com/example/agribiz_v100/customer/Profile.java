@@ -22,26 +22,34 @@ import com.google.firebase.auth.FirebaseUser;
 public class Profile extends Fragment {
 
     CardView logout_card;
-    TextView displayName_tv;
+    TextView displayName_tv, edit_profile_tv;
     ImageView userImage_iv;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view=inflater.inflate(R.layout.fragment_profile, container, false);
+        View view = inflater.inflate(R.layout.fragment_profile, container, false);
         displayName_tv = view.findViewById(R.id.displayName_tv);
         userImage_iv = view.findViewById(R.id.userImage_iv);
-        if(!user.getDisplayName().equals("")) {
+        edit_profile_tv = view.findViewById(R.id.edit_profile_tv);
+        if (!user.getDisplayName().equals("")) {
             String[] displayName = user.getDisplayName().split("-");
-            displayName_tv.setText(user.getDisplayName().substring(0,user.getDisplayName().length()-2));
+            displayName_tv.setText(user.getDisplayName().substring(0, user.getDisplayName().length() - 2));
 //            userImage_iv.setImageURI(user.getPhotoUrl());
             Glide.with(getContext())
                     .load(user.getPhotoUrl())
                     .into(userImage_iv);
         }
-        logout_card=view.findViewById(R.id.logout_card);
-
+        logout_card = view.findViewById(R.id.logout_card);
+        edit_profile_tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(),EditProfile.class);
+                startActivity(intent);
+            }
+        });
         logout_card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

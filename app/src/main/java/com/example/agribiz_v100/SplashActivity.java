@@ -61,7 +61,7 @@ public class SplashActivity extends AppCompatActivity {
 //        user.updateProfile(profileUpdates);
 
         //FirebaseAuth.getInstance().signOut();
-        //startHeavyProcessing();
+        startHeavyProcessing();
     }
 
     private void startHeavyProcessing() {

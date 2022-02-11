@@ -172,6 +172,13 @@ public class ViewAllProductsActivity extends AppCompatActivity {
     int count = 0;
     DocumentSnapshot last = null;
 
+    @Override
+    public void onBackPressed() {
+        Intent intent=new Intent();
+        intent.setClassName(getApplicationContext(),"com.example.agribiz_v100.customer.CustomerMainActivity");
+        startActivity(intent);
+    }
+
     public void loadProduct() {
         swipeRefreshLayout.setRefreshing(true);
         if (last == null) {
