@@ -68,6 +68,7 @@ public class SignupActivity extends AppCompatActivity {
                 intent.putExtra("userPassword",password);
                 intent.putExtra("userName",username);
                 startActivity(intent);
+                finish();
             }
         });
     }

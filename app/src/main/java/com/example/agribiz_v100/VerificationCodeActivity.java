@@ -133,12 +133,12 @@ public class VerificationCodeActivity extends AppCompatActivity {
                     String code = phoneAuthCredential.getSmsCode();
                     Toast.makeText(getApplicationContext(), "Code : " + code, Toast.LENGTH_SHORT).show();
                     if (!TextUtils.isEmpty(code)) {
-                        char_code_1.setText(code.charAt(0));
-                        char_code_2.setText(code.charAt(1));
-                        char_code_3.setText(code.charAt(2));
-                        char_code_4.setText(code.charAt(3));
-                        char_code_5.setText(code.charAt(4));
-                        char_code_6.setText(code.charAt(5));
+                        char_code_1.setText(code.charAt(0)+"");
+                        char_code_2.setText(code.charAt(1)+"");
+                        char_code_3.setText(code.charAt(2)+"");
+                        char_code_4.setText(code.charAt(3)+"");
+                        char_code_5.setText(code.charAt(4)+"");
+                        char_code_6.setText(code.charAt(5)+"");
                         verifyCode(code);
                     }
                 }

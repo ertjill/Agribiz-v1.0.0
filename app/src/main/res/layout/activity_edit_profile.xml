@@ -28,7 +28,7 @@
                     android:layout_gravity="end"
                     android:layout_marginEnd="20dp"
                     android:fontFamily="@font/montserrat_bold"
-                    android:text="Save"
+                    android:text="@string/save"
                     android:textColor="@color/white"
                     android:textSize="18sp" />
             </com.google.android.material.appbar.MaterialToolbar>
@@ -56,7 +56,8 @@
 
                 <FrameLayout
                     android:layout_width="70dp"
-                    android:layout_height="70dp">
+                    android:layout_height="70dp"
+                    android:background="@color/transparent">
 
                     <ImageView
                         android:id="@+id/profile_iv"
@@ -64,7 +65,8 @@
                         android:layout_height="match_parent"
                         android:background="@drawable/round_red_11"
                         android:backgroundTint="@color/white"
-                        android:src="@drawable/ic_round_account_circle_70">
+                        android:src="@drawable/ic_round_account_circle_70"
+                        android:contentDescription="@string/profile_photo">
 
                     </ImageView>
 
@@ -76,7 +78,8 @@
                         android:layout_marginTop="25dp"
                         android:background="@color/transparent"
                         android:src="@drawable/ic_baseline_add_a_photo_24"
-                        app:tint="@color/yellow_orange" />
+                        app:tint="@color/yellow_orange"
+                        android:contentDescription="@string/add_photo_camera" />
 
                 </FrameLayout>
 
@@ -109,7 +112,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/montserrat_medium"
-                        android:hint="Username"
+                        android:hint="@string/username"
                         android:importantForAutofill="no"
                         android:inputType="text"
                         android:paddingTop="20dp"
@@ -141,7 +144,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/montserrat_medium"
-                        android:hint="Email"
+                        android:hint="@string/email"
                         android:importantForAutofill="no"
                         android:inputType="textEmailAddress"
                         android:paddingTop="20dp"
@@ -172,7 +175,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/montserrat_medium"
-                        android:hint="Mobile Number"
+                        android:hint="@string/mobile_number"
                         android:importantForAutofill="no"
                         android:inputType="phone"
                         android:paddingTop="20dp"
@@ -189,16 +192,16 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="13dp"
                     android:fontFamily="@font/montserrat_semibold"
-                    android:text="Do you want to change password?"
+                    android:text="@string/do_you_want_to_change_password"
                     android:textColor="@color/brown"
                     android:textFontWeight="600"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"
+                    tools:ignore="UnusedAttribute" />
 
                 <RadioGroup
                     android:id="@+id/radioYesNo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
                     android:orientation="horizontal">
 
                     <RadioButton
@@ -207,7 +210,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="30dp"
                         android:buttonTint="@color/army_green"
-                        android:text="No"
+                        android:text="@string/no"
                         android:checked="true"
                         android:textColor="@color/brown"
                         android:textSize="15sp"/>
@@ -217,7 +220,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:buttonTint="@color/army_green"
-                        android:text="Yes"
+                        android:text="@string/yes"
                         android:textColor="@color/brown"
                         android:textSize="15sp" />
 
@@ -245,7 +248,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/montserrat_medium"
-                        android:hint="Password"
+                        android:hint="@string/password"
                         android:importantForAutofill="no"
                         android:inputType="textPassword"
                         android:paddingTop="20dp"
@@ -279,7 +282,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/montserrat_medium"
-                        android:hint="Confirn Password"
+                        android:hint="@string/confirm_password"
                         android:importantForAutofill="no"
                         android:inputType="textPassword"
                         android:paddingTop="20dp"

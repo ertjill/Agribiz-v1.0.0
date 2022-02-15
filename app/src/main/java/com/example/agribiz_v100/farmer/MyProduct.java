@@ -17,6 +17,7 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.core.location.LocationRequestCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -187,20 +188,21 @@ public class MyProduct extends Fragment {
             @Override
             public void onActivityResult(ActivityResult result) {
 
-//                if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
-//                    Bundle bundle = result.getData().getExtras();
-//                    Bitmap bitmap = (Bitmap) bundle.get("data");
-//                    product_image_iv.setImageBitmap(bitmap);
-//                }
+                if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+                    Bitmap imBtm = (Bitmap)result.getData().getExtras().get("data");
+                    ByteArrayOutputStream byts = new ByteArrayOutputStream();
+                    imBtm.compress(Bitmap.CompressFormat.JPEG, 100,byts);
+                    String path = MediaStore.Images.Media.insertImage(getContext().getContentResolver(),imBtm,"val"+arrayOfImages.size(),null);
 
-                if (result.getResultCode() == Activity.RESULT_OK && result.getData().getClipData() != null) {
-                    int i = result.getData().getClipData().getItemCount();
-                    for (int n = 0; n < i; n++) {
-                        Uri imageUri = result.getData().getClipData().getItemAt(n).getUri();
-                        arrayOfImages.add(imageUri);
-                    }
-//                    imageViewPagerAdapter = new ImageViewPagerAdapter(getContext(), arrayOfImages);
-//                    imageSlider.setAdapter(imageViewPagerAdapter);
+                    Uri image= Uri.parse(path);
+                    arrayOfImages.add(image);
+                    if (arrayOfImages.size() > 0) {
+                        blank_photo_ll.setVisibility(View.GONE);
+                        imageSlider.setVisibility(View.VISIBLE);
+                        imageViewPagerAdapter.notifyDataSetChanged();
+
+                    } else
+                        blank_photo_ll.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -239,12 +241,7 @@ public class MyProduct extends Fragment {
                         Verification.verifyPorductQuantity(productQuantity_til) &&
                         Verification.verifyPorductUnit(productUnit_til, productUnit_at.getText().toString())
                 ) {
-//                    product_image_iv.setDrawingCacheEnabled(true);
-//                    product_image_iv.buildDrawingCache();
-//                    Bitmap bitmap = ((BitmapDrawable) product_image_iv.getDrawable()).getBitmap();
-//                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-//                    byte[] data = baos.toByteArray();
+
                     String productName = productName_til.getEditText().getText().toString(),
                             productDescription = productDescription_til.getEditText().getText().toString(),
                             productCategory = productCategory_at.getText().toString(),
@@ -252,23 +249,13 @@ public class MyProduct extends Fragment {
                             productPrice = productPrice_til.getEditText().getText().toString(),
                             productQuantity = productQuantity_til.getEditText().getText().toString(),
                             productUnit = productUnit_at.getText().toString();
-//                    ArrayList<Object> itemSpecs = new ArrayList<>();
-//                    itemSpecs.add(new String(productName));
-//                    itemSpecs.add(new String(productDescription));
-//                    itemSpecs.add(new String(productCategory));
-//                    itemSpecs.add(new Integer(Integer.parseInt(productStocks)));
-//                    itemSpecs.add(new Double(Double.parseDouble(productPrice)));
-//                    itemSpecs.add(new Integer(Integer.parseInt(productQuantity)));
-//                    itemSpecs.add(new String(productUnit));
-//                    itemSpecs.add(new String(user.getUid()));
+
                     Map<String, Object> product = new HashMap<>();
                     Date date = new Date();
                     Timestamp productDateUploaded = new Timestamp(date);
-//                    List productImage = Arrays.asList(arrayOfImages);
                     product.put("productUserId", user.getUid());
                     product.put("productName", productName);
                     product.put("productDescription", productDescription);
-//                    product.put("productImage", productImage);
                     product.put("productCategory", productCategory);
                     product.put("productPrice", Double.parseDouble(productPrice));
                     product.put("productUnit", productUnit);
@@ -278,11 +265,6 @@ public class MyProduct extends Fragment {
                     product.put("productRating", 0);
                     product.put("productNoCustomerRate", 0);
                     product.put("productDateUploaded", productDateUploaded);
-
-//                    if (FirebaseHelper.addProduct(getContext(), itemSpecs, data)) {
-//                        addProductDialog.dismiss();
-//                        successAddProductToast.show();
-//                    }
 
                     uploadProduct(product);
                 }
@@ -498,13 +480,11 @@ public class MyProduct extends Fragment {
     }
 
     public void addFromCamera() {
-//        Intent intent = new Intent(Intent.ACTION_PICK,MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE );
         if (intent.resolveActivity(getContext().getPackageManager()) != null) {
             selectFromCamera.launch(intent);
-
         } else {
-            Toast.makeText(getActivity(), "There is no app to support this action", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Unable to use camera!", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -517,7 +497,7 @@ public class MyProduct extends Fragment {
         if (intent.resolveActivity(getContext().getPackageManager()) != null) {
             selectFromGallery.launch(Intent.createChooser(intent, "Select Image(s)"));
         } else {
-            Toast.makeText(getActivity(), "There is no app to support this action", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Unable to use gallery!", Toast.LENGTH_SHORT).show();
         }
     }
 
