@@ -72,7 +72,6 @@ public class Verification {
 
     public static boolean verifyEmail(String email) {
 
-
         String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\." +
                 "[a-zA-Z0-9_+&*-]+)*@" +
                 "(?:[a-zA-Z0-9-]+\\.)+[a-z" +

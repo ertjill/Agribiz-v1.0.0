@@ -268,6 +268,8 @@
             android:fontFamily="@font/montserrat_semibold"
             android:gravity="center"
             android:padding="8dp"
+            android:onClick="viewBasketDialog"
+            android:clickable="true"
             android:text="Add to basket"
             android:textColor="@color/yellow_orange"
             android:textFontWeight="600"

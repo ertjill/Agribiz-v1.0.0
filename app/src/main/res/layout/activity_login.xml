@@ -137,7 +137,7 @@
             app:passwordToggleEnabled="true">
 
             <EditText
-                android:id="@+id/password"
+                android:id="@+id/password_et"
                 style="TextAppearance.App.TextIn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

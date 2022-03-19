@@ -47,7 +47,7 @@ public class Firebase implements Serializable {
 //    }
 
     public void getProductItems() {
-        synchronized (this){
+        synchronized (this) {
             db.collection("products")
                     .get()
                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

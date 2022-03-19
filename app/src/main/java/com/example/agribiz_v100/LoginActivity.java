@@ -12,112 +12,103 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.agribiz_v100.agrovit.AgrovitMainActivity;
-import com.example.agribiz_v100.customer.CustomerMainActivity;
-import com.example.agribiz_v100.farmer.FarmerMainActivity;
+import com.example.agribiz_v100.controller.AuthController;
+import com.example.agribiz_v100.responses.AuthResponse;
+import com.example.agribiz_v100.services.AuthManagement;
+import com.example.agribiz_v100.validation.AuthValidation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
 
-
-    EditText email_input, password;
     Button login_btn;
-    private FirebaseAuth mAuth;
+    AuthManagement am;
+    AuthValidation av;
+    AuthController ac;
+    EditText email_input, password_et;
+    private static final String Tag = "LoginActivity";
 
     @Override
     protected void onStart() {
         super.onStart();
+        // If user is already logged in
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-            if (user.getDisplayName() != null && !user.getDisplayName().equals("")) {
-                char c = user.getDisplayName().charAt(user.getDisplayName().length() - 1);
-                if (c == 'c') {
-                    startActivity(new Intent(getBaseContext(), CustomerMainActivity.class));
-                    finish();
-                } else if (c == 'f') {
-                    startActivity(new Intent(getBaseContext(), FarmerMainActivity.class));
-                    finish();
-                } else {
-                    startActivity(new Intent(getBaseContext(), AgrovitMainActivity.class));
-                    finish();
-                }
-
-            }
-        }
+        // then navigate to corresponding UI based on the user role
+        ac.loginNavigation(user, this);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        // Initialize Firebase Auth
-        mAuth = FirebaseAuth.getInstance();
 
+        // AuthManagement class object initialization
+        am = new AuthManagement();
+        // AuthValidation class object initialization
+        av = new AuthValidation();
+        // AuthController class object initialization
+        ac = new AuthController();
+        
+        // Fragment UI ID References
         email_input = findViewById(R.id.email_input);
-        password = findViewById(R.id.password);
+        password_et = findViewById(R.id.password_et);
         login_btn = findViewById(R.id.login_btn);
 
+        // When login button is click
         login_btn.setOnClickListener(view -> {
-
+            // Get inputted values from fields
             String email = email_input.getText().toString();
-            String pass = password.getText().toString();
+            String pass = password_et.getText().toString();
 
-            if (TextUtils.isEmpty(email)) {
-                Toast.makeText(getBaseContext(), "Input Phone number!", Toast.LENGTH_SHORT).show();
-            } else if (!Verification.verifyEmail(email)) {
-                Toast.makeText(getBaseContext(), "Invalid Email address!", Toast.LENGTH_SHORT).show();
-            } else if (TextUtils.isEmpty(pass)) {
-                Toast.makeText(getBaseContext(), "Input password!", Toast.LENGTH_SHORT).show();
-            } else if (!Verification.verifyPassword(pass)) {
-                Toast.makeText(getBaseContext(), "Password must at least 8 characters with at least one digit, special character, uppercase and lower case letter!", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(getBaseContext(), "Log in", Toast.LENGTH_SHORT).show();
-                mAuth.signInWithEmailAndPassword(email, pass)
-                        .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()) {
-                                    // Sign in success, update UI with the signed-in user's information
-                                    FirebaseUser user = mAuth.getCurrentUser();
-                                    if (user.getDisplayName() != null) {
-                                        char c = user.getDisplayName().charAt(user.getDisplayName().length() - 1);
-                                        if (c == 'c') {
-                                            Intent intent = new Intent(getBaseContext(), CustomerMainActivity.class);
-                                            intent.putExtra("user",user);
-                                            startActivity(intent);
-                                            finish();
-                                        } else if(c=='f') {
-                                            startActivity(new Intent(getBaseContext(), FarmerMainActivity.class));
-                                            finish();
-                                        }else{
-                                            startActivity(new Intent(getBaseContext(), AgrovitMainActivity.class));
-                                            finish();
-                                        }
-                                    } else {
-                                        Intent intent =new Intent(getBaseContext(), AgrovitMainActivity.class);
-                                        intent.putExtra("user",user);
-                                        startActivity(intent);
-                                        finish();
-                                    }
+            // Stored get validation response
+            String validatedEmail = av.validateEmail(email);
+            String validatedPassword = av.validatePassword(pass);
 
-                                    Log.d("Login", "signInWithEmail:success" + user.getDisplayName());
-                                    //updateUI(user);
-                                } else {
-                                    // If sign in fails, display a message to the user.
-                                    Log.w("Login", "signInWithEmail:failure", task.getException());
-                                    Toast.makeText(LoginActivity.this, "Authentication failed.",
-                                            Toast.LENGTH_SHORT).show();
-                                    // updateUI(null);
-                                }
-                            }
-                        });
+            // Checks if email contains error
+            if (!TextUtils.isEmpty(validatedEmail)) {
+                // then display error message
+                email_input.setError(validatedEmail);
+            }
+            // Checks if password contains error
+            else if (!TextUtils.isEmpty(validatedPassword)) {
+                // then display error message
+                password_et.setError(validatedPassword);
+            }
+            else {
+                // Holds a task that returns AuthResult, which is a FirebaseAuth object
+                Task<AuthResult> loginTask = am.loginAccount(email, pass, this);
+                // Listens if task is complete
+                loginTask.addOnCompleteListener(this, task -> {
+                    // Verifies if task is successful
+                    if (task.isSuccessful()) {
+                        // then user is logged in,
+                        Log.d(Tag, "signInWithEmail:success"); // for developers
+                        // returns currently signed-in user
+                        FirebaseUser user = task.getResult().getUser();
+                        // Navigate to corresponding UI based on user roles
+                        ac.loginNavigation(user, LoginActivity.this);
+                    } else {
+                        try {
+                            // stop here
+                            // If sign in fails, display a message to the user.
+                            String errorCode = ((FirebaseAuthException)task.getException()).getErrorCode();
+
+                            Log.d(Tag, AuthResponse.getAuthError(errorCode)); // for developers
+                            Toast.makeText(LoginActivity.this, AuthResponse.getAuthError(errorCode),
+                                    Toast.LENGTH_LONG).show();
+                        } catch (Exception e) {
+                            Toast.makeText(LoginActivity.this, "Malicious login detected. " +
+                                    "Your account has been temporarily put on hold for a day..",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
             }
         });
-
     }
 
     public void goToSignup(View v) {
@@ -125,11 +116,4 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
-
-    public void goToResetPassword(View v) {
-        //Intent intent = new Intent(this, ResetPasswordActivity.class);
-        //startActivity(intent);
-    }
-
-
 }

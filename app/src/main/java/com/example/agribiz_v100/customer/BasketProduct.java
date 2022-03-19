@@ -6,7 +6,7 @@ public class BasketProduct {
     double price;
     int quantity;
     String farmerId;
-    boolean checked=false;
+    boolean checked = false;
 
     public boolean isChecked() {
         return checked;

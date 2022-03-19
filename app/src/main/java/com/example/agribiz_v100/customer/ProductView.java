@@ -75,8 +75,8 @@ public class ProductView extends AppCompatActivity implements FirebaseHelper.Fir
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_view);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+//                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         firebaseHelper = new FirebaseHelper(this);
         topAppBar = findViewById(R.id.topAppBar);
         imageSlider = findViewById(R.id.imageSlider);
@@ -178,6 +178,9 @@ public class ProductView extends AppCompatActivity implements FirebaseHelper.Fir
                 addProductToBasket.show();
             }
         });
+
+
+
         product_image_iv = findViewById(R.id.product_image_iv);
         hub_profile_image = findViewById(R.id.hub_profile_image);
         productName = findViewById(R.id.productName);
