@@ -1,11 +1,9 @@
 package com.example.agribiz_v100.controller;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
 
-import com.example.agribiz_v100.LoginActivity;
 import com.example.agribiz_v100.agrovit.AgrovitMainActivity;
 import com.example.agribiz_v100.customer.CustomerMainActivity;
 import com.example.agribiz_v100.farmer.FarmerMainActivity;
@@ -13,10 +11,10 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class AuthController {
 
-    public static void loginNavigation(FirebaseUser currentUser, Activity activity) {
-        FirebaseUser user = currentUser;
+    public static void loginNavigation(FirebaseUser user, Activity activity) {
+        
         if (user != null) {
-            if (!TextUtils.isEmpty(user.getDisplayName())) {
+            if (!TextUtils.isEmpty(user.getDisplayName()) && user.getDisplayName() != null) {
                 char c = user.getDisplayName().charAt(user.getDisplayName().length() - 1);
                 if (c == 'c') {
                     activity.startActivity(new Intent(activity.getApplicationContext(), CustomerMainActivity.class));
@@ -29,9 +27,6 @@ public class AuthController {
                     activity.finish();
                 }
             }
-        }
-        else {
-
         }
     }
 }

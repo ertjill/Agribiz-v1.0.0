@@ -37,18 +37,22 @@ public class Profile extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
+
+
         displayName_tv = view.findViewById(R.id.displayName_tv);
         userImage_iv = view.findViewById(R.id.userImage_iv);
         edit_profile_tv = view.findViewById(R.id.edit_profile_tv);
+
         if (!user.getDisplayName().equals("")) {
             String[] displayName = user.getDisplayName().split("-");
             displayName_tv.setText(user.getDisplayName().substring(0, user.getDisplayName().length() - 2));
-//            userImage_iv.setImageURI(user.getPhotoUrl());
             Glide.with(getContext())
                     .load(user.getPhotoUrl())
                     .into(userImage_iv);
         }
+
         logout_card = view.findViewById(R.id.logout_card);
+
         edit_profile_tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

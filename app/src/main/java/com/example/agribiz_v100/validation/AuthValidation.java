@@ -5,11 +5,9 @@ import android.text.TextUtils;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import okhttp3.internal.Util;
-
 public class AuthValidation {
 
-    public String validateEmail(String email) {
+    public static String validateEmail(String email) {
         if (TextUtils.isEmpty(email)) {
             return "Required email";
         }
@@ -32,7 +30,7 @@ public class AuthValidation {
         return pat.matcher(email).matches();
     }
 
-    public String validatePassword(String password) {
+    public static String validatePassword(String password) {
         if (TextUtils.isEmpty(password)) {
             return "Required password";
         }
@@ -44,7 +42,7 @@ public class AuthValidation {
         }
     }
 
-    private boolean isValidPassword(String password) {
+    private static boolean isValidPassword(String password) {
         // Regular expression (regex) to check valid password
         String regex = "^(?=.*[0-9])"
                 + "(?=.*[a-z])(?=.*[A-Z])"

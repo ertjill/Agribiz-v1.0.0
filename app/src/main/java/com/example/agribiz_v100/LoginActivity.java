@@ -26,8 +26,6 @@ public class LoginActivity extends AppCompatActivity {
 
     Button login_btn;
     AuthManagement am;
-    AuthValidation av;
-    AuthController ac;
     private FirebaseAuth mAuth;
 
     EditText email_input, password_et;
@@ -40,7 +38,7 @@ public class LoginActivity extends AppCompatActivity {
         // If user is already logged in
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         // then navigate to corresponding UI based on the user role
-        ac.loginNavigation(user, this);
+        AuthController.loginNavigation(user, this);
     }
 
     @Override
@@ -50,10 +48,6 @@ public class LoginActivity extends AppCompatActivity {
 
         // AuthManagement class object initialization
         am = new AuthManagement(this);
-        // AuthValidation class object initialization
-        av = new AuthValidation();
-        // AuthController class object initialization
-        ac = new AuthController();
         // FirebaseAuth object initialization
         mAuth = FirebaseAuth.getInstance();
         
@@ -70,8 +64,8 @@ public class LoginActivity extends AppCompatActivity {
             String pass = password_et.getText().toString();
 
             // Stored get validation response
-            String validatedEmail = av.validateEmail(email);
-            String validatedPassword = av.validatePassword(pass);
+            String validatedEmail = AuthValidation.validateEmail(email);
+            String validatedPassword = AuthValidation.validatePassword(pass);
 
             // Checks if email contains error
             if (!TextUtils.isEmpty(validatedEmail)) {
@@ -96,7 +90,7 @@ public class LoginActivity extends AppCompatActivity {
                             // returns currently signed-in user
                             FirebaseUser user = mAuth.getCurrentUser();
                             // Navigate to corresponding UI based on user roles
-                            ac.loginNavigation(user, LoginActivity.this);
+                            AuthController.loginNavigation(user, LoginActivity.this);
                         } catch (Exception e) {
                             Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
@@ -120,12 +114,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        forgot_pass_label.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), ResetPasswordActivity.class));
-            }
-        });
+        forgot_pass_label.setOnClickListener(view -> startActivity(new Intent(getApplicationContext(), ResetPasswordActivity.class)));
     }
 
     public void goToSignup(View v) {
