@@ -24,4 +24,5 @@
     <string name="messages">Messages</string>
     <string name="barter_goods">Barter Goods</string>
     <string name="logout">Logout</string>
+    <string name="resetPassword">Reset Password</string>
 </resources>

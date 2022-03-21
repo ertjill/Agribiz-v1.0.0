@@ -4,9 +4,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,11 +18,15 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.agribiz_v100.LoginActivity;
 import com.example.agribiz_v100.R;
+import com.example.agribiz_v100.services.AuthManagement;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class Profile extends Fragment {
 
+    private static final String TAG = "Profile";
     CardView logout_card;
     TextView displayName_tv, edit_profile_tv;
     ImageView userImage_iv;
@@ -53,7 +59,7 @@ public class Profile extends Fragment {
         logout_card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FirebaseAuth.getInstance().signOut();
+                AuthManagement.logoutAccount();
                 startActivity(new Intent(getContext(), LoginActivity.class));
                 getActivity().finish();
             }

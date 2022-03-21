@@ -13,6 +13,7 @@ import android.util.Log;
 import android.util.SparseArray;
 
 import com.example.agribiz_v100.agrovit.AgrovitMainActivity;
+import com.example.agribiz_v100.controller.AuthController;
 import com.example.agribiz_v100.customer.CustomerMainActivity;
 import com.example.agribiz_v100.farmer.FarmerMainActivity;
 import com.example.agribiz_v100.farmer.Product;
@@ -72,23 +73,6 @@ public class SplashActivity extends AppCompatActivity {
         @Override
         protected Bundle doInBackground(String... params) {
             Bundle bundle = new Bundle();
-//            char userType = 'd';
-//            if (user != null) {
-//                userType = user.getDisplayName().charAt(user.getDisplayName().length() - 1);
-//            }
-//
-//            switch (userType) {
-//                case 'c':
-//                    bundle.putParcelable("user", user);
-//                    break;
-//                case 'f':
-//                    bundle.putParcelable("user", user);
-//                    break;
-//
-//                case 'a':
-//                    bundle.putParcelable("user", user);
-//                    break;
-//            }
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
@@ -99,34 +83,12 @@ public class SplashActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Bundle bundle) {
-            char userType = 'd';
-            if (user != null)
-                userType = user.getDisplayName().charAt(user.getDisplayName().length() - 1);
-
-            switch (userType) {
-                case 'c':
-                    Intent intent = new Intent(getBaseContext(), CustomerMainActivity.class);
-                    intent.putExtras(bundle);
-                    startActivity(intent);
-                    finish();
-                    break;
-                case 'f':
-                    Intent intent1 = new Intent(getBaseContext(), FarmerMainActivity.class);
-                    intent1.putExtras(bundle);
-                    startActivity(intent1);
-                    finish();
-                    break;
-                case 'a':
-                    Intent intent2 = new Intent(getBaseContext(), AgrovitMainActivity.class);
-                    intent2.putExtras(bundle);
-                    startActivity(intent2);
-                    finish();
-                    break;
-                default:
-                    Intent intent3 = new Intent(getBaseContext(), OnBoard.class);
-                    intent3.putExtras(bundle);
-                    startActivity(intent3);
-                    finish();
+            if (user == null) {
+                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                finish();
+            }
+            else {
+                AuthController.loginNavigation(user, SplashActivity.this);
             }
         }
 

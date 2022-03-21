@@ -21,7 +21,7 @@ public class AuthValidation {
         }
     }
 
-    private boolean isValidEmail(String email) {
+    public static boolean isValidEmail(String email) {
         // Regular expression (regex) to check valid email
         String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\." +
             "[a-zA-Z0-9_+&*-]+)*@" +
