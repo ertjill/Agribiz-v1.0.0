@@ -88,7 +88,10 @@ public class AuthManagement {
                 @Override
                 public void onVerificationFailed(@NonNull FirebaseException e) {
                     Log.d(TAG,"On verification failed", e);
+                    Toast.makeText(activity, "Failed to update phone number", Toast.LENGTH_SHORT).show();
                 }
+
+
     };
 
     private void verifyCode(String code) {
@@ -191,49 +194,14 @@ public class AuthManagement {
     }
 
     // Update phone number
-    public void phoneNumberAuthentication(String code) {
+    public Task<Void> updatePhoneNumber(String code) {
         Log.d("PhoneNumber","Verifying " + code);
         PhoneAuthCredential credential = PhoneAuthProvider.getCredential(codeBySystem, code);
+
         Log.d("PhoneNumber","Update phone number credential " + code);
-        mAuth.getCurrentUser().updatePhoneNumber(credential);
+        // Stop here...
+        return mAuth.getCurrentUser().updatePhoneNumber(credential);
     }
-
-    private final PhoneAuthProvider.OnVerificationStateChangedCallbacks updateAccPhoneNumber =
-            new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-
-                @Override
-                public void onCodeSent(@NonNull String s, @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
-                    super.onCodeSent(s, forceResendingToken);
-                    codeBySystem = s;
-                    Log.d("PhoneNumber","Code sent");
-                }
-
-                @Override
-                public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
-                    // String code = phoneAuthCredential.getSmsCode();
-                    // if (!TextUtils.isEmpty(code)) {
-                    //     phoneNumberAuthentication(code);
-                    //    Log.d("PhoneNumber","Changed phone number");
-                    //}
-                }
-
-                @Override
-                public void onVerificationFailed(@NonNull FirebaseException e) {
-                    Toast.makeText(activity, "Cannot change phone number.", Toast.LENGTH_LONG).show();
-                }
-    };
-
-    public void updatePhoneNumber(String phoneNumber) {
-        PhoneAuthOptions options = PhoneAuthOptions.newBuilder(mAuth)
-                .setPhoneNumber(phoneNumber)       // Phone number to verify
-                .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
-                .setActivity(activity)              // Activity (for callback binding)
-                .setCallbacks(updateAccPhoneNumber)          // OnVerificationStateChangedCallbacks
-                .build();
-        PhoneAuthProvider.verifyPhoneNumber(options);
-
-    }
-
 
     public static void logoutAccount() {
         FirebaseAuth.getInstance().signOut();

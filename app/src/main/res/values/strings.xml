@@ -25,4 +25,12 @@
     <string name="barter_goods">Barter Goods</string>
     <string name="logout">Logout</string>
     <string name="resetPassword">Reset Password</string>
+    <string name="enter_verification_code">Enter verification code</string>
+    <string name="submit">Submit</string>
+    <string name="verification_text_dialog">A verification code is sent by SMS to 09567724913</string>
+    <string name="cancel">Cancel</string>
+    <string name="new_mobile_number">New mobile number</string>
+    <string name="update">Update</string>
+    <string name="enter_new_mobile_number">Enter New Mobile Number</string>
+    <string name="_9xxxxxxxx">9X-XXX-XXXX</string>
 </resources>

@@ -1,6 +1,14 @@
 package com.example.agribiz_v100.validation;
 
+import android.content.Context;
 import android.text.TextUtils;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.agribiz_v100.R;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -55,5 +63,25 @@ public class AuthValidation {
         return m.matches();
     }
 
+    public static boolean validatePhoneNumber(String no) {
+        Pattern p = Pattern.compile("^(09|\\+639)\\d{9}$");
+        if (no == null) {
+            return false;
+        }
+        Matcher m = p.matcher(no);
+        return (m.matches());
+    }
+
+    public static Toast successToast(Context context, String message){
+        Toast successAddProductToast = new Toast(context);
+        View successToast = LayoutInflater.from(context).inflate(R.layout.success_toast, null);
+        TextView success_message_tv = successToast.findViewById(R.id.success_message_tv);
+        success_message_tv.setText(message);
+        successAddProductToast.setView(successToast);
+        successAddProductToast.setDuration(Toast.LENGTH_LONG);
+        successAddProductToast.setGravity(Gravity.CENTER, 0, 0);
+
+        return successAddProductToast;
+    }
 
 }
