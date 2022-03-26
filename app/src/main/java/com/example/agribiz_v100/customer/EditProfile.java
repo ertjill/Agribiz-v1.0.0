@@ -79,6 +79,10 @@ public class EditProfile extends AppCompatActivity {
         topAppBar=findViewById(R.id.topAppBar);
         //
         profile_iv=findViewById(R.id.profile_iv);
+        Glide.with(getApplicationContext())
+                .load(user.getPhotoUrl())
+                .circleCrop()
+                .into(profile_iv);
         username_et = findViewById(R.id.username_et);
         number_et=findViewById(R.id.number_et);
         email_et=findViewById(R.id.email_et);
@@ -384,7 +388,8 @@ public class EditProfile extends AppCompatActivity {
                         .load(imageUri)
                         .circleCrop()
                         .into(profile_iv);
-                ProfileManagement.updateImage(this, imageUri, user.getUid());
+                ProfileManagement pm=new ProfileManagement();
+                pm.updateImage(this, imageUri, user);
             }
         }
     }

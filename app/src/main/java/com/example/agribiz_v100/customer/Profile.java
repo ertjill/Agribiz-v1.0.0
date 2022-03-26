@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,13 +32,20 @@ public class Profile extends Fragment {
     TextView displayName_tv, edit_profile_tv;
     ImageView userImage_iv;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    @Override
+    public void onResume() {
+        super.onResume();
+        Glide.with(getContext())
+                .load(user.getPhotoUrl())
+                .into(userImage_iv);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
+        View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
         displayName_tv = view.findViewById(R.id.displayName_tv);
         userImage_iv = view.findViewById(R.id.userImage_iv);
