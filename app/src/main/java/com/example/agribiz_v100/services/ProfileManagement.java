@@ -12,18 +12,25 @@ import com.example.agribiz_v100.entities.LocationModel;
 import com.example.agribiz_v100.entities.UserModel;
 import com.example.agribiz_v100.validation.AuthValidation;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Transaction;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 import com.google.rpc.context.AttributeContext;
 
 import java.io.File;
 import java.net.URI;
+import java.util.List;
 
 public class ProfileManagement {
 
@@ -83,15 +90,57 @@ public class ProfileManagement {
 
     }
 
-    public static void addAddress(LocationModel locationModel) {
+    public static Task<Void> addAddress(Activity activity,LocationModel location, FirebaseUser user) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference locationRef = db.collection("users").document(user.getUid());
+        return db.runTransaction(new Transaction.Function<Void>() {
+            @Override
+            public Void apply(Transaction transaction) throws FirebaseFirestoreException {
+                DocumentSnapshot snapshot = transaction.get(locationRef);
+                List<LocationModel> address = (List<LocationModel>) snapshot.getData().get("userLocation");
+                int i = address.size();
+                if(i<3) {
+                    Log.d("ads", "added location");
+                    locationRef.update("userLocation", FieldValue.arrayUnion(location));
+                }
+                else {
+                    throw new FirebaseFirestoreException("Address exceeds limit",
+                            FirebaseFirestoreException.Code.ABORTED);
+                }
+                // Success
+                return null;
+            }
+        }).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()){
+                    AuthValidation.successToast(activity,"Successfully added address");
+                    Log.d("ads", "Successfully added address");
+                }
+                else{
+                    AuthValidation.failedToast(activity,task.getException().getMessage());
+                    Log.d("ads", task.getException().getMessage());
+                }
+            }
+        });
+
 
     }
 
-    public static void updateAddress(LocationModel locationModel) {
-
-    }
-
-    public static void deleteAddress() {
-
+    public static void deleteAddress(Activity activity,LocationModel location, FirebaseUser user) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference locationRef = db.collection("users").document(user.getUid());
+        locationRef.update("userLocation", FieldValue.arrayRemove(location)).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()){
+                    AuthValidation.successToast(activity,"Successfully removed address");
+                    Log.d("ads", "Successfully removed address");
+                }else{
+                    AuthValidation.failedToast(activity,task.getException().getMessage());
+                    Log.d("ads", task.getException().getMessage());
+                }
+            }
+        });
     }
 }

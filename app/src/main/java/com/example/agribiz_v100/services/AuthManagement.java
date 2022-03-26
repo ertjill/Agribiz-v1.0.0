@@ -21,6 +21,8 @@ import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.concurrent.TimeUnit;
 
@@ -199,7 +201,30 @@ public class AuthManagement {
         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                 .setDisplayName(username)
                 .build();
-        return user.updateProfile(profileUpdates);
+        return user.updateProfile(profileUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()){
+                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                    DocumentReference usernameRef = db.collection("users").document(mAuth.getCurrentUser().getUid());
+                    usernameRef.update("userDisplayName",mAuth.getCurrentUser().getDisplayName())
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if(task.isSuccessful()){
+                                AuthValidation.successToast(activity,"Successfully updated username");
+                            }
+                            else{
+                                AuthValidation.failedToast(activity,"Failed to update username");
+                            }
+                        }
+                    });
+                }{
+                    AuthValidation.failedToast(activity,"Failed to update email");
+                }
+            }
+        });
+
     }
 
     public Task<Void> updatePassword(String password) {
@@ -207,7 +232,18 @@ public class AuthManagement {
     }
 
     public Task<Void> updateEmail(String email) {
-        return mAuth.getCurrentUser().updateEmail(email);
+        return mAuth.getCurrentUser().updateEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()){
+                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                    DocumentReference emailRef = db.collection("users").document(mAuth.getCurrentUser().getUid());
+                    emailRef.update("userEmail",email);
+                }{
+                    AuthValidation.failedToast(activity,"Failed to update email");
+                }
+            }
+        });
     }
 
     // Update phone number
@@ -217,7 +253,31 @@ public class AuthManagement {
 
         Log.d("PhoneNumber","Update phone number credential " + code);
         // Stop here...
-        return mAuth.getCurrentUser().updatePhoneNumber(credential);
+        return mAuth.getCurrentUser().updatePhoneNumber(credential)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()){
+                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                    DocumentReference mobileRef = db.collection("users").document(mAuth.getCurrentUser().getUid());
+                    mobileRef.update("userPhoneNumber",mAuth.getCurrentUser().getPhoneNumber())
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if(task.isSuccessful()){
+                                AuthValidation.successToast(activity,"Successfully updated phone number");
+                            }
+                            else{
+                                AuthValidation.failedToast(activity,"Failed to update phone number");
+                            }
+                        }
+                    });
+                }{
+                    AuthValidation.failedToast(activity,"Failed to update email");
+                }
+            }
+        });
+
     }
 
     public static void logoutAccount() {

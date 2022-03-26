@@ -4,31 +4,60 @@ import java.io.Serializable;
 
 public class LocationModel implements Serializable {
 
-    private String userCity;
+    private String userFullName;
+    private String userPhoneNumber;
+    private String userRegion;
+    private String userProvince;
     private String userMunicipality;
     private String userBarangay;
-    private String userStreet;
+    private String userZipCode;
     private String userSpecificAddress;
 
-    public LocationModel () {
+    public LocationModel() {
 
     }
 
-    public LocationModel(String userCity, String userMunicipality, String userBarangay,
-                         String userStreet, String userSpecificAddress) {
-        this.userCity = userCity;
+    public LocationModel(String userFullName, String userPhoneNumber, String userRegion, String userProvince, String userMunicipality, String userBarangay, String userZipCode, String userSpecificAddress) {
+        this.userFullName = userFullName;
+        this.userPhoneNumber = userPhoneNumber;
+        this.userRegion = userRegion;
+        this.userProvince = userProvince;
         this.userMunicipality = userMunicipality;
         this.userBarangay = userBarangay;
-        this.userStreet = userStreet;
+        this.userZipCode = userZipCode;
         this.userSpecificAddress = userSpecificAddress;
     }
 
-    public String getUserCity() {
-        return userCity;
+    public String getUserFullName() {
+        return userFullName;
     }
 
-    public void setUserCity(String userCity) {
-        this.userCity = userCity;
+    public void setUserFullName(String userFullName) {
+        this.userFullName = userFullName;
+    }
+
+    public String getUserPhoneNumber() {
+        return userPhoneNumber;
+    }
+
+    public void setUserPhoneNumber(String userPhoneNumber) {
+        this.userPhoneNumber = userPhoneNumber;
+    }
+
+    public String getUserRegion() {
+        return userRegion;
+    }
+
+    public void setUserRegion(String userRegion) {
+        this.userRegion = userRegion;
+    }
+
+    public String getUserProvince() {
+        return userProvince;
+    }
+
+    public void setUserProvince(String userProvince) {
+        this.userProvince = userProvince;
     }
 
     public String getUserMunicipality() {
@@ -47,12 +76,12 @@ public class LocationModel implements Serializable {
         this.userBarangay = userBarangay;
     }
 
-    public String getUserStreet() {
-        return userStreet;
+    public String getUserZipCode() {
+        return userZipCode;
     }
 
-    public void setUserStreet(String userStreet) {
-        this.userStreet = userStreet;
+    public void setUserZipCode(String userZipCode) {
+        this.userZipCode = userZipCode;
     }
 
     public String getUserSpecificAddress() {
