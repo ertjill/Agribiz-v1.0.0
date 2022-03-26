@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 
 import com.example.agribiz_v100.controller.AuthController;
 import com.example.agribiz_v100.entities.UserModel;
+import com.example.agribiz_v100.validation.AuthValidation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
@@ -90,8 +91,6 @@ public class AuthManagement {
                     Log.d(TAG,"On verification failed", e);
                     Toast.makeText(activity, "Failed to update phone number", Toast.LENGTH_SHORT).show();
                 }
-
-
     };
 
     private void verifyCode(String code) {
@@ -142,9 +141,19 @@ public class AuthManagement {
                                 user.setUserImage(fuser.getPhotoUrl().toString());
 
                                 // Create account...
-                                ProfileManagement pm = new ProfileManagement();
-                                pm.createAccountProfile(user);
-                                AuthController.loginNavigation(fuser, activity);
+                                ProfileManagement.createAccountProfile(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            AuthController.loginNavigation(fuser, activity);
+                                            AuthValidation.successToast(activity, "Account successfully created");
+                                        }
+                                        else {
+                                            deleteAccount(fuser);
+                                            AuthValidation.failedToast(activity, "Failed to create account.");
+                                        }
+                                    }
+                                });
                             }
                             else {
                                 deleteAccount(mAuth.getCurrentUser());
@@ -183,6 +192,14 @@ public class AuthManagement {
 
     public static Task<Void> resetPassword(String email) {
         return FirebaseAuth.getInstance().sendPasswordResetEmail(email);
+    }
+
+    public Task<Void> updateUsername(String username){
+        FirebaseUser user = mAuth.getCurrentUser();
+        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                .setDisplayName(username)
+                .build();
+        return user.updateProfile(profileUpdates);
     }
 
     public Task<Void> updatePassword(String password) {

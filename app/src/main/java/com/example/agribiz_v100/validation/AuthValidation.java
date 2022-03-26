@@ -37,6 +37,29 @@ public class AuthValidation {
         Pattern pat = Pattern.compile(emailRegex);
         return pat.matcher(email).matches();
     }
+    public static boolean validateUsername(String name) {
+
+        // Regex to check valid username.
+        String regex = "^[A-Za-z]\\w{5,29}$";
+
+        // Compile the ReGex
+        Pattern p = Pattern.compile(regex);
+
+        // If the username is empty
+        // return false
+        if (name.equals("")) {
+            return false;
+        }
+
+        // Pattern class contains matcher() method
+        // to find matching between given username
+        // and regular expression.
+        Matcher m = p.matcher(name);
+
+        // Return if the username
+        // matched the ReGex
+        return m.matches();
+    }
 
     public static String validatePassword(String password) {
         if (TextUtils.isEmpty(password)) {
@@ -78,10 +101,22 @@ public class AuthValidation {
         TextView success_message_tv = successToast.findViewById(R.id.success_message_tv);
         success_message_tv.setText(message);
         successAddProductToast.setView(successToast);
-        successAddProductToast.setDuration(Toast.LENGTH_LONG);
+        successAddProductToast.setDuration(Toast.LENGTH_SHORT);
         successAddProductToast.setGravity(Gravity.CENTER, 0, 0);
 
         return successAddProductToast;
+    }
+
+    public static Toast failedToast(Context context, String message){
+        Toast failureToast = new Toast(context);
+        View failedToast = LayoutInflater.from(context).inflate(R.layout.failed_toast, null);
+        TextView failed_message_tv = failedToast.findViewById(R.id.failed_message_tv);
+        failed_message_tv.setText(message);
+        failureToast.setView(failedToast);
+        failureToast.setDuration(Toast.LENGTH_SHORT);
+        failureToast.setGravity(Gravity.CENTER, 0, 0);
+
+        return failureToast;
     }
 
 }

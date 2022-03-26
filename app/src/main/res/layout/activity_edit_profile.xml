@@ -46,31 +46,48 @@
                 android:paddingBottom="50dp">
 
                 <FrameLayout
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
                     android:background="@color/transparent">
 
-                    <ImageView
-                        android:id="@+id/profile_iv"
+                    <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@drawable/round_red_11"
-                        android:backgroundTint="@color/white"
-                        android:contentDescription="@string/profile_photo"
-                        android:src="@drawable/ic_round_account_circle_70">
+                        app:cardCornerRadius="50dp"
+                        android:backgroundTint="@color/yellow_orange">
 
-                    </ImageView>
+                        <ImageView
+                            android:id="@+id/profile_iv"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="2dp"
+                            android:background="@drawable/round_red_11"
+                            android:backgroundTint="@color/white"
+                            android:contentDescription="@string/profile_photo"
+                            android:src="@drawable/ic_round_account_circle_70">
 
-                    <ImageButton
+                        </ImageView>
+
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginStart="25dp"
-                        android:layout_marginTop="25dp"
-                        android:background="@color/transparent"
-                        android:contentDescription="@string/add_photo_camera"
-                        android:src="@drawable/ic_baseline_add_a_photo_24"
-                        app:tint="@color/yellow_orange" />
+                        android:layout_marginStart="35dp"
+                        android:layout_marginTop="35dp"
+                        android:backgroundTint="@color/transparent">
+                        <ImageButton
+                            android:id="@+id/edit_image_ib"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@color/transparent"
+                            android:contentDescription="@string/add_photo_camera"
+                            android:src="@drawable/ic_baseline_add_a_photo_30"
+                            app:tint="@color/yellow_orange" />
+                    </androidx.cardview.widget.CardView>
+
+
 
                 </FrameLayout>
 
@@ -259,6 +276,7 @@
                     app:boxCornerRadiusTopStart="15dp"
                     app:errorEnabled="true"
                     app:boxStrokeColor="@color/army_green"
+                    app:endIconTint="@color/yellow_orange"
                     app:endIconDrawable="@drawable/ic_baseline_edit_35"
                     app:endIconMode="custom"
                     app:hintTextColor="@color/army_green">
@@ -389,6 +407,21 @@
                         tools:ignore="SpeakableTextPresentCheck" />
 
                 </com.google.android.material.textfield.TextInputLayout>
+
+                <Button
+                    android:id="@+id/change_password_btn"
+                    android:layout_width="200dp"
+                    android:layout_height="55dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_gravity="center"
+                    android:text="Change Password"
+                    android:textColor="@color/army_green"
+                    android:fontFamily="@font/montserrat_bold"
+                    android:textAllCaps="false"
+                    android:backgroundTint="@color/yellow_orange"
+                    app:cornerRadius="20dp"
+                    android:visibility="gone"
+                    tools:ignore="UsingOnClickInXml" />
             </LinearLayout>
         </LinearLayout>
 

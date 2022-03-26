@@ -6,8 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,12 +15,9 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.core.location.LocationRequestCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.viewpager.widget.PagerAdapter;
-import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.provider.MediaStore;
@@ -46,11 +41,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.denzcoskun.imageslider.ImageSlider;
-import com.denzcoskun.imageslider.constants.ScaleTypes;
-import com.denzcoskun.imageslider.models.SlideModel;
-import com.example.agribiz_v100.FirebaseHelper;
-import com.example.agribiz_v100.OnboardingAdapter;
 import com.example.agribiz_v100.ProductItem;
 import com.example.agribiz_v100.R;
 import com.example.agribiz_v100.Verification;
@@ -63,12 +53,9 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -79,15 +66,11 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.annotation.Nullable;
 
 public class MyProduct extends Fragment {
     String TAG = "MyProduct";
@@ -305,12 +288,17 @@ public class MyProduct extends Fragment {
             });
             addProductDialog.show();
 
-            addProductPhotoDialog.setContentView(R.layout.add_product_picture_dialog);
+            addProductPhotoDialog.setContentView(R.layout.upload_picture_dialog);
             addProductPhotoDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             addProductPhotoDialog.setCancelable(false);
+
             ImageButton camera_ib = addProductPhotoDialog.findViewById(R.id.camera_ib);
             ImageButton gallery_ib = addProductPhotoDialog.findViewById(R.id.gallery_ib);
             ImageButton close_ib = addProductPhotoDialog.findViewById(R.id.close_ib);
+            TextView upload_tv = addProductPhotoDialog.findViewById(R.id.upload_tv);
+
+            upload_tv.setText("Upload product photos");
+
             close_ib.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
