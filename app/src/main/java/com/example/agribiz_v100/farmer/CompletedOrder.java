@@ -17,5 +17,6 @@ public class CompletedOrder extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_completed_order, container, false);
+
     }
 }

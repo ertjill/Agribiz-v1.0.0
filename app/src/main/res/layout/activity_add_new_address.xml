@@ -184,7 +184,7 @@
                 app:hintTextColor="@color/army_green">
 
                 <AutoCompleteTextView
-                    android:id="@+id/schoolCategory"
+                    android:id="@+id/municipality_act"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/montserrat_medium"
@@ -211,7 +211,7 @@
                 app:hintTextColor="@color/army_green">
 
                 <AutoCompleteTextView
-                    android:id="@+id/barangay_et"
+                    android:id="@+id/barangay_act"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/montserrat_medium"

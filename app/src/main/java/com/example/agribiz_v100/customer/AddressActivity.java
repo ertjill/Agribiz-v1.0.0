@@ -5,8 +5,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 
 import com.example.agribiz_v100.R;
+import com.example.agribiz_v100.location.BrgyManagement;
+import com.example.agribiz_v100.location.CityManagement;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -21,82 +27,50 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.Executor;
 
 public class AddressActivity extends AppCompatActivity {
-    final String page1_cities = "https://ph-locations-api.buonzz.com/v1/cities?page=1";
-    final String page2_cities = "https://ph-locations-api.buonzz.com/v1/cities?page=2";
-
+    AutoCompleteTextView municipality_act, barangay_act;
+    CityManagement cities;
+    BrgyManagement barangay;
+    List<JSONObject> citiesList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_address);
+        municipality_act = findViewById(R.id.municipality_act);
+        barangay_act = findViewById(R.id.barangay_act);
+        cities = new CityManagement(new CityManagement.AsyncResponse() {
+            @Override
+            public void processFinish(List<JSONObject> citiesList, List<String> citiesNames) {
 
-        new MyTask().execute();
-    }
-
-    private class MyTask extends AsyncTask<Void, Void, Void> {
-        String page1_cities_result,page2_cities_result;
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            URL url, url1;
-            try {
-                url = new URL(page1_cities);
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(url.openStream()));
-                String stringBuffer;
-                String string = "";
-                while ((stringBuffer = bufferedReader.readLine()) != null) {
-                    string = String.format("%s%s", string, stringBuffer);
-                }
-                bufferedReader.close();
-                page1_cities_result = string;
-
-                url1 = new URL(page2_cities);
-                BufferedReader bufferedReader1 = new BufferedReader(new InputStreamReader(url1.openStream()));
-                String stringBuffer1;
-                String string1 = "";
-                while ((stringBuffer1 = bufferedReader1.readLine()) != null) {
-                    string1 = String.format("%s%s", string1, stringBuffer1);
-                }
-                bufferedReader.close();
-                page2_cities_result = string1;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            try {
-                JSONObject mainObject = new JSONObject(page1_cities_result);
-                JSONObject mainObject1 = new JSONObject(page2_cities_result);
-                String data = mainObject.getString("data");
-                String data1 = mainObject1.getString("data");
-                JSONArray array = new JSONArray(data);
-                List<JSONObject> cities= new  ArrayList<>();
-                for (int i = 0; i < array.length(); i++) {
-                    JSONObject object = array.getJSONObject(i);
-                    if (object.getString("province_code").equals("0722"))
-                        cities.add(object);
-                }
-                JSONArray array1 = new JSONArray(data1);
-                for (int i = 0; i < array1.length(); i++) {
-                    JSONObject object = array1.getJSONObject(i);
-                    if (object.getString("province_code").equals("0722"))
-                        cities.add(object);
-                }
-                Log.i("tag" ,cities.size()+" Cities");
-                for (JSONObject ob: cities) {
-                    Log.i("tag" ,ob.getString("name"));
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-                Log.i("tag",e.getMessage());
+                ArrayAdapter<String> mAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.dropdown_item, citiesNames);
+                municipality_act.setAdapter(mAdapter);
             }
 
-        }
+
+        });
+
+        municipality_act.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                try {
+                    Log.d("tag",cities.citiesList.get(i).getString("id"));
+                    barangay = new BrgyManagement(cities.citiesList.get(i).getString("id"),new BrgyManagement.AsyncResponse() {
+                        @Override
+                        public void processFinish(List<JSONObject> brgyList, List<String> brgyNames) {
+                            ArrayAdapter<String> bAdapter = new ArrayAdapter<>(getApplicationContext(), R.layout.dropdown_item, brgyNames);
+                            municipality_act.setAdapter(bAdapter);
+                        }
+                    });
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+
     }
+
 
 }
