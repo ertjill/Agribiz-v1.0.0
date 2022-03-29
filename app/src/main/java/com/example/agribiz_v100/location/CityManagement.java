@@ -46,14 +46,14 @@ public class CityManagement {
         @Override
         protected void onPostExecute(Void voids) {
             delegate.processFinish(citiesList, citiesNames);
-//            for (JSONObject city : citiesList
-//            ) {
-//                try {
-//                    Log.d(TAG, city.getString("name"));
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//            }
+            for (JSONObject city : citiesList
+            ) {
+                try {
+                    Log.d(TAG, city.toString());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
 
         }
 

@@ -40,30 +40,35 @@ public class AddressActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_new_address);
         municipality_act = findViewById(R.id.municipality_act);
         barangay_act = findViewById(R.id.barangay_act);
+        String id = "";
         cities = new CityManagement(new CityManagement.AsyncResponse() {
             @Override
             public void processFinish(List<JSONObject> citiesList, List<String> citiesNames) {
 
                 ArrayAdapter<String> mAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.dropdown_item, citiesNames);
                 municipality_act.setAdapter(mAdapter);
+
             }
 
-
         });
+
+
 
         municipality_act.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Log.d("tag","imong ge click kay index : "+i);
                 try {
-                    Log.d("tag",cities.citiesList.get(i).getString("id"));
-                    barangay = new BrgyManagement(cities.citiesList.get(i).getString("id"),new BrgyManagement.AsyncResponse() {
+                    Log.d("tag",cities.citiesList.get(i).getString("code"));
+                    barangay = new BrgyManagement(cities.citiesList.get(i).getString("code"),new BrgyManagement.AsyncResponse() {
                         @Override
                         public void processFinish(List<JSONObject> brgyList, List<String> brgyNames) {
                             ArrayAdapter<String> bAdapter = new ArrayAdapter<>(getApplicationContext(), R.layout.dropdown_item, brgyNames);
-                            municipality_act.setAdapter(bAdapter);
+                            barangay_act.setAdapter(bAdapter);
                         }
                     });
-                } catch (JSONException e) {
+
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
