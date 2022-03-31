@@ -1,15 +1,11 @@
 package com.example.agribiz_v100.customer;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,11 +15,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.agribiz_v100.LoginActivity;
 import com.example.agribiz_v100.R;
-import com.example.agribiz_v100.entities.LocationModel;
 import com.example.agribiz_v100.services.AuthManagement;
-import com.example.agribiz_v100.services.ProfileManagement;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -34,6 +26,7 @@ public class Profile extends Fragment {
     TextView displayName_tv, edit_profile_tv,my_address_tv;
     ImageView userImage_iv;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
     @Override
     public void onResume() {
         super.onResume();
@@ -52,9 +45,10 @@ public class Profile extends Fragment {
         displayName_tv = view.findViewById(R.id.displayName_tv);
         userImage_iv = view.findViewById(R.id.userImage_iv);
         edit_profile_tv = view.findViewById(R.id.edit_profile_tv);
+        //add_new_address_btn = view.
 
         my_address_tv.setOnClickListener(t->{
-            startActivity(new Intent(getContext(),AddressActivity.class));
+            startActivity(new Intent(getActivity(), MyAddressesActivity.class));
         });
 
         if (!user.getDisplayName().equals("")) {

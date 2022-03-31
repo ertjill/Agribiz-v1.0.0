@@ -1,21 +1,17 @@
 package com.example.agribiz_v100.services;
 
 import android.app.Activity;
+import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import com.example.agribiz_v100.customer.Profile;
 import com.example.agribiz_v100.entities.LocationModel;
 import com.example.agribiz_v100.entities.UserModel;
 import com.example.agribiz_v100.validation.AuthValidation;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.DocumentReference;
@@ -26,10 +22,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Transaction;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
-import com.google.rpc.context.AttributeContext;
 
-import java.io.File;
-import java.net.URI;
 import java.util.List;
 
 public class ProfileManagement {
@@ -90,7 +83,7 @@ public class ProfileManagement {
 
     }
 
-    public static Task<Void> addAddress(Activity activity,LocationModel location, FirebaseUser user) {
+    public static Task<Void> addAddress(Activity activity, LocationModel location, FirebaseUser user) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference locationRef = db.collection("users").document(user.getUid());
         return db.runTransaction(new Transaction.Function<Void>() {
@@ -123,24 +116,17 @@ public class ProfileManagement {
                 }
             }
         });
-
-
     }
 
-    public static void deleteAddress(Activity activity,LocationModel location, FirebaseUser user) {
+    public static Task<Void> deleteAddress( LocationModel location, FirebaseUser user) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference locationRef = db.collection("users").document(user.getUid());
-        locationRef.update("userLocation", FieldValue.arrayRemove(location)).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful()){
-                    AuthValidation.successToast(activity,"Successfully removed address");
-                    Log.d("ads", "Successfully removed address");
-                }else{
-                    AuthValidation.failedToast(activity,task.getException().getMessage());
-                    Log.d("ads", task.getException().getMessage());
-                }
-            }
-        });
+        return locationRef.update("userLocation", FieldValue.arrayRemove(location));
+    }
+
+    public static DocumentReference getAddress(String userID) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference locationRef = db.collection("users").document(userID);
+        return locationRef;
     }
 }

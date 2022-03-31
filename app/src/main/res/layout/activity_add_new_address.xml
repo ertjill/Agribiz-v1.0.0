@@ -10,6 +10,7 @@
         android:id="@+id/topAppBar_cl"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -27,7 +28,6 @@
         </com.google.android.material.appbar.AppBarLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -35,9 +35,11 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="30dp">
+            android:layout_marginTop="10dp"
+            android:paddingStart="30dp"
+            android:paddingEnd="30dp">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/input_lay_fullName"
@@ -92,7 +94,8 @@
                     android:fontFamily="@font/montserrat_medium"
                     android:hint="Phone Number"
                     android:importantForAutofill="no"
-                    android:inputType="number"
+                    android:inputType="phone"
+                    android:maxLength="11"
                     android:paddingTop="20dp"
                     android:textColorHint="@color/color_hint"
                     android:textCursorDrawable="@null"
@@ -242,8 +245,9 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/montserrat_medium"
                     android:hint="Postal Code"
+                    android:maxLength="4"
                     android:importantForAutofill="no"
-                    android:inputType="text"
+                    android:inputType="number"
                     android:paddingTop="20dp"
                     android:textColorHint="@color/color_hint"
                     android:textCursorDrawable="@null"
@@ -272,7 +276,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/montserrat_medium"
-                    android:hint="Street name, house no."
+                    android:hint="Purok, street name, house no."
                     android:importantForAutofill="no"
                     android:inputType="text"
                     android:paddingTop="20dp"
@@ -283,7 +287,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
-                android:id="@+id/reset_pass_btn"
+                android:id="@+id/add_address_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"

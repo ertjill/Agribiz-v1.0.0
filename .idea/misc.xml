@@ -88,6 +88,7 @@
         <entry key="..\:/Emerson Agribiz/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.1315" />
         <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/drawable/bg_layout.xml" value="0.1" />
         <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/drawable/ic_baseline_add_a_photo_30.xml" value="0.1545" />
+        <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/drawable/ic_baseline_delete_forever_24.xml" value="0.1565" />
         <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/drawable/ic_baseline_edit_35.xml" value="0.1545" />
         <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/drawable/ic_baseline_error_24.xml" value="0.1545" />
         <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/drawable/ic_baseline_update_35.xml" value="0.1545" />
@@ -98,20 +99,28 @@
         <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/layout/activity_address.xml" value="0.209375" />
         <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/layout/activity_edit_profile.xml" value="0.25" />
         <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/layout/activity_login.xml" value="0.209375" />
+        <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/layout/activity_my_addresses.xml" value="0.18" />
         <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/layout/activity_product_view.xml" value="0.15989583333333332" />
         <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/layout/activity_reset_password.xml" value="0.2" />
         <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/layout/activity_signup.xml" value="0.209375" />
         <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/layout/activity_verification_code.xml" value="0.209375" />
         <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/layout/activity_view_all_products.xml" value="0.19375" />
         <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/layout/add_product_picture_dialog.xml" value="0.209375" />
+        <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/layout/address_list_item.xml" value="0.33" />
+        <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/layout/basket_list_item.xml" value="0.209375" />
+        <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/layout/basket_list_item_header.xml" value="0.209375" />
+        <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/layout/customer_my_addresses.xml" value="0.22" />
         <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/layout/enter_verification_code_dialog.xml" value="0.23076923076923078" />
         <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/layout/failed_toast.xml" value="0.209375" />
         <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/layout/farmer_add_new_product_dialog.xml" value="0.209375" />
+        <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/layout/fragment_basket.xml" value="0.18" />
+        <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/layout/fragment_customer_addresses.xml" value="0.209375" />
         <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/layout/fragment_my_product.xml" value="0.209375" />
         <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/layout/fragment_product.xml" value="0.15989583333333332" />
         <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/layout/fragment_profile.xml" value="0.19375" />
         <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/layout/product_item_card.xml" value="0.15989583333333332" />
         <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/layout/success_toast.xml" value="0.33" />
+        <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/layout/test.xml" value="0.209375" />
         <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/layout/update_phone_dialog.xml" value="0.22" />
       </map>
     </option>

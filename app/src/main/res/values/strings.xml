@@ -33,4 +33,5 @@
     <string name="update">Update</string>
     <string name="enter_new_mobile_number">Enter New Mobile Number</string>
     <string name="_9xxxxxxxx">9X-XXX-XXXX</string>
+    <string name="add_a_new_address">Add a new address</string>
 </resources>
