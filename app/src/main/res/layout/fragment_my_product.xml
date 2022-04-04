@@ -13,7 +13,9 @@
         android:id="@+id/farmer_product_lv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="@null" />
+        android:divider="@null">
+
+    </ListView>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     <LinearLayout
         android:id="@+id/no_product_ll"

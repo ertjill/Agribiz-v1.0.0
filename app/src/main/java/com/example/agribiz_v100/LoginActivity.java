@@ -120,6 +120,5 @@ public class LoginActivity extends AppCompatActivity {
     public void goToSignup(View v) {
         Intent intent = new Intent(this, SignupActivity.class);
         startActivity(intent);
-        finish();
     }
 }

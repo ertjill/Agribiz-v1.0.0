@@ -71,6 +71,8 @@ public class AddressActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Log.d("tag","imong ge click kay index : "+i);
+                barangay_act.setText("");
+                barangay_act.setEnabled(false);
                 try {
                     Log.d("tag",cities.citiesList.get(i).getString("code"));
                     barangay = new BrgyManagement(cities.citiesList.get(i).getString("code"),new BrgyManagement.AsyncResponse() {
@@ -78,6 +80,7 @@ public class AddressActivity extends AppCompatActivity {
                         public void processFinish(List<JSONObject> brgyList, List<String> brgyNames) {
                             ArrayAdapter<String> bAdapter = new ArrayAdapter<>(getApplicationContext(), R.layout.dropdown_item, brgyNames);
                             barangay_act.setAdapter(bAdapter);
+                            barangay_act.setEnabled(true);
                         }
                     });
 
@@ -153,7 +156,9 @@ public class AddressActivity extends AppCompatActivity {
                                 specificAddress_et.setFocusable(false);
                             }
                             else {
-                                AuthValidation.failedToast(AddressActivity.this, "Failed to add address").show();
+                                AuthValidation.failedToast(AddressActivity.this, task.getException().getMessage()).show();
+                                Log.d("tag",task.getException().getLocalizedMessage());
+                                task.getException().printStackTrace();
                             }
                         }
                     });

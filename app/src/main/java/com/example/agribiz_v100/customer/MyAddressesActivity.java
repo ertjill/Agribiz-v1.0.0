@@ -41,7 +41,8 @@ public class MyAddressesActivity extends AppCompatActivity {
     AddressItemAdapter addressItemAdapter;
     SparseArray<LocationModel> addressItems;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-    int i=0;
+    int i = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,8 +50,8 @@ public class MyAddressesActivity extends AppCompatActivity {
 
         // Get references of widgets from XML layout
         references();
-        addressItems=new SparseArray<>();
-        addressItemAdapter = new AddressItemAdapter(this,getApplicationContext(),addressItems);
+        addressItems = new SparseArray<>();
+        addressItemAdapter = new AddressItemAdapter(this, getApplicationContext(), addressItems);
 
         topAppBar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,36 +78,37 @@ public class MyAddressesActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-            getAddressList();
+        getAddressList();
     }
 
-    protected void getAddressList(){
+    protected void getAddressList() {
+
         ProfileManagement.getAddress(user.getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     DocumentSnapshot doc = task.getResult();
-
-                    ArrayList<Object> list = (ArrayList<Object>) doc.get("userLocation");
+                    ArrayList<Object> list;
+                    list = (ArrayList<Object>) doc.get("userLocation");
 //                    Map<String, String> m = (Map<String, String>) list.get(0);
-                    int count =0;
-                    for (Object map: list) {
-                        Map<String,String> loc = (Map<String, String>) map;
-                        LocationModel locationModel = new LocationModel();
-                        locationModel.setUserFullName(loc.get("userFullName"));
-                        locationModel.setUserPhoneNumber(loc.get("userPhoneNumber"));
-                        locationModel.setUserRegion(loc.get("userRegion"));
-                        locationModel.setUserProvince(loc.get("userProvince"));
-                        locationModel.setUserMunicipality(loc.get("userMunicipality"));
-                        locationModel.setUserBarangay(loc.get("userBarangay"));
-                        locationModel.setUserZipCode(loc.get("userZipCode"));
-                        locationModel.setUserSpecificAddress(loc.get("userSpecificAddress"));
-                        addressItems.append(count++,locationModel);
-                    }
+                    int count = 0;
+                    if (list !=null)
+                        for (Object map : list) {
+                            Map<String, String> loc = (Map<String, String>) map;
+                            LocationModel locationModel = new LocationModel();
+                            locationModel.setUserFullName(loc.get("userFullName"));
+                            locationModel.setUserPhoneNumber(loc.get("userPhoneNumber"));
+                            locationModel.setUserRegion(loc.get("userRegion"));
+                            locationModel.setUserProvince(loc.get("userProvince"));
+                            locationModel.setUserMunicipality(loc.get("userMunicipality"));
+                            locationModel.setUserBarangay(loc.get("userBarangay"));
+                            locationModel.setUserZipCode(loc.get("userZipCode"));
+                            locationModel.setUserSpecificAddress(loc.get("userSpecificAddress"));
+                            addressItems.append(count++, locationModel);
+                        }
                     addressItemAdapter.notifyDataSetChanged();
-                }
-                else{
-                    AuthValidation.failedToast(getApplicationContext(),task.getException().getMessage());
+                } else {
+                    AuthValidation.failedToast(getApplicationContext(), task.getException().getMessage());
                 }
             }
         });

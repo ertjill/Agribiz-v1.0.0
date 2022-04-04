@@ -11,13 +11,10 @@ public class StorageManagement {
     public static UploadTask uploadImage(String path, Uri imageURI, String userID) {
 
         FirebaseStorage storage = FirebaseStorage.getInstance();
-
         // Create a storage reference from our app
         StorageReference storageRef = storage.getReference();
-
         StorageReference pathRef = storageRef.child(path + "/" + userID);
         UploadTask uploadTask = pathRef.putFile(imageURI);
-
         return uploadTask;
     }
 }

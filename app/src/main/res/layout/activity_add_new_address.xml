@@ -219,6 +219,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/montserrat_medium"
                     android:inputType="none"
+                    android:enabled="false"
                     android:textColorHint="@color/color_hint"
                     tools:ignore="TextContrastCheck" />
             </com.google.android.material.textfield.TextInputLayout>

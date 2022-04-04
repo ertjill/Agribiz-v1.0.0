@@ -130,9 +130,7 @@ public class MyProduct extends Fragment {
         selectFromGallery = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
             @Override
             public void onActivityResult(ActivityResult result) {
-//                if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
-//                    product_image_iv.setImageURI(result.getData().getData());
-//                }
+
                 if (result.getResultCode() == Activity.RESULT_OK) {
                     if (result.getData().getClipData() != null) {
                         int i = result.getData().getClipData().getItemCount();

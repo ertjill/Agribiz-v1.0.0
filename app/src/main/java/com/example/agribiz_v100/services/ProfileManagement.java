@@ -32,54 +32,54 @@ public class ProfileManagement {
     public static Task<Void> createAccountProfile(UserModel user) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         return db.collection("users").document(user.getUserID())
-        .set(user);
+                .set(user);
     }
 
-    public static StorageTask<UploadTask.TaskSnapshot> updateImage(Activity activity, Uri imageURI, FirebaseUser user)  {
+    public static StorageTask<UploadTask.TaskSnapshot> updateImage(Activity activity, Uri imageURI, FirebaseUser user) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference imageProfile = db.collection("users").document(user.getUid());
 
         return StorageManagement.uploadImage("profile", imageURI, user.getUid())
-            .addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                    if (task.isSuccessful()) {
-                        task.getResult().getStorage().getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Uri> task) {
-                                if (task.isSuccessful()) {
-                                    Uri image = task.getResult();
-                                    Log.d(TAG, image.toString());
-                                    imageProfile.update("userImage", image.toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            if (task.isSuccessful()) {
-                                                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                                                        .setPhotoUri(image)
-                                                        .build();
-                                                user.updateProfile(profileUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                    @Override
-                                                    public void onComplete(@NonNull Task<Void> task) {
-                                                        if (task.isSuccessful()) {
-                                                            AuthValidation.successToast(activity, "Successfully updated profile").show();
-                                                        } else {
-                                                            AuthValidation.failedToast(activity, "Failed to update profile.");
+                .addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            task.getResult().getStorage().getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Uri> task) {
+                                    if (task.isSuccessful()) {
+                                        Uri image = task.getResult();
+                                        Log.d(TAG, image.toString());
+                                        imageProfile.update("userImage", image.toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+                                                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                                            .setPhotoUri(image)
+                                                            .build();
+                                                    user.updateProfile(profileUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                        @Override
+                                                        public void onComplete(@NonNull Task<Void> task) {
+                                                            if (task.isSuccessful()) {
+                                                                AuthValidation.successToast(activity, "Successfully updated profile").show();
+                                                            } else {
+                                                                AuthValidation.failedToast(activity, "Failed to update profile.");
+                                                            }
                                                         }
-                                                    }
-                                                });
+                                                    });
+                                                }
                                             }
-                                        }
-                                    });
-                                } else {
-                                    AuthValidation.failedToast(activity, "Failed to update profile.");
+                                        });
+                                    } else {
+                                        AuthValidation.failedToast(activity, "Failed to update profile.");
+                                    }
                                 }
-                            }
-                        });
-                    } else {
-                        AuthValidation.failedToast(activity, "Failed to update profile").show();
+                            });
+                        } else {
+                            AuthValidation.failedToast(activity, "Failed to update profile").show();
+                        }
                     }
-                }
-            });
+                });
 
     }
 
@@ -89,14 +89,15 @@ public class ProfileManagement {
         return db.runTransaction(new Transaction.Function<Void>() {
             @Override
             public Void apply(Transaction transaction) throws FirebaseFirestoreException {
+                int i = 0;
                 DocumentSnapshot snapshot = transaction.get(locationRef);
                 List<LocationModel> address = (List<LocationModel>) snapshot.getData().get("userLocation");
-                int i = address.size();
-                if(i<3) {
+                if (address != null)
+                    i = address.size();
+                if (i < 3) {
                     Log.d("ads", "added location");
                     locationRef.update("userLocation", FieldValue.arrayUnion(location));
-                }
-                else {
+                } else {
                     throw new FirebaseFirestoreException("Address exceeds limit",
                             FirebaseFirestoreException.Code.ABORTED);
                 }
@@ -106,19 +107,18 @@ public class ProfileManagement {
         }).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful()){
-                    AuthValidation.successToast(activity,"Successfully added address");
+                if (task.isSuccessful()) {
+                    AuthValidation.successToast(activity, "Successfully added address");
                     Log.d("ads", "Successfully added address");
-                }
-                else{
-                    AuthValidation.failedToast(activity,task.getException().getMessage());
+                } else {
+                    AuthValidation.failedToast(activity, task.getException().getMessage());
                     Log.d("ads", task.getException().getMessage());
                 }
             }
         });
     }
 
-    public static Task<Void> deleteAddress( LocationModel location, FirebaseUser user) {
+    public static Task<Void> deleteAddress(LocationModel location, FirebaseUser user) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference locationRef = db.collection("users").document(user.getUid());
         return locationRef.update("userLocation", FieldValue.arrayRemove(location));

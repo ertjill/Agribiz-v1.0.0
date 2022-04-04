@@ -72,8 +72,10 @@ public class Profile extends Fragment {
             @Override
             public void onClick(View v) {
                 AuthManagement.logoutAccount();
-                startActivity(new Intent(getContext(), LoginActivity.class));
-                getActivity().finish();
+                Intent i = new Intent(getContext(), LoginActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(i);
+                getActivity().finishAffinity();
             }
         });
 
