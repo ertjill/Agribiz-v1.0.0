@@ -108,6 +108,7 @@
                         android:id="@+id/userName_til"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_toStartOf="@+id/username_tools_ll"
                         android:backgroundTint="@color/army_green"
                         app:boxBackgroundColor="@color/transparent"
                         app:boxBackgroundMode="outline"
@@ -118,7 +119,6 @@
                         app:boxStrokeColor="@color/army_green"
                         app:endIconMode="custom"
                         app:errorEnabled="true"
-                        android:layout_toStartOf="@+id/username_tools_ll"
                         app:hintTextColor="@color/army_green">
 
                         <EditText
@@ -145,25 +145,27 @@
                         android:id="@+id/username_tools_ll"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
-                        android:padding="2dp"
-                        >
+                        android:orientation="horizontal"
+                        android:padding="2dp">
+
                         <ImageButton
                             android:id="@+id/username_edit_ib"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:background="@color/transparent"
                             android:src="@drawable/ic_baseline_edit_35"
-                            app:tint="@color/yellow_orange"
-                            android:visibility="visible"/>
+                            android:visibility="visible"
+                            app:tint="@color/yellow_orange" />
+
                         <LinearLayout
                             android:id="@+id/username_cancel_update_ll"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
                             android:visibility="gone">
+
                             <ImageButton
                                 android:id="@+id/username_cancel_ib"
                                 android:layout_width="wrap_content"
@@ -171,6 +173,7 @@
                                 android:background="@color/transparent"
                                 android:src="@drawable/ic_outline_cancel_35"
                                 app:tint="@color/red" />
+
                             <ImageButton
                                 android:id="@+id/username_update_ib"
                                 android:layout_width="wrap_content"
@@ -186,10 +189,13 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
+
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/email_til"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toStartOf="@+id/email_tools_ll"
                         android:backgroundTint="@color/army_green"
                         app:boxBackgroundColor="@color/transparent"
                         app:boxBackgroundMode="outline"
@@ -199,10 +205,8 @@
                         app:boxCornerRadiusTopStart="15dp"
                         app:boxStrokeColor="@color/army_green"
                         app:endIconMode="custom"
-                        android:layout_toStartOf="@+id/email_tools_ll"
-                        app:hintTextColor="@color/army_green"
                         app:errorEnabled="true"
-                        android:layout_centerVertical="true">
+                        app:hintTextColor="@color/army_green">
 
                         <EditText
                             android:id="@+id/email_et"
@@ -221,29 +225,32 @@
                             tools:ignore="SpeakableTextPresentCheck" />
 
                     </com.google.android.material.textfield.TextInputLayout>
+
                     <LinearLayout
                         android:id="@+id/email_tools_ll"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
-                        android:padding="2dp"
-                        >
-                            <ImageButton
-                                android:id="@+id/email_edit_ib"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:background="@color/transparent"
-                                android:src="@drawable/ic_baseline_edit_35"
-                                app:tint="@color/yellow_orange"
-                                android:visibility="visible"/>
+                        android:orientation="horizontal"
+                        android:padding="2dp">
+
+                        <ImageButton
+                            android:id="@+id/email_edit_ib"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@color/transparent"
+                            android:src="@drawable/ic_baseline_edit_35"
+                            android:visibility="visible"
+                            app:tint="@color/yellow_orange" />
+
                         <LinearLayout
                             android:id="@+id/cancel_update_ll"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
                             android:visibility="gone">
+
                             <ImageButton
                                 android:id="@+id/email_cancel_ib"
                                 android:layout_width="wrap_content"
@@ -251,6 +258,7 @@
                                 android:background="@color/transparent"
                                 android:src="@drawable/ic_outline_cancel_35"
                                 app:tint="@color/red" />
+
                             <ImageButton
                                 android:id="@+id/email_update_ib"
                                 android:layout_width="wrap_content"
@@ -262,43 +270,66 @@
                     </LinearLayout>
                 </RelativeLayout>
 
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/number_til"
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:backgroundTint="@color/army_green"
-                    app:boxBackgroundColor="@color/transparent"
-                    app:boxBackgroundMode="outline"
-                    app:boxCornerRadiusBottomEnd="15dp"
-                    app:boxCornerRadiusBottomStart="15dp"
-                    app:boxCornerRadiusTopEnd="15dp"
-                    app:boxCornerRadiusTopStart="15dp"
-                    app:errorEnabled="true"
-                    app:boxStrokeColor="@color/army_green"
-                    app:endIconTint="@color/yellow_orange"
-                    app:endIconDrawable="@drawable/ic_baseline_edit_35"
-                    app:endIconMode="custom"
-                    app:hintTextColor="@color/army_green">
+                    android:layout_height="wrap_content">
 
-                    <EditText
-                        android:id="@+id/number_et"
-                        style="TextAppearance.App.TextIn"
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/number_til"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:enabled="false"
-                        android:fontFamily="@font/montserrat_medium"
-                        android:hint="@string/mobile_number"
-                        android:importantForAutofill="no"
-                        android:inputType="phone"
-                        android:maxLength="13"
-                        android:paddingTop="20dp"
-                        android:textColorHint="@color/color_hint"
-                        android:textCursorDrawable="@null"
-                        android:textSize="16sp"
-                        tools:ignore="SpeakableTextPresentCheck" />
+                        android:layout_toStartOf="@+id/phone_tools_ll"
+                        android:backgroundTint="@color/army_green"
+                        app:boxBackgroundColor="@color/transparent"
+                        app:boxBackgroundMode="outline"
+                        app:boxCornerRadiusBottomEnd="15dp"
+                        app:boxCornerRadiusBottomStart="15dp"
+                        app:boxCornerRadiusTopEnd="15dp"
+                        app:boxCornerRadiusTopStart="15dp"
+                        app:boxStrokeColor="@color/army_green"
+                        app:errorEnabled="true"
 
-                </com.google.android.material.textfield.TextInputLayout>
+                        app:hintTextColor="@color/army_green">
+
+                        <EditText
+                            android:id="@+id/number_et"
+                            style="TextAppearance.App.TextIn"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:fontFamily="@font/montserrat_medium"
+                            android:hint="@string/mobile_number"
+                            android:importantForAutofill="no"
+                            android:inputType="phone"
+                            android:maxLength="13"
+                            android:paddingTop="20dp"
+                            android:textColorHint="@color/color_hint"
+                            android:textCursorDrawable="@null"
+                            android:textSize="16sp"
+                            tools:ignore="SpeakableTextPresentCheck" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <LinearLayout
+                        android:id="@+id/phone_tools_ll"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:orientation="horizontal"
+                        android:padding="2dp">
+
+                        <ImageButton
+                            android:id="@+id/mobileNum_edit_ib"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+
+                            android:background="@color/transparent"
+                            android:src="@drawable/ic_baseline_edit_35"
+                            android:visibility="visible"
+                            app:tint="@color/yellow_orange" />
+                    </LinearLayout>
+                </RelativeLayout>
 
 
                 <TextView
@@ -412,15 +443,15 @@
                     android:id="@+id/change_password_btn"
                     android:layout_width="200dp"
                     android:layout_height="55dp"
-                    android:layout_marginTop="20dp"
                     android:layout_gravity="center"
-                    android:text="Change Password"
-                    android:textColor="@color/army_green"
-                    android:fontFamily="@font/montserrat_bold"
-                    android:textAllCaps="false"
+                    android:layout_marginTop="20dp"
                     android:backgroundTint="@color/yellow_orange"
-                    app:cornerRadius="20dp"
+                    android:fontFamily="@font/montserrat_bold"
+                    android:text="Change Password"
+                    android:textAllCaps="false"
+                    android:textColor="@color/army_green"
                     android:visibility="gone"
+                    app:cornerRadius="20dp"
                     tools:ignore="UsingOnClickInXml" />
             </LinearLayout>
         </LinearLayout>

@@ -44,6 +44,9 @@ import com.bumptech.glide.Glide;
 import com.example.agribiz_v100.ProductItem;
 import com.example.agribiz_v100.R;
 import com.example.agribiz_v100.Verification;
+import com.example.agribiz_v100.dialog.AddProductDialog;
+import com.example.agribiz_v100.entities.ProductModel;
+import com.example.agribiz_v100.services.ProductManagement;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -76,424 +79,125 @@ public class MyProduct extends Fragment {
     String TAG = "MyProduct";
     ListView farmer_product_lv;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-    FirebaseStorage storage = FirebaseStorage.getInstance();
-    SparseArray<ProductItem> productItems;
+    SparseArray<ProductModel> productItems;
     FarmerProductAdapter farmerProductAdapter;
     LinearLayout no_product_ll;
     ImageButton add_product_ib;
-    Dialog addProductDialog;
-    Dialog addProductPhotoDialog;
-    ImageView product_image_iv;
-    ActivityResultLauncher<Intent> selectFromGallery, selectFromCamera;
-    ImageView real_product_image;
-    FirebaseUser user;
-    Toast successAddProductToast;
-    List<Uri> arrayOfImages;
-    ImageViewPagerAdapter imageViewPagerAdapter;
-    ViewPager2 imageSlider;
-    LinearLayout blank_photo_ll;
-    LinearProgressIndicator add_product_progress;
-    SwipeRefreshLayout refreshLayout;
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     DocumentSnapshot last = null;
+    AddProductDialog addProductDialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        successAddProductToast = new Toast(getContext());
-        arrayOfImages = new ArrayList<>();
-        LayoutInflater inflater1 = getLayoutInflater();
-        View successToast = inflater1.inflate(R.layout.success_toast, null);
-        successAddProductToast.setView(successToast);
-        successAddProductToast.setDuration(Toast.LENGTH_LONG);
-        successAddProductToast.setGravity(Gravity.CENTER, 0, 0);
-        Toast.makeText(getActivity(), "Successfully added produce", Toast.LENGTH_SHORT).show();
-        // Inflate the layout for this fragment
-
         View view = inflater.inflate(R.layout.fragment_my_product, container, false);
-        refreshLayout = view.findViewById(R.id.refreshLayout);
-        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                displayMyProducts();
-                refreshLayout.setRefreshing(false);
-            }
-        });
-        addProductDialog = new Dialog(getContext());
-        addProductPhotoDialog = new Dialog(getContext());
-        farmer_product_lv = view.findViewById(R.id.farmer_product_lv);
-        no_product_ll = view.findViewById(R.id.no_product_ll);
+        addProductDialog = new AddProductDialog(getActivity(), this);
         add_product_ib = view.findViewById(R.id.add_product_ib);
         productItems = new SparseArray<>();
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        displayMyProducts();
-
-        selectFromGallery = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
-            @Override
-            public void onActivityResult(ActivityResult result) {
-
-                if (result.getResultCode() == Activity.RESULT_OK) {
-                    if (result.getData().getClipData() != null) {
-                        int i = result.getData().getClipData().getItemCount();
-                        for (int n = 0; n < i; n++) {
-                            Uri imageUri = result.getData().getClipData().getItemAt(n).getUri();
-                            arrayOfImages.add(imageUri);
-
-                        }
-                        Log.d(TAG, "aDD mORE");
-
-                        if (arrayOfImages.size() > 0) {
-                            blank_photo_ll.setVisibility(View.GONE);
-                            imageSlider.setVisibility(View.VISIBLE);
-                            imageViewPagerAdapter.notifyDataSetChanged();
-
-                        } else
-                            blank_photo_ll.setVisibility(View.VISIBLE);
-                    } else {
-                        Uri imageUri = result.getData().getData();
-                        arrayOfImages.add(imageUri);
-                        if (arrayOfImages.size() > 0) {
-                            blank_photo_ll.setVisibility(View.GONE);
-                            imageSlider.setVisibility(View.VISIBLE);
-                            imageViewPagerAdapter.notifyDataSetChanged();
-
-                        } else
-                            blank_photo_ll.setVisibility(View.VISIBLE);
-                    }
-                } else {
-                    Toast.makeText(getContext(), "Unable to add this images!", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-        selectFromCamera = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
-            @Override
-            public void onActivityResult(ActivityResult result) {
-
-                if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
-                    Bitmap imBtm = (Bitmap)result.getData().getExtras().get("data");
-                    ByteArrayOutputStream byts = new ByteArrayOutputStream();
-                    imBtm.compress(Bitmap.CompressFormat.JPEG, 100,byts);
-                    String path = MediaStore.Images.Media.insertImage(getContext().getContentResolver(),imBtm,"val"+arrayOfImages.size(),null);
-
-                    Uri image= Uri.parse(path);
-                    arrayOfImages.add(image);
-                    if (arrayOfImages.size() > 0) {
-                        blank_photo_ll.setVisibility(View.GONE);
-                        imageSlider.setVisibility(View.VISIBLE);
-                        imageViewPagerAdapter.notifyDataSetChanged();
-
-                    } else
-                        blank_photo_ll.setVisibility(View.VISIBLE);
-                }
-            }
-        });
-
-        add_product_ib.setOnClickListener(v -> {
-
-            String category[] = {"Fruits", "Vegetables", "Livestocks", "Poultry", "Fertilizer"};
-            String unit[] = {"kg", "g", "ml", "pcs", "L"};
-            addProductDialog.setContentView(R.layout.farmer_add_new_product_dialog);
-            addProductDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-            addProductDialog.setCancelable(false);
-            Button cancel_btn = addProductDialog.findViewById(R.id.cancel_btn);
-            product_image_iv = addProductDialog.findViewById(R.id.product_image_iv);
-            imageSlider = addProductDialog.findViewById(R.id.imageSlider);
-            add_product_progress = addProductDialog.findViewById(R.id.add_product_progress);
-            TextInputLayout productName_til = addProductDialog.findViewById(R.id.productName_til);
-            TextInputLayout productDescription_til = addProductDialog.findViewById(R.id.productDescription_til);
-            TextInputLayout productCategory_til = addProductDialog.findViewById(R.id.productCategory_til);
-            TextInputLayout productStocks_til = addProductDialog.findViewById(R.id.productStocks_til);
-            TextInputLayout productPrice_til = addProductDialog.findViewById(R.id.productPrice_til);
-            TextInputLayout productQuantity_til = addProductDialog.findViewById(R.id.productQuantity_til);
-            TextInputLayout productUnit_til = addProductDialog.findViewById(R.id.productUnit_til);
-            AutoCompleteTextView productCategory_at = addProductDialog.findViewById(R.id.productCategory_at);
-            AutoCompleteTextView productUnit_at = addProductDialog.findViewById(R.id.productUnit_at);
-            Button add_product_btn = addProductDialog.findViewById(R.id.add_product_btn);
-            blank_photo_ll = addProductDialog.findViewById(R.id.blank_photo_ll);
-            imageViewPagerAdapter = new ImageViewPagerAdapter();
-            imageSlider.setAdapter(imageViewPagerAdapter);
-
-            add_product_btn.setOnClickListener(v13 -> {
-                if (Verification.verifyPorductName(productName_til) &&
-                        Verification.verifyPorductDescription(productDescription_til) &&
-                        Verification.verifyPorductCategory(productCategory_til, productCategory_at.getText().toString()) &&
-                        Verification.verifyPorductStocks(productStocks_til) &&
-                        Verification.verifyPorductPrice(productPrice_til) &&
-                        Verification.verifyPorductQuantity(productQuantity_til) &&
-                        Verification.verifyPorductUnit(productUnit_til, productUnit_at.getText().toString())
-                ) {
-
-                    String productName = productName_til.getEditText().getText().toString(),
-                            productDescription = productDescription_til.getEditText().getText().toString(),
-                            productCategory = productCategory_at.getText().toString(),
-                            productStocks = productStocks_til.getEditText().getText().toString(),
-                            productPrice = productPrice_til.getEditText().getText().toString(),
-                            productQuantity = productQuantity_til.getEditText().getText().toString(),
-                            productUnit = productUnit_at.getText().toString();
-
-                    Map<String, Object> product = new HashMap<>();
-                    Date date = new Date();
-                    Timestamp productDateUploaded = new Timestamp(date);
-                    product.put("productUserId", user.getUid());
-                    product.put("productName", productName);
-                    product.put("productDescription", productDescription);
-                    product.put("productCategory", productCategory);
-                    product.put("productPrice", Double.parseDouble(productPrice));
-                    product.put("productUnit", productUnit);
-                    product.put("productQuantity", Integer.parseInt(productQuantity));
-                    product.put("productStocks", Integer.parseInt(productStocks));
-                    product.put("productSold", 0);
-                    product.put("productRating", 0);
-                    product.put("productNoCustomerRate", 0);
-                    product.put("productDateUploaded", productDateUploaded);
-
-                    uploadProduct(product);
-                }
-
-            });
-
-            ArrayAdapter<String> productCategoryAdapter = new ArrayAdapter<String>(getContext(), R.layout.dropdown_item, category);
-            productCategory_at.setAdapter(productCategoryAdapter);
-            productCategory_at.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    String item = parent.getItemAtPosition(position).toString();
-                    Toast.makeText(getContext(), "Selected : " + item, Toast.LENGTH_SHORT).show();
-                }
-            });
-
-            ArrayAdapter<String> productUnitAdapter = new ArrayAdapter<String>(getContext(), R.layout.dropdown_item, unit);
-            productUnit_at.setAdapter(productUnitAdapter);
-            productUnit_at.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    String item = parent.getItemAtPosition(position).toString();
-                    Toast.makeText(getContext(), "Selected : " + item, Toast.LENGTH_SHORT).show();
-                }
-            });
-
-            cancel_btn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    addProductDialog.dismiss();
-                }
-            });
-            product_image_iv.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    addProductPhotoDialog.show();
-                }
-            });
-            addProductDialog.show();
-
-            addProductPhotoDialog.setContentView(R.layout.upload_picture_dialog);
-            addProductPhotoDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-            addProductPhotoDialog.setCancelable(false);
-
-            ImageButton camera_ib = addProductPhotoDialog.findViewById(R.id.camera_ib);
-            ImageButton gallery_ib = addProductPhotoDialog.findViewById(R.id.gallery_ib);
-            ImageButton close_ib = addProductPhotoDialog.findViewById(R.id.close_ib);
-            TextView upload_tv = addProductPhotoDialog.findViewById(R.id.upload_tv);
-
-            upload_tv.setText("Upload product photos");
-
-            close_ib.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    addProductPhotoDialog.dismiss();
-                }
-            });
-            camera_ib.setOnClickListener(v1 -> {
-                addFromCamera();
-                addProductPhotoDialog.dismiss();
-            });
-            gallery_ib.setOnClickListener(v12 -> {
-                addFromGallery();
-                addProductPhotoDialog.dismiss();
-            });
-
-
-        });
         farmerProductAdapter = new FarmerProductAdapter(getContext(), productItems);
+        addProductDialog.buildDialog();
+        farmer_product_lv = view.findViewById(R.id.farmer_product_lv);
         farmer_product_lv.setAdapter(farmerProductAdapter);
+        displayMyProducts();
+        no_product_ll = view.findViewById(R.id.no_product_ll);
+        add_product_ib.setOnClickListener(v -> {
+            Log.d(TAG, "hELLO BTN");
+            addProductDialog.showDialog();
+        });
         return view;
     }
 
-    private void uploadProduct(Map<String, Object> product) {
-        add_product_progress.setVisibility(View.VISIBLE);
-        getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-        StorageReference storageRef = storage.getReference();
-        Date date = new Date();
-        List<String> productImage = new ArrayList();
-        for (int i = 0; i < arrayOfImages.size(); i++) {
-            int count = i;
-            StorageReference imagesRef = storageRef.child("products/" + user.getUid() + "/" + arrayOfImages.get(i).getLastPathSegment() + date);
-            UploadTask uploadTask = imagesRef.putFile(arrayOfImages.get(i));
-            uploadTask.addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception exception) {
-                    // Handle unsuccessful uploads
-                }
-            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
-                    // ...
-                    imagesRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                        @Override
-                        public void onSuccess(Uri uri) {
-                            productImage.add(uri.toString());
-                            if (count == arrayOfImages.size() - 1) {
-//                               List img = Arrays.asList(productImage);
-                                product.put("productImage", productImage);
-                                db.collection("products")
-                                        .add(product)
-                                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                            @Override
-                                            public void onSuccess(DocumentReference documentReference) {
-                                                addProductDialog.dismiss();
-                                                successAddProductToast.show();
-                                                getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                            }
-                                        })
-                                        .addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-                                                Log.w(TAG, "Error adding document", e);
-                                            }
-                                        });
-                            }
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(getContext(), "Some image failed to upload!", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-
-                }
-            }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                    int progress = (int) ((100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount());
-                    add_product_progress.setProgressCompat(progress, true);
-                    Log.d(TAG, "Upload is " + progress + "% done");
-                }
-            }).addOnPausedListener(new OnPausedListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onPaused(UploadTask.TaskSnapshot taskSnapshot) {
-                    Log.d(TAG, "Upload is paused");
-                }
-            });
-        }
-
-
-    }
+    final int[] i = {0};
 
     public void displayMyProducts() {
-        refreshLayout.setRefreshing(true);
-        if (last == null) {
-            db.collection("products")
-                    .whereEqualTo("productUserId", user.getUid())
-                    .orderBy("productDateUploaded", Query.Direction.DESCENDING)
-                    .get()
-                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if (task.isSuccessful()) {
-                                final int[] i = {0};
-                                if (task.getResult().size() > 0) {
-                                    no_product_ll.setVisibility(View.GONE);
-                                    refreshLayout.setVisibility(View.VISIBLE);
-                                    last = task.getResult().getDocuments().get(task.getResult().getDocuments().size()-1);
-                                } else {
-                                    no_product_ll.setVisibility(View.VISIBLE);
-                                    refreshLayout.setVisibility(View.GONE);
-                                }
+        ProductManagement.getProducts(last, user.getUid())
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+
+                            if (task.getResult().size() > 0) {
                                 for (QueryDocumentSnapshot document : task.getResult()) {
-                                    //Log.d(TAG, document.getId() + " => " + document.getData());
-                                    ProductItem item = new ProductItem(document);
-                                    productItems.append((i[0]++), item);
+                                    ProductModel item = document.toObject(ProductModel.class);
                                 }
-                                farmerProductAdapter.notifyDataSetChanged();
-                                refreshLayout.setRefreshing(false);
-//                                farmerProductAdapter = new FarmerProductAdapter(getContext(), productItems);
-//                                farmer_product_lv.setAdapter(farmerProductAdapter);
-                            } else {
-                                Log.d(TAG, "Error getting documents: ", task.getException());
+                                last = task.getResult().getDocuments().get(task.getResult().getDocuments().size() - 1);
                             }
                         }
-                    });
-        }
-        else
-        {
-            db.collection("products")
-                    .whereEqualTo("productUserId", user.getUid())
-                    .orderBy("productDateAdded", Query.Direction.DESCENDING)
-                    .startAfter(last)
-                    .get()
-                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if (task.isSuccessful()) {
-                                final int[] i = {0};
-                                if(task.getResult().size()>0){
-                                    no_product_ll.setVisibility(View.GONE);
-                                    refreshLayout.setVisibility(View.VISIBLE);
-                                    last = task.getResult().getDocuments().get(task.getResult().getDocuments().size()-1);
-                                }
-                                else {
-                                    no_product_ll.setVisibility(View.VISIBLE);
-                                    refreshLayout.setVisibility(View.GONE);
-                                }
-                                for (QueryDocumentSnapshot document : task.getResult()) {
-                                    //Log.d(TAG, document.getId() + " => " + document.getData());
-                                    ProductItem item = new ProductItem(document);
-                                    productItems.append((i[0]++), item);
-                                }
-                                farmerProductAdapter.notifyDataSetChanged();
-                                refreshLayout.setRefreshing(false);
-//                                farmerProductAdapter = new FarmerProductAdapter(getContext(), productItems);
-//                                farmer_product_lv.setAdapter(farmerProductAdapter);
-                            } else {
-                                Log.d(TAG, "Error getting documents: ", task.getException());
-                            }
-                        }
-                    });
-        }
+                    }
+                });
+//        refreshLayout.setRefreshing(true);
+//        if (last == null) {
+//            db.collection("products")
+//                    .whereEqualTo("productUserId", user.getUid())
+//                    .orderBy("productDateUploaded", Query.Direction.DESCENDING)
+//                    .get()
+//                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                        @Override
+//                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                            if (task.isSuccessful()) {
+//
+//                                if (task.getResult().size() > 0) {
+//                                    no_product_ll.setVisibility(View.GONE);
+//                                    last = task.getResult().getDocuments().get(task.getResult().getDocuments().size()-1);
+//                                } else {
+//                                    no_product_ll.setVisibility(View.VISIBLE);
+//                                }
+//                                for (QueryDocumentSnapshot document : task.getResult()) {
+//                                    ProductModel item = document.toObject(ProductModel.class);
+//                                    productItems.append((i[0]++), item);
+//                                }
+//                                farmerProductAdapter.notifyDataSetChanged();
+//                            } else {
+//                                Log.d(TAG, "Error getting documents: ", task.getException());
+//                            }
+//                        }
+//                    });
+//        }
+//        else
+//        {
+//            db.collection("products")
+//                    .whereEqualTo("productUserId", user.getUid())
+//                    .orderBy("productDateUploaded", Query.Direction.DESCENDING)
+//                    .startAfter(last)
+//                    .get()
+//                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                        @Override
+//                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                            if (task.isSuccessful()) {
+//                                if(task.getResult().size()>0){
+//                                    no_product_ll.setVisibility(View.GONE);
+////                                    refreshLayout.setVisibility(View.VISIBLE);
+//                                    last = task.getResult().getDocuments().get(task.getResult().getDocuments().size()-1);
+//                                }
+//                                else {
+//                                    no_product_ll.setVisibility(View.VISIBLE);
+////                                    refreshLayout.setVisibility(View.GONE);
+//                                }
+//                                for (QueryDocumentSnapshot document : task.getResult()) {
+//                                    //Log.d(TAG, document.getId() + " => " + document.getData());
+//                                    ProductModel item = document.toObject(ProductModel.class);
+//                                    productItems.append((i[0]++), item);
+//                                }
+//                                farmerProductAdapter.notifyDataSetChanged();
+////                                refreshLayout.setRefreshing(false);
+////                                farmerProductAdapter = new FarmerProductAdapter(getContext(), productItems);
+////                                farmer_product_lv.setAdapter(farmerProductAdapter);
+//                            } else {
+//                                Log.d(TAG, "Error getting documents: ", task.getException());
+//                            }
+//                        }
+//                    });
+//        }
 
-    }
-
-    public void addFromCamera() {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE );
-        if (intent.resolveActivity(getContext().getPackageManager()) != null) {
-            selectFromCamera.launch(intent);
-        } else {
-            Toast.makeText(getActivity(), "Unable to use camera!", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    public void addFromGallery() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-//        Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        if (intent.resolveActivity(getContext().getPackageManager()) != null) {
-            selectFromGallery.launch(Intent.createChooser(intent, "Select Image(s)"));
-        } else {
-            Toast.makeText(getActivity(), "Unable to use gallery!", Toast.LENGTH_SHORT).show();
-        }
     }
 
     public class FarmerProductAdapter extends BaseAdapter {
 
         Context context;
-        SparseArray<ProductItem> productList;
+        SparseArray<ProductModel> productList;
         LayoutInflater layoutInflater;
 
-        public FarmerProductAdapter(Context context, SparseArray<ProductItem> productList) {
+        public FarmerProductAdapter(Context context, SparseArray<ProductModel> productList) {
             this.context = context;
             this.productList = productList;
             layoutInflater = LayoutInflater.from(context);
@@ -545,57 +249,4 @@ public class MyProduct extends Fragment {
             return convertView;
         }
     }
-
-    public class ImageViewPagerAdapter extends RecyclerView.Adapter<ImageViewPagerAdapter.SlideViewHolder> {
-
-        public ImageViewPagerAdapter() {
-        }
-
-        @NonNull
-        @Override
-        public ImageViewPagerAdapter.SlideViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
-            return new ImageViewPagerAdapter.SlideViewHolder(
-                    LayoutInflater.from(getContext()).inflate(
-                            R.layout.image_slide, parent, false
-                    )
-            );
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull ImageViewPagerAdapter.SlideViewHolder holder, int position) {
-            Glide.with(getContext())
-                    .load(arrayOfImages.get(position))
-                    .into(holder.product_image_iv);
-            holder.indicator_tv.setText((position + 1) + "/" + arrayOfImages.size());
-            holder.remove_image_ib.setOnClickListener(v -> {
-                arrayOfImages.remove(position);
-                notifyDataSetChanged();
-                if (arrayOfImages.size() < 1) {
-                    blank_photo_ll.setVisibility(View.VISIBLE);
-                    imageSlider.setVisibility(View.GONE);
-                }
-            });
-        }
-
-        @Override
-        public int getItemCount() {
-            return arrayOfImages.size();
-        }
-
-        public class SlideViewHolder extends RecyclerView.ViewHolder {
-            ImageView product_image_iv;
-            TextView indicator_tv;
-            ImageButton remove_image_ib;
-
-            public SlideViewHolder(@NonNull View itemView) {
-                super(itemView);
-                product_image_iv = itemView.findViewById(R.id.product_image_iv);
-                indicator_tv = itemView.findViewById(R.id.indicator_tv);
-                remove_image_ib = itemView.findViewById(R.id.remove_image_ib);
-            }
-        }
-    }
-
-
 }

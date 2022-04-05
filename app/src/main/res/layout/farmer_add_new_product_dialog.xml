@@ -15,12 +15,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="34dp"
         android:fontFamily="@font/montserrat_semibold"
+        android:gravity="center"
         android:text="Add new produce"
         android:textColor="@color/brown"
         android:textFontWeight="400"
-        android:textSize="17sp"
-        android:gravity="center"
-        />
+        android:textSize="17sp" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -34,8 +33,7 @@
             android:layout_height="match_parent"
             android:gravity="center_horizontal"
             android:orientation="vertical"
-
-            >
+            android:padding="20dp">
 
 
             <LinearLayout
@@ -48,7 +46,7 @@
                     android:id="@+id/product_image_iv"
                     android:layout_width="150dp"
                     android:layout_height="151dp"
-                    android:layout_marginTop="25dp"
+                    android:layout_marginTop="5dp"
                     android:scaleType="centerCrop"
                     android:src="@drawable/ic_baseline_add_photo_alternate_24" />
 
@@ -71,11 +69,27 @@
                 android:layout_marginTop="25dp"
                 android:visibility="gone" />
 
+            <Button
+                android:id="@+id/add_image_btn"
+                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:alpha="0.53"
+                android:backgroundTint="#FFBF03"
+                android:fontFamily="@font/montserrat_bold"
+                android:text="Add"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+
+                android:textSize="13sp"
+                app:cornerRadius="25dp" />
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/productName_til"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 android:backgroundTint="@color/army_green"
                 app:boxBackgroundColor="@color/transparent"
                 app:boxBackgroundMode="outline"
@@ -310,13 +324,14 @@
             </RelativeLayout>
         </LinearLayout>
     </ScrollView>
+
     <RelativeLayout
         android:id="@+id/bottom_ll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
-        android:layout_alignParentBottom="true">
+        android:layout_marginBottom="20dp">
 
         <Button
             android:id="@+id/cancel_btn"
@@ -324,7 +339,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:backgroundTint="#C4C4C4"
-            android:fontFamily="@font/montserrat_medium"
+            android:fontFamily="@font/montserrat_bold"
             android:text="Cancel"
             android:textAllCaps="false"
             android:textSize="13sp"
@@ -336,7 +351,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:backgroundTint="#F2B705"
-            android:fontFamily="@font/montserrat_medium"
+            android:fontFamily="@font/montserrat_bold"
             android:text="Add Produce"
             android:textAllCaps="false"
             android:textColor="@color/army_green"

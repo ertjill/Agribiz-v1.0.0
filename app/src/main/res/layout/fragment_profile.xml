@@ -323,6 +323,7 @@
                     <!--                    android:layout_marginRight="10dp"-->
                     <!--                    />-->
                     <TextView
+                        android:id="@+id/barter_goods_tv"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:drawablePadding="10dp"

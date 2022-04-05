@@ -22,10 +22,9 @@ public class ProductModel implements Serializable {
     private int productNoCustomerRate=0;
     private Timestamp productDateUploaded;
 
-    //Product advance properties
-    private Double productShippingFee;
-    private Double productOldPrice;
-    private int productSalesTo;
+    //Product optional properties
+    //private Double productOldPrice;
+    //private int productDiscount;
 
     public ProductModel() {
     }
@@ -45,9 +44,6 @@ public class ProductModel implements Serializable {
         this.productRating = productRating;
         this.productNoCustomerRate = productNoCustomerRate;
         this.productDateUploaded = productDateUploaded;
-        this.productShippingFee = productShippingFee;
-        this.productOldPrice = productOldPrice;
-        this.productSalesTo = productSalesTo;
     }
 
     public String getProductId() {
@@ -162,27 +158,4 @@ public class ProductModel implements Serializable {
         this.productDateUploaded = productDateUploaded;
     }
 
-    public Double getProductShippingFee() {
-        return productShippingFee;
-    }
-
-    public void setProductShippingFee(Double productShippingFee) {
-        this.productShippingFee = productShippingFee;
-    }
-
-    public Double getProductOldPrice() {
-        return productOldPrice;
-    }
-
-    public void setProductOldPrice(Double productOldPrice) {
-        this.productOldPrice = productOldPrice;
-    }
-
-    public int getProductSalesTo() {
-        return productSalesTo;
-    }
-
-    public void setProductSalesTo(int productSalesTo) {
-        this.productSalesTo = productSalesTo;
-    }
 }

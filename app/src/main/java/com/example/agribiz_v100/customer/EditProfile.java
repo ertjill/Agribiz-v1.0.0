@@ -57,7 +57,7 @@ public class EditProfile extends AppCompatActivity {
     Uri imageUri;
 
     ImageView profile_iv;
-    ImageButton edit_image_ib;
+    ImageButton edit_image_ib, mobileNum_edit_ib;
     Button change_password_btn;
     EditText username_et, email_et,number_et, password_et, con_password_et;
     TextInputLayout username_til, email_til, number_til, password_til, con_password_til;
@@ -89,6 +89,7 @@ public class EditProfile extends AppCompatActivity {
         password_et=findViewById(R.id.password_et);
         con_password_et =findViewById(R.id.con_password_et);
         radioYesNo = findViewById(R.id.radioYesNo);
+        mobileNum_edit_ib = findViewById(R.id.mobileNum_edit_ib);
         //
         cancel_update_ll = findViewById(R.id.cancel_update_ll);
         username_cancel_update_ll = findViewById(R.id.username_cancel_update_ll);
@@ -261,7 +262,7 @@ public class EditProfile extends AppCompatActivity {
             }
         });
 
-        number_til.setEndIconOnClickListener(new View.OnClickListener() {
+        mobileNum_edit_ib.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -350,14 +351,12 @@ public class EditProfile extends AppCompatActivity {
         uploadPhotoDialog.setContentView(R.layout.upload_picture_dialog);
         uploadPhotoDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         uploadPhotoDialog.setCancelable(false);
-
         ImageButton camera_ib = uploadPhotoDialog.findViewById(R.id.camera_ib);
         ImageButton gallery_ib = uploadPhotoDialog.findViewById(R.id.gallery_ib);
         ImageButton close_ib = uploadPhotoDialog.findViewById(R.id.close_ib);
         TextView upload_tv = uploadPhotoDialog.findViewById(R.id.upload_tv);
 
         upload_tv.setText("Upload profile photo");
-
         close_ib.setOnClickListener(v -> {
            uploadPhotoDialog.dismiss();
         });

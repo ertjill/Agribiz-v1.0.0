@@ -23,7 +23,7 @@ public class Profile extends Fragment {
 
     private static final String TAG = "Profile";
     CardView logout_card;
-    TextView displayName_tv, edit_profile_tv,my_address_tv;
+    TextView displayName_tv, edit_profile_tv,my_address_tv, barter_goods_tv;
     ImageView userImage_iv;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -31,8 +31,8 @@ public class Profile extends Fragment {
     public void onResume() {
         super.onResume();
         Glide.with(getContext())
-                .load(user.getPhotoUrl())
-                .into(userImage_iv);
+            .load(user.getPhotoUrl())
+            .into(userImage_iv);
     }
 
     @Override
@@ -45,6 +45,7 @@ public class Profile extends Fragment {
         displayName_tv = view.findViewById(R.id.displayName_tv);
         userImage_iv = view.findViewById(R.id.userImage_iv);
         edit_profile_tv = view.findViewById(R.id.edit_profile_tv);
+        barter_goods_tv = view.findViewById(R.id.barter_goods_tv);
         //add_new_address_btn = view.
 
         my_address_tv.setOnClickListener(t->{
@@ -58,6 +59,14 @@ public class Profile extends Fragment {
                     .load(user.getPhotoUrl())
                     .into(userImage_iv);
         }
+
+        barter_goods_tv.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View view) {
+               //startActivity(new Intent(getActivity(), MyAddressesActivity.class));
+               startActivity(new Intent(getActivity(),BarterGoodsActivity.class));
+           }
+        });
 
         logout_card = view.findViewById(R.id.logout_card);
 

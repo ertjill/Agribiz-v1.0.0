@@ -39,6 +39,9 @@
             android:name=".customer.EditProfile"
             android:exported="false" />
         <activity
+            android:name=".customer.BarterGoodsActivity"
+            android:exported="false" />
+        <activity
             android:name=".SplashActivity"
             android:exported="true">
             <intent-filter>
