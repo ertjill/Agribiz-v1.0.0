@@ -15,6 +15,8 @@
         <item name="bottomNavigationStyle">@style/Widget.App.BottomNavigationView</item>
         <!-- For Tab Text-->
         <item name="textAppearanceCaption">@style/bottom_navigation_textApperance</item>
+        <!--    progressbar indicator    -->
+        <item name="circularProgressIndicatorStyle">@style/Widget.App.CircularProgressIndicator</item>
     </style>
 
     <style name="bottom_navigation_textApperance" parent="">
@@ -94,5 +96,14 @@
     <style name="Theme.Agribizv100.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
     <!--End of AppBar-->
 
+    <!--   Custom indicator   -->
+    <style name="Widget.App.CircularProgressIndicator" parent="Widget.MaterialComponents.CircularProgressIndicator">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.App.CircularProgressIndicator</item>
+        <item name="trackThickness">70dp</item>
+    </style>
+
+    <style name="ThemeOverlay.App.CircularProgressIndicator" parent="">
+        <item name="colorPrimary">@color/yellow_orange</item>
+    </style>
 
 </resources>

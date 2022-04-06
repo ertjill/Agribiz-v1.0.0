@@ -2,47 +2,48 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="5dp"
-    android:paddingBottom="5dp">
+    android:background="@color/highlight_back">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:background="@color/highlight_back"
-        android:paddingTop="14dp"
-        android:paddingLeft="17dp"
-        android:paddingBottom="14dp"
-        android:gravity="center_vertical">
+        android:layout_toStartOf="@+id/delete_ib"
+        android:paddingLeft="10dp">
+
         <ImageView
             android:id="@+id/product_image_iv"
-            android:layout_width="75dp"
-            android:layout_height="75dp"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
             android:layout_centerVertical="true"
-            android:src="@drawable/sample"
-            android:scaleType="centerCrop"/>
+            android:scaleType="centerCrop"
+            android:src="@drawable/sample" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginLeft="12dp">
-        <TextView
-            android:id="@+id/product_name_unit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Fresh Tomato (per kg)"
-            android:fontFamily="@font/montserrat_semibold"
-            android:textColor="@color/brown"
-            android:singleLine="true"/>
+            android:layout_marginLeft="12dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/product_name_unit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_semibold"
+                android:singleLine="true"
+                android:text="Fresh Tomato (per kg)"
+                android:textColor="@color/brown" />
+
             <TextView
                 android:id="@+id/product_stocks"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_regular"
                 android:text="Stocks: 100"
                 android:textColor="@color/brown"
-                android:fontFamily="@font/montserrat_regular"
-                android:textSize="11sp"
-                android:textFontWeight="400"/>
+                android:textFontWeight="400"
+                android:textSize="11sp" />
 
             <TextView
                 android:id="@+id/product_sold"
@@ -51,27 +52,40 @@
                 android:fontFamily="@font/montserrat_regular"
                 android:text="Sold: 2"
                 android:textColor="@color/brown"
-                android:textSize="11sp"
-                android:textFontWeight="400"/>
+                android:textFontWeight="400"
+                android:textSize="11sp" />
+
             <TextView
                 android:id="@+id/product_category"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_regular"
                 android:text="Category: Fruit"
                 android:textColor="@color/brown"
-                android:fontFamily="@font/montserrat_regular"
-                android:textSize="11sp"
-                android:textFontWeight="400"/>
+                android:textFontWeight="400"
+                android:textSize="11sp" />
+
             <TextView
                 android:id="@+id/product_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_regular"
                 android:text="Price: Php 87.00"
                 android:textColor="@color/brown"
-                android:fontFamily="@font/montserrat_regular"
-                android:textSize="11sp"
-                android:textFontWeight="400"/>
+                android:textFontWeight="400"
+                android:textSize="11sp" />
         </LinearLayout>
+
     </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/delete_ib"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:background="null"
+        android:padding="10dp"
+        android:src="@drawable/ic_baseline_delete_forever_24" />
 
 </RelativeLayout>

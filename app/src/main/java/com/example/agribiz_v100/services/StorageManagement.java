@@ -2,6 +2,7 @@ package com.example.agribiz_v100.services;
 
 import android.net.Uri;
 
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -17,4 +18,17 @@ public class StorageManagement {
         UploadTask uploadTask = pathRef.putFile(imageURI);
         return uploadTask;
     }
+
+    public static UploadTask uploadProductImage(StorageReference ref, Uri file) {
+        return ref.putFile(file);
+    }
+
+    public static Task<Void> deleteFiles(String id){
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        // Create a storage reference from our app
+        StorageReference storageRef = storage.getReference();
+        StorageReference filetRef = storageRef.child("products/"+id);
+        return filetRef.delete();
+    }
+
 }
