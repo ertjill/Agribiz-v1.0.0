@@ -33,6 +33,7 @@ public class Profile extends Fragment {
         Glide.with(getContext())
             .load(user.getPhotoUrl())
             .into(userImage_iv);
+
     }
 
     @Override

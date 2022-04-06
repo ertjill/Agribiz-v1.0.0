@@ -104,90 +104,41 @@ public class MyProduct extends Fragment {
             Log.d(TAG, "hELLO BTN");
             addProductDialog.showDialog();
         });
+        addProductDialog.createListener(new AddProductDialog.AddProductDialogCallback() {
+            @Override
+            public void addOnDocumentAddedListener(boolean isAdded) {
+                Log.d("tag","hereee");
+                displayMyProducts();
+            }
+        });
         return view;
     }
 
-    final int[] i = {0};
+    int i = 0;
 
     public void displayMyProducts() {
+        Log.d("tag","hereee displayMyProducts");
         ProductManagement.getProducts(last, user.getUid())
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
-
-                            if (task.getResult().size() > 0) {
-                                for (QueryDocumentSnapshot document : task.getResult()) {
+                            Log.d("tag",last!=null?last.getData().toString():"null");
+                            Log.d("tag","hereee out");
+                            if (task.getResult().getDocuments().size() > 0) {
+                                Log.d("tag","hereee inside");
+                                for (DocumentSnapshot document : task.getResult().getDocuments()) {
                                     ProductModel item = document.toObject(ProductModel.class);
+                                    productItems.append(i++, item);
+                                    Log.d("tag","hereee inside inside" );
                                 }
-                                last = task.getResult().getDocuments().get(task.getResult().getDocuments().size() - 1);
+                                farmerProductAdapter.notifyDataSetChanged();
+                                last = task.getResult().getDocuments().get(task.getResult().getDocuments().size()-1);
                             }
+
                         }
                     }
                 });
-//        refreshLayout.setRefreshing(true);
-//        if (last == null) {
-//            db.collection("products")
-//                    .whereEqualTo("productUserId", user.getUid())
-//                    .orderBy("productDateUploaded", Query.Direction.DESCENDING)
-//                    .get()
-//                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                        @Override
-//                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                            if (task.isSuccessful()) {
-//
-//                                if (task.getResult().size() > 0) {
-//                                    no_product_ll.setVisibility(View.GONE);
-//                                    last = task.getResult().getDocuments().get(task.getResult().getDocuments().size()-1);
-//                                } else {
-//                                    no_product_ll.setVisibility(View.VISIBLE);
-//                                }
-//                                for (QueryDocumentSnapshot document : task.getResult()) {
-//                                    ProductModel item = document.toObject(ProductModel.class);
-//                                    productItems.append((i[0]++), item);
-//                                }
-//                                farmerProductAdapter.notifyDataSetChanged();
-//                            } else {
-//                                Log.d(TAG, "Error getting documents: ", task.getException());
-//                            }
-//                        }
-//                    });
-//        }
-//        else
-//        {
-//            db.collection("products")
-//                    .whereEqualTo("productUserId", user.getUid())
-//                    .orderBy("productDateUploaded", Query.Direction.DESCENDING)
-//                    .startAfter(last)
-//                    .get()
-//                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                        @Override
-//                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                            if (task.isSuccessful()) {
-//                                if(task.getResult().size()>0){
-//                                    no_product_ll.setVisibility(View.GONE);
-////                                    refreshLayout.setVisibility(View.VISIBLE);
-//                                    last = task.getResult().getDocuments().get(task.getResult().getDocuments().size()-1);
-//                                }
-//                                else {
-//                                    no_product_ll.setVisibility(View.VISIBLE);
-////                                    refreshLayout.setVisibility(View.GONE);
-//                                }
-//                                for (QueryDocumentSnapshot document : task.getResult()) {
-//                                    //Log.d(TAG, document.getId() + " => " + document.getData());
-//                                    ProductModel item = document.toObject(ProductModel.class);
-//                                    productItems.append((i[0]++), item);
-//                                }
-//                                farmerProductAdapter.notifyDataSetChanged();
-////                                refreshLayout.setRefreshing(false);
-////                                farmerProductAdapter = new FarmerProductAdapter(getContext(), productItems);
-////                                farmer_product_lv.setAdapter(farmerProductAdapter);
-//                            } else {
-//                                Log.d(TAG, "Error getting documents: ", task.getException());
-//                            }
-//                        }
-//                    });
-//        }
 
     }
 
@@ -239,7 +190,7 @@ public class MyProduct extends Fragment {
 
 
             Glide.with(context)
-                    .load(productList.get(position).getProductImage().get(0))
+                    .load(productList.get(position).getProductImage().size()<1?"":productList.get(position).getProductImage().get(0))
                     .into(product_image_iv);
             product_name_unit.setText(productList.get(position).getProductName() + " (per " + productList.get(position).getProductQuantity() + " " + productList.get(position).getProductUnit() + ")");
             product_stocks.setText("Stocks: " + productList.get(position).getProductStocks());
