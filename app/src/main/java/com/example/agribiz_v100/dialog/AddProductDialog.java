@@ -407,14 +407,14 @@ public class AddProductDialog {
                             if (task.isSuccessful()) {
                                 for (int i = 0; i < arrayOfImages.size(); i++) {
                                     Uri file = Uri.parse(arrayOfImages.get(i));
-                                    StorageReference ref = storageRef.child("products").child(product.getProductId()).child(file.getLastPathSegment());
+                                    StorageReference ref = storageRef.child("products").child(product.getProductId()).child(String.valueOf(i));
                                     int finalI = i;
                                     StorageManagement.uploadProductImage(ref, file).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                                         @Override
                                         public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
                                             double progress = (100.0 * snapshot.getBytesTransferred()) / snapshot.getTotalByteCount();
                                             Log.d("tag", "Upload is " + progress + "% done");
-                                            add_product_progress.setProgressCompat((int) progress,true);
+                                            add_product_progress.setProgressCompat( (int)progress,true);
                                             count_done_tv.setText((int)progress+"");
                                         }
                                     }).continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
@@ -434,6 +434,7 @@ public class AddProductDialog {
                                                 Log.d("imagess", "uploaded : " + downloadUri);
                                                 product.getProductImage().add(downloadUri);
                                                 if (finalI == arrayOfImages.size()-1) {
+
                                                     AuthValidation.successToast(activity.getBaseContext(), "Successfully added product").show();
                                                     FirebaseFirestore db =FirebaseFirestore.getInstance();
                                                     db.collection("products").document(product.getProductId())
@@ -442,6 +443,7 @@ public class AddProductDialog {
                                                     reset();
                                                     dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                                     addProductDialogCallback.addOnDocumentAddedListener(true);
+
                                                     dismissDialog();
                                                 }
                                             } else {

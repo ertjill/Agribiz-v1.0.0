@@ -63,13 +63,12 @@ public class AddressItemAdapter extends BaseAdapter {
 
             AlertDialog.Builder dialogbox = new AlertDialog.Builder(activity);
             dialogbox.setMessage("Do you really want to delete this address?");
-            dialogbox.setCancelable(true);
             dialogbox.setTitle("Delete Address");
             dialogbox.setCancelable(false);
-            dialogbox.setPositiveButton("Yes way", new DialogInterface.OnClickListener() {
+            dialogbox.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int s) {
-                    Log.d("GetAddress","Yes way");
+                    Log.d("GetAddress","Yes");
                     ProfileManagement.deleteAddress(addressItems.get(i), user)
                             .addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override

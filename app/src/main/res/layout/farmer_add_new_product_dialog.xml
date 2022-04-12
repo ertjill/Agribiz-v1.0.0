@@ -370,7 +370,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/whitebackground_roundedcorner"
-        android:backgroundTint="#ee000000"
+        android:backgroundTint="#99000000"
         android:visibility="gone">
 
         <TextView

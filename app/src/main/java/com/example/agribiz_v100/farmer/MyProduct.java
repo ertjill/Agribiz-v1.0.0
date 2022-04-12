@@ -1,8 +1,10 @@
 package com.example.agribiz_v100.farmer;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -47,6 +49,8 @@ import com.example.agribiz_v100.Verification;
 import com.example.agribiz_v100.dialog.AddProductDialog;
 import com.example.agribiz_v100.entities.ProductModel;
 import com.example.agribiz_v100.services.ProductManagement;
+import com.example.agribiz_v100.services.StorageManagement;
+import com.example.agribiz_v100.validation.AuthValidation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -107,7 +111,7 @@ public class MyProduct extends Fragment {
         addProductDialog.createListener(new AddProductDialog.AddProductDialogCallback() {
             @Override
             public void addOnDocumentAddedListener(boolean isAdded) {
-                Log.d("tag","hereee");
+                Log.d("tag", "hereee");
                 displayMyProducts();
             }
         });
@@ -117,23 +121,23 @@ public class MyProduct extends Fragment {
     int i = 0;
 
     public void displayMyProducts() {
-        Log.d("tag","hereee displayMyProducts");
+        Log.d("tag", "hereee displayMyProducts");
         ProductManagement.getProducts(last, user.getUid())
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
-                            Log.d("tag",last!=null?last.getData().toString():"null");
-                            Log.d("tag","hereee out");
+                            Log.d("tag", last != null ? last.getData().toString() : "null");
+                            Log.d("tag", "hereee out");
                             if (task.getResult().getDocuments().size() > 0) {
-                                Log.d("tag","hereee inside");
+                                Log.d("tag", "hereee inside");
                                 for (DocumentSnapshot document : task.getResult().getDocuments()) {
                                     ProductModel item = document.toObject(ProductModel.class);
                                     productItems.append(i++, item);
-                                    Log.d("tag","hereee inside inside" );
+                                    Log.d("tag", "hereee inside inside");
                                 }
                                 farmerProductAdapter.notifyDataSetChanged();
-                                last = task.getResult().getDocuments().get(task.getResult().getDocuments().size()-1);
+                                last = task.getResult().getDocuments().get(task.getResult().getDocuments().size() - 1);
                             }
 
                         }
@@ -187,10 +191,65 @@ public class MyProduct extends Fragment {
             TextView product_category = convertView.findViewById(R.id.product_category);
 
             TextView product_price = convertView.findViewById(R.id.product_price);
+            ImageButton delete_ib = convertView.findViewById(R.id.delete_ib);
+            delete_ib.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AlertDialog.Builder dialogbox = new AlertDialog.Builder(getActivity());
+                    dialogbox.setMessage("Do you really want to delete this products?");
+                    dialogbox.setTitle("Delete Product");
+                    dialogbox.setCancelable(false);
+                    dialogbox.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Toast.makeText(context, "No", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    dialogbox.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Toast.makeText(context, "Yes", Toast.LENGTH_SHORT).show();
+                            ProductManagement.deleteProduct(productList.get(position).getProductId())
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()) {
+                                                for (int i = 0; i < productList.get(position).getProductImage().size(); i++) {
+                                                    int finalI = i;
+                                                    StorageManagement.deleteProductImage(productList.get(position).getProductId() + "/" + i)
+                                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                @Override
+                                                                public void onComplete(@NonNull Task<Void> task) {
+                                                                    if (task.isSuccessful()) {
+                                                                        if (productList.get(position) != null)
+                                                                            if (finalI == productList.get(position).getProductImage().size() - 1) {
+                                                                                productList.remove(position);
+                                                                                notifyDataSetChanged();
+                                                                                AuthValidation.successToast(getContext(), "Product successfully deleted").show();
+                                                                            }
+                                                                    } else {
+                                                                        AuthValidation.failedToast(getContext(), "Failed To delete product").show();
+                                                                    }
+                                                                }
+                                                            });
+
+                                                }
+
+                                            } else {
+                                                AuthValidation.failedToast(getContext(), "Failed To delete product").show();
+                                            }
+                                        }
+                                    });
+
+                        }
+                    });
+                    dialogbox.show();
+                }
+            });
 
 
             Glide.with(context)
-                    .load(productList.get(position).getProductImage().size()<1?"":productList.get(position).getProductImage().get(0))
+                    .load(productList.get(position) == null || productList.get(position).getProductImage() == null || productList.get(position).getProductImage().size() < 1 ? "" : productList.get(position).getProductImage().get(0))
                     .into(product_image_iv);
             product_name_unit.setText(productList.get(position).getProductName() + " (per " + productList.get(position).getProductQuantity() + " " + productList.get(position).getProductUnit() + ")");
             product_stocks.setText("Stocks: " + productList.get(position).getProductStocks());

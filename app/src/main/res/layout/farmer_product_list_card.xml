@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/highlight_back">
+    android:background="@color/highlight_back"
+    android:padding="5dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -10,7 +11,7 @@
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:layout_toStartOf="@+id/delete_ib"
-        android:paddingLeft="10dp">
+        android:paddingLeft="5dp">
 
         <ImageView
             android:id="@+id/product_image_iv"
@@ -84,7 +85,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
-        android:background="null"
+        android:background="@color/transparent"
         android:padding="10dp"
         android:src="@drawable/ic_baseline_delete_forever_24" />
 
