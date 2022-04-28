@@ -16,7 +16,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.agribiz_v100.LoginActivity;
 import com.example.agribiz_v100.R;
-import com.example.agribiz_v100.agrovit.AgrovitMainActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
