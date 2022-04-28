@@ -1,8 +1,8 @@
 package com.example.agribiz_v100.services;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.net.Uri;
-import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -14,7 +14,9 @@ import com.example.agribiz_v100.validation.AuthValidation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
@@ -50,7 +52,7 @@ public class AuthManagement {
         this.userPassword = password;
         // For user verification
         verifyPhoneNumber(user.getUserPhoneNumber());
-        Log.d(TAG,"Register account method");
+        Log.d(TAG, "Register account method");
     }
 
     public void verifyPhoneNumber(String phoneNumber) {
@@ -61,7 +63,7 @@ public class AuthManagement {
                 .setCallbacks(mCallbacks)          // OnVerificationStateChangedCallbacks
                 .build();
         PhoneAuthProvider.verifyPhoneNumber(options);
-        Log.d(TAG,"Verify phone number method");
+        Log.d(TAG, "Verify phone number method");
     }
 
     private final PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks =
@@ -71,8 +73,9 @@ public class AuthManagement {
                 public void onCodeSent(@NonNull String s, @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
                     super.onCodeSent(s, forceResendingToken);
                     codeBySystem = s;
-                    Log.d(TAG,"On code sent method");
+                    Log.d(TAG, "On code sent method");
                 }
+
                 // Once code is on process for verification
                 // Will only function if the device used is also the device that received the OTP code by Firebase
                 @Override
@@ -82,105 +85,126 @@ public class AuthManagement {
                     // String code = phoneAuthCredential.getSmsCode();
                     // Checks if code is valid or not empty
                     // if (!TextUtils.isEmpty(code)) {
-                        // Process verification
-                        //verifyCode(code);
+                    // Process verification
+                    //verifyCode(code);
                     // }
                     // Log.d(TAG,"On verification complete method");
                 }
 
                 @Override
                 public void onVerificationFailed(@NonNull FirebaseException e) {
-                    Log.d(TAG,"On verification failed", e);
+                    Log.d(TAG, "On verification failed", e);
                     Toast.makeText(activity, "Failed to update phone number", Toast.LENGTH_SHORT).show();
                 }
-    };
+            };
 
-    private void verifyCode(String code) {
+    public Task<AuthResult> verifyCode(String code) {
         // Verify code sent by Firebase if it will match to the code inputted by user
         // then create account linked with the phone number
         PhoneAuthCredential credential = PhoneAuthProvider.getCredential(codeBySystem, code);
         // User is log on with the phone number authentication account
-        signInWithCredential(credential);
-        Log.d(TAG,"Verify code method");
+        Log.d(TAG, "Verify code method");
+        return signInWithCredential(credential);
+
     }
 
     public Task<AuthResult> createEmailAccount(String email, String password) {
         return mAuth.createUserWithEmailAndPassword(email, password);
     }
 
-    private void signInWithCredential(PhoneAuthCredential phoneAuthCredential) {
-        //
-        createEmailAccount(user.getUserEmail(), userPassword)
-        .addOnCompleteListener(activity, task -> {
-            if (task.isSuccessful()) {
-                AuthController.loginNavigation(mAuth.getCurrentUser(), activity);
-                // Sign in success, update UI with the signed-in user's information
-                Log.d(TAG, "createUserWithEmail:success");
+    private Task<AuthResult> signInWithCredential(PhoneAuthCredential phoneAuthCredential) {
+        //Create credential using phone number
+        //if phone credential is successfully created create email and password credential
+        //link phone credential to email credential
+        //else delete created credentials
+        return mAuth.signInWithCredential(phoneAuthCredential).addOnCompleteListener(activity, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task1) {
+                if (task1.isSuccessful()) {
+                    AuthCredential credential = EmailAuthProvider.getCredential(user.getUserEmail(), userPassword);
+                    mAuth.getCurrentUser().linkWithCredential(credential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task2) {
+                            if (task2.isSuccessful()) {
+                                Log.d(TAG, "linkWithCredential:success");
+                                // Prepare user object
+                                FirebaseUser fuser = FirebaseAuth.getInstance().getCurrentUser();
+                                //
+                                String defaultProfileImage = "https://firebasestorage.googleapis.com/v0/b/agribiz-12cc6.appspot.com/o/profile%2F272229741_475164050669220_5648552245273002941_n.png?alt=media&token=781589bc-71bd-4b66-a647-59c0bff5f9e5";
+                                Uri uri = Uri.parse(defaultProfileImage);
 
-                if (mAuth.getCurrentUser() != null) {
-                    // Link email/password account to phone auth credential
-                    mAuth.getCurrentUser().linkWithCredential(phoneAuthCredential);
-                    Log.d(TAG, "linkWithCredential:success");
-                    // Prepare user object
-                    FirebaseUser fuser = FirebaseAuth.getInstance().getCurrentUser();
-                    //
-                    String defaultProfileImage = "https://firebasestorage.googleapis.com/v0/b/agribiz-12cc6.appspot.com/o/profile%2F272229741_475164050669220_5648552245273002941_n.png?alt=media&token=781589bc-71bd-4b66-a647-59c0bff5f9e5";
-                    Uri uri = Uri.parse(defaultProfileImage);
+                                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                        .setDisplayName(user.getUserDisplayName())
+                                        .setPhotoUri(uri)
+                                        .build();
 
-                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                            .setDisplayName(user.getUserDisplayName())
-                            .setPhotoUri(uri)
-                            .build();
+                                if (fuser != null) {
+                                    fuser.updateProfile(profileUpdates).addOnCompleteListener(task11 -> {
+                                        if (task11.isSuccessful()) {
+                                            Log.d(TAG, "User profile updated");
+                                            user.setUserID(fuser.getUid());
+                                            user.setUserIsActive(true);
 
-                    if (fuser != null) {
-                        fuser.updateProfile(profileUpdates).addOnCompleteListener(task11 -> {
-                            if (task11.isSuccessful()) {
-                                Log.d(TAG, "User profile updated");
-                                user.setUserID(fuser.getUid());
-                                user.setUserIsActive(true);
+                                            if (fuser.getPhotoUrl() != null)
+                                                user.setUserImage(fuser.getPhotoUrl().toString());
 
-                                if (fuser.getPhotoUrl() != null)
-                                user.setUserImage(fuser.getPhotoUrl().toString());
-
-                                // Create account...
-                                ProfileManagement.createAccountProfile(user).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        if (task.isSuccessful()) {
-                                            AuthController.loginNavigation(fuser, activity);
-                                            AuthValidation.successToast(activity, "Account successfully created");
+                                            // Create account...
+                                            ProfileManagement.createAccountProfile(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful()) {
+                                                        AuthController.loginNavigation(fuser, activity);
+                                                        AuthValidation.successToast(activity, "Account successfully created");
+                                                    } else {
+                                                        deleteAccount(fuser);
+                                                        AuthValidation.failedToast(activity, "Failed to create account.");
+                                                        AlertDialog.Builder alert = new AlertDialog.Builder(activity);
+                                                        alert.setTitle("Invalid Credential");
+                                                        alert.setMessage(task.getException().getLocalizedMessage());
+                                                        alert.setPositiveButton("OK", null);
+                                                        alert.show();
+                                                    }
+                                                }
+                                            });
+                                        } else {
+                                            deleteAccount(mAuth.getCurrentUser());
+                                            Toast.makeText(activity, "Failed to create account.",
+                                                    Toast.LENGTH_SHORT).show();
                                         }
-                                        else {
-                                            deleteAccount(fuser);
-                                            AuthValidation.failedToast(activity, "Failed to create account.");
-                                        }
-                                    }
-                                });
+                                    });
+                                }
+                            } else {
+                                logoutAccount();
+                                Log.d(TAG, task2.getException().getMessage());
+                                AlertDialog.Builder alert = new AlertDialog.Builder(activity);
+                                alert.setTitle("Invalid Credential");
+                                alert.setMessage(task2.getException().getLocalizedMessage());
+                                alert.setPositiveButton("OK", null);
+                                alert.show();
                             }
-                            else {
-                                deleteAccount(mAuth.getCurrentUser());
-                                Toast.makeText(activity, "Failed to create account.",
-                                        Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
+                        }
+                    });
+
+                } else {
+                    AlertDialog.Builder alert = new AlertDialog.Builder(activity);
+                    alert.setTitle("Invalid OTP Code");
+                    alert.setMessage(task1.getException().getLocalizedMessage());
+                    alert.setPositiveButton("OK", null);
+                    alert.show();
                 }
-            } else {
-                // If sign in fails, display a message to the user.
-                Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                Toast.makeText(activity, "Authentication failed.",
-                        Toast.LENGTH_SHORT).show();
             }
         });
+
+
     }
 
     public void deleteAccount(FirebaseUser user) {
         user.delete()
-        .addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                Log.d(TAG, "User account deleted.");
-            }
-        });
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Log.d(TAG, "User account deleted.");
+                    }
+                });
     }
 
     public Task<AuthResult> loginAccount(String email, String password) {
@@ -196,7 +220,7 @@ public class AuthManagement {
         return FirebaseAuth.getInstance().sendPasswordResetEmail(email);
     }
 
-    public Task<Void> updateUsername(String username){
+    public Task<Void> updateUsername(String username) {
         FirebaseUser user = mAuth.getCurrentUser();
         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                 .setDisplayName(username)
@@ -204,23 +228,23 @@ public class AuthManagement {
         return user.updateProfile(profileUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful()){
+                if (task.isSuccessful()) {
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
                     DocumentReference usernameRef = db.collection("users").document(mAuth.getCurrentUser().getUid());
-                    usernameRef.update("userDisplayName",mAuth.getCurrentUser().getDisplayName())
+                    usernameRef.update("userDisplayName", mAuth.getCurrentUser().getDisplayName())
                             .addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if(task.isSuccessful()){
-                                AuthValidation.successToast(activity,"Successfully updated username");
-                            }
-                            else{
-                                AuthValidation.failedToast(activity,"Failed to update username");
-                            }
-                        }
-                    });
-                }{
-                    AuthValidation.failedToast(activity,"Failed to update email");
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        AuthValidation.successToast(activity, "Successfully updated username");
+                                    } else {
+                                        AuthValidation.failedToast(activity, "Failed to update username");
+                                    }
+                                }
+                            });
+                }
+                {
+                    AuthValidation.failedToast(activity, "Failed to update email");
                 }
             }
         });
@@ -235,12 +259,13 @@ public class AuthManagement {
         return mAuth.getCurrentUser().updateEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful()){
+                if (task.isSuccessful()) {
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
                     DocumentReference emailRef = db.collection("users").document(mAuth.getCurrentUser().getUid());
-                    emailRef.update("userEmail",email);
-                }{
-                    AuthValidation.failedToast(activity,"Failed to update email");
+                    emailRef.update("userEmail", email);
+                }
+                {
+                    AuthValidation.failedToast(activity, "Failed to update email");
                 }
             }
         });
@@ -248,35 +273,35 @@ public class AuthManagement {
 
     // Update phone number
     public Task<Void> updatePhoneNumber(String code) {
-        Log.d("PhoneNumber","Verifying " + code);
+        Log.d("PhoneNumber", "Verifying " + code);
         PhoneAuthCredential credential = PhoneAuthProvider.getCredential(codeBySystem, code);
 
-        Log.d("PhoneNumber","Update phone number credential " + code);
+        Log.d("PhoneNumber", "Update phone number credential " + code);
         // Stop here...
         return mAuth.getCurrentUser().updatePhoneNumber(credential)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful()){
-                    FirebaseFirestore db = FirebaseFirestore.getInstance();
-                    DocumentReference mobileRef = db.collection("users").document(mAuth.getCurrentUser().getUid());
-                    mobileRef.update("userPhoneNumber",mAuth.getCurrentUser().getPhoneNumber())
-                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if(task.isSuccessful()){
-                                AuthValidation.successToast(activity,"Successfully updated phone number");
-                            }
-                            else{
-                                AuthValidation.failedToast(activity,"Failed to update phone number");
-                            }
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            FirebaseFirestore db = FirebaseFirestore.getInstance();
+                            DocumentReference mobileRef = db.collection("users").document(mAuth.getCurrentUser().getUid());
+                            mobileRef.update("userPhoneNumber", mAuth.getCurrentUser().getPhoneNumber())
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()) {
+                                                AuthValidation.successToast(activity, "Successfully updated phone number");
+                                            } else {
+                                                AuthValidation.failedToast(activity, "Failed to update phone number");
+                                            }
+                                        }
+                                    });
                         }
-                    });
-                }{
-                    AuthValidation.failedToast(activity,"Failed to update email");
-                }
-            }
-        });
+                        {
+                            AuthValidation.failedToast(activity, "Failed to update email");
+                        }
+                    }
+                });
 
     }
 

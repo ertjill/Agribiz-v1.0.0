@@ -3,6 +3,7 @@ package com.example.agribiz_v100;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -103,9 +104,8 @@ public class VerificationCodeActivity extends AppCompatActivity {
         user.setUserIsActive(true);
         user.setUserType("customer");
         user.setUserPhoneNumber(userPhoneNo);
-        am.registerAccount(user, userPassword);
-
         populatePhoneNumber.setText(userPhoneNo);
+        am.registerAccount(user, userPassword);
 
         verificationCode__nextBtn.setOnClickListener(view -> {
             String code = char_code_1.getText().toString()+
@@ -114,10 +114,22 @@ public class VerificationCodeActivity extends AppCompatActivity {
                     char_code_4.getText().toString()+
                     char_code_5.getText().toString()+
                     char_code_6.getText().toString();
-            if (TextUtils.isEmpty(code)) {
-                Toast.makeText(getApplicationContext(), "Input code", Toast.LENGTH_SHORT).show();
+            if (TextUtils.isEmpty(code) || code.length()<6) {
+                Toast.makeText(getApplicationContext(), "Input valid code", Toast.LENGTH_SHORT).show();
             } else {
-                am.verifyReceivedCode(code);
+                ProgressDialog progressDialog;
+                progressDialog = new ProgressDialog(this);
+                progressDialog.setMessage("Creating account, please wait!");
+                progressDialog.setCancelable(false);
+                progressDialog.show();
+                verificationCode__nextBtn.setEnabled(false);
+                am.verifyCode(code).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        verificationCode__nextBtn.setEnabled(true);
+                        progressDialog.dismiss();
+                    }
+                });
             }
         });
     }

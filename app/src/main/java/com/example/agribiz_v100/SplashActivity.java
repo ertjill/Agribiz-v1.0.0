@@ -34,7 +34,6 @@ import com.google.firebase.storage.StorageReference;
 public class SplashActivity extends AppCompatActivity {
     private static final String TAG = "SplashActivity...";
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-    Uri defaultImage = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,13 +71,12 @@ public class SplashActivity extends AppCompatActivity {
     private class LongOperation extends AsyncTask<String, Void, Bundle> {
         @Override
         protected Bundle doInBackground(String... params) {
-            Bundle bundle = new Bundle();
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            return bundle;
+            return null;
         }
 
         @Override
