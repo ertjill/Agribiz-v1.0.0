@@ -9,7 +9,6 @@
     android:paddingRight="25dp"
     tools:context=".farmer.Finance">
 
-
     <ImageView
         android:layout_width="119dp"
         android:layout_height="57dp"
@@ -17,40 +16,13 @@
         android:layout_marginTop="17dp"
         android:src="@drawable/agribiz_logo_green" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/productCategory_til"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:backgroundTint="@color/army_green"
-        app:boxBackgroundColor="@color/transparent"
-        app:boxBackgroundMode="outline"
-        app:boxCornerRadiusBottomEnd="15dp"
-        app:boxCornerRadiusBottomStart="15dp"
-        app:boxCornerRadiusTopEnd="15dp"
-        app:boxCornerRadiusTopStart="15dp"
-        app:boxStrokeColor="@color/army_green"
-        app:endIconTint="@color/army_green"
-        app:hintTextColor="@color/army_green">
-
-        <AutoCompleteTextView
-            android:id="@+id/finance_category"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/montserrat_medium"
-            android:hint="Choose Category"
-            android:inputType="none"
-            android:text="AgriFinance"
-            android:textColor="@color/army_green"/>
-
-    </com.google.android.material.textfield.TextInputLayout>
     <LinearLayout
         android:id="@+id/agri_finance_ll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginTop="19dp">
+        android:layout_marginTop="20dp">
+
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -61,8 +33,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
-                >
+                android:padding="10dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -74,30 +45,29 @@
                     android:layout_centerVertical="true"/>
 
                 <TextView
+                    android:id="@+id/totalRevenue_amount_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
                     android:fontFamily="@font/montserrat_semibold"
                     android:text="₱ 0.00"
                     android:textColor="@color/yellow_orange"
                     android:textFontWeight="700"
-                    android:textSize="20sp"
-                    android:layout_centerVertical="true"/>
+                    android:textSize="20sp" />
             </RelativeLayout>
-
         </androidx.cardview.widget.CardView>
+
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/army_green"
             app:cardCornerRadius="10dp"
-            android:layout_marginBottom="12dp"
-            >
+            android:layout_marginBottom="12dp">
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
-                >
+                android:padding="10dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -109,30 +79,29 @@
                     android:textSize="14sp" />
 
                 <TextView
+                    android:id="@+id/expenses_amount_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
                     android:fontFamily="@font/montserrat_semibold"
                     android:text="₱ 0.00"
                     android:textColor="@color/yellow_orange"
                     android:textFontWeight="700"
-                    android:textSize="20sp"
-                    android:layout_centerVertical="true"/>
+                    android:textSize="20sp" />
             </RelativeLayout>
-
         </androidx.cardview.widget.CardView>
+
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/army_green"
             app:cardCornerRadius="10dp"
-            android:layout_marginBottom="12dp"
-            >
+            android:layout_marginBottom="12dp">
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
-                >
+                android:padding="10dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -144,6 +113,41 @@
                     android:textSize="14sp" />
 
                 <TextView
+                    android:id="@+id/netIncome_amount_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:text="₱ 0.00"
+                    android:textColor="@color/yellow_orange"
+                    android:textFontWeight="700"
+                    android:textSize="20sp" />
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/army_green"
+            app:cardCornerRadius="10dp"
+            android:layout_marginBottom="12dp">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:text="Donations Received"
+                    android:textColor="@color/yellow_orange"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/donationsReceived_amount_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
@@ -154,7 +158,6 @@
                     android:textSize="20sp"
                     android:layout_centerVertical="true"/>
             </RelativeLayout>
-
         </androidx.cardview.widget.CardView>
 
     </LinearLayout>
@@ -312,6 +315,7 @@
 
     </LinearLayout>
     <Button
+        android:id="@+id/addExpense_btn"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:text="Add expense"
@@ -326,7 +330,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Recently added expences"
+        android:text="Recently added expenses"
         android:textColor="@color/brown"
         android:textSize="16sp"
         android:textFontWeight="600"

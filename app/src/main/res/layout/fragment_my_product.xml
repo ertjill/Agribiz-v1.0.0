@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".farmer.MyProduct">
+
     <ListView
         android:id="@+id/farmer_product_lv"
         android:layout_width="match_parent"
@@ -34,9 +35,6 @@
             android:textFontWeight="400"
             android:textSize="14sp"
             android:textColor="#5E381932"/>
-
-
-
     </LinearLayout>
 
     <ImageButton
@@ -50,5 +48,4 @@
         android:background="@color/transparent"
         android:src="@drawable/ic_baseline_add_circle_24"
         app:tint="@color/army_green" />
-
 </RelativeLayout>

@@ -23,7 +23,7 @@ public class Profile extends Fragment {
 
     private static final String TAG = "Profile";
     CardView logout_card;
-    TextView displayName_tv, edit_profile_tv,my_address_tv, barter_goods_tv;
+    TextView displayName_tv, edit_profile_tv,my_address_tv, barter_goods_tv, messages_tv;
     ImageView userImage_iv;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -40,14 +40,14 @@ public class Profile extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
+
         my_address_tv = view.findViewById(R.id.my_address_tv);
         displayName_tv = view.findViewById(R.id.displayName_tv);
         userImage_iv = view.findViewById(R.id.userImage_iv);
         edit_profile_tv = view.findViewById(R.id.edit_profile_tv);
         barter_goods_tv = view.findViewById(R.id.barter_goods_tv);
-        //add_new_address_btn = view.
+        messages_tv = view.findViewById(R.id.messages_tv);
 
         my_address_tv.setOnClickListener(t->{
             startActivity(new Intent(getActivity(), MyAddressesActivity.class));
@@ -65,8 +65,15 @@ public class Profile extends Fragment {
            @Override
            public void onClick(View view) {
                //startActivity(new Intent(getActivity(), MyAddressesActivity.class));
-               startActivity(new Intent(getActivity(),BarterGoodsActivity.class));
+               startActivity(new Intent(getActivity(), BarterGoodsActivity.class));
            }
+        });
+
+        messages_tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(), MessagesActivity.class));
+            }
         });
 
         logout_card = view.findViewById(R.id.logout_card);

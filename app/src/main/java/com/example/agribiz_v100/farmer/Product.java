@@ -94,14 +94,14 @@ public class Product extends Fragment {
             } else if (position == 1) {
                 return new SoldOutProduct();
             } else {
-                return new BarterProduct();
+                return new MyProduct();
             }
 
         }
 
         @Override
         public int getItemCount() {
-            return 3;
+            return 2;
         }
     }
 }

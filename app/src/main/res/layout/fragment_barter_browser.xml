@@ -3,10 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".customer.BarterReceivedFragment">
+    tools:context=".customer.BarterBrowserFragment">
 
     <ListView
-        android:id="@+id/customer_barter_received"
+        android:id="@+id/customer_barter_browser"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:divider="@null"
@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="28dp"
             android:fontFamily="@font/montserrat_regular"
-            android:text="No barters received yet"
+            android:text="No barter items yet"
             android:textColor="#5E381932"
             android:textFontWeight="400"
             android:textSize="14sp" />

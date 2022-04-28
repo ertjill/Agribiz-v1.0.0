@@ -23,11 +23,11 @@ public class StorageManagement {
         return ref.putFile(file);
     }
 
-    public static Task<Void> deleteProductImage(String id){
+    public static Task<Void> deleteFile(String url){
         FirebaseStorage storage = FirebaseStorage.getInstance();
         // Create a storage reference from our app
         StorageReference storageRef = storage.getReference();
-        StorageReference filetRef = storageRef.child("products/"+id);
+            StorageReference filetRef = storageRef.child(url);
         return filetRef.delete();
     }
 

@@ -3,38 +3,36 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".customer.BarterReceivedFragment">
+    tools:context=".customer.BarterBrowserFragment">
 
     <ListView
-        android:id="@+id/customer_barter_received"
+        android:id="@+id/farmer_barter_product_lv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:divider="@null"
         android:visibility="gone"/>
 
     <LinearLayout
-        android:id="@+id/no_product_ll"
+        android:id="@+id/no_barter_product_ll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_marginTop="51dp"
         android:gravity="center_horizontal"
+        android:orientation="vertical"
         android:visibility="visible">
 
         <ImageView
             android:layout_width="181dp"
             android:layout_height="195dp"
-            android:src="@drawable/farmer_no_produce"/>
+            android:src="@drawable/no_barter_item"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="28dp"
             android:fontFamily="@font/montserrat_regular"
-            android:text="No barters received yet"
+            android:text="@string/no_barter_requests_yet"
             android:textColor="#5E381932"
-            android:textFontWeight="400"
             android:textSize="14sp" />
     </LinearLayout>
-
 </RelativeLayout>

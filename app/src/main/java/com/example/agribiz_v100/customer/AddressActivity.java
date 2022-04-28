@@ -186,8 +186,4 @@ public class AddressActivity extends AppCompatActivity {
         postal_code_et.getText().clear();
         specificAddress_et.getText().clear();
     }
-
-    private void removeFocusable() {
-
-    }
 }

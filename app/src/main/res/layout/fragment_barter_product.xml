@@ -7,11 +7,12 @@
     tools:context=".farmer.BarterProduct">
 
     <ListView
-        android:id="@+id/farmer_barter_product_lv"
+        android:id="@+id/farmer_barter_lv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="@null"
-        android:visibility="gone"/>
+        android:divider="@null">
+
+    </ListView>
 
     <LinearLayout
         android:id="@+id/no_barter_product_ll"
@@ -20,7 +21,7 @@
         android:layout_marginTop="51dp"
         android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <ImageView
             android:layout_width="181dp"
@@ -32,16 +33,14 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="28dp"
             android:fontFamily="@font/montserrat_regular"
-            android:text="No produce added yet"
+            android:text="No products added yet to barter"
             android:textColor="#5E381932"
             android:textFontWeight="400"
             android:textSize="14sp" />
-
-
     </LinearLayout>
 
     <ImageButton
-        android:id="@+id/add_product_ib"
+        android:id="@+id/add_barter_ib"
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:layout_alignParentEnd="true"

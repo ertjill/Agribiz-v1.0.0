@@ -2,7 +2,6 @@ package com.example.agribiz_v100.dialog;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -24,54 +23,39 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.bumptech.glide.Glide;
 import com.example.agribiz_v100.R;
-import com.example.agribiz_v100.customer.EditProfile;
 import com.example.agribiz_v100.entities.ProductModel;
-import com.example.agribiz_v100.farmer.MyProduct;
 import com.example.agribiz_v100.services.ProductManagement;
-import com.example.agribiz_v100.services.ProfileManagement;
 import com.example.agribiz_v100.services.StorageManagement;
 import com.example.agribiz_v100.validation.AuthValidation;
 import com.example.agribiz_v100.validation.ProductValidation;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
-import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.Transaction;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -89,8 +73,9 @@ public class AddProductDialog {
     Fragment fragment;
     RelativeLayout loder_rl;
     AddProductImageCallBack addProductImageCallBack;
-    private boolean flag[] = {false, false, false, false, false, false, false, false};
-    boolean productNameFlag=false;
+    private boolean[] flag = {false, false, false, false, false, false, false, false};
+    boolean productNameFlag = false;
+
     Dialog dialog;
     AddProductDialogCallback addProductDialogCallback = null;
     TextInputLayout productDescription_til;
@@ -106,8 +91,8 @@ public class AddProductDialog {
     Button cancel_btn;
     TextView count_done_tv;
 
-    static String category[] = {"Fruits", "Vegetables", "Livestock", "Poultry", "Fertilizer"};
-    static String unit[] = {"kg", "g", "ml", "pcs", "L"};
+    static String[] category = {"Fruits", "Vegetables", "Livestock", "Poultry", "Fertilizer"};
+    static String[] unit = {"kg", "g", "ml", "pcs", "L"};
 
     public void createListener(AddProductDialogCallback addProductDialogCallback) {
         this.addProductDialogCallback = addProductDialogCallback;
@@ -159,8 +144,8 @@ public class AddProductDialog {
 
         imageViewPagerAdapter = new AddProductDialog.ImageViewPagerAdapter();
         imageSlider.setAdapter(imageViewPagerAdapter);
-        ArrayAdapter<String> productCategoryAdapter = new ArrayAdapter<String>(activity.getBaseContext(), R.layout.dropdown_item, category);
-        ArrayAdapter<String> productUnitAdapter = new ArrayAdapter<String>(activity.getBaseContext(), R.layout.dropdown_item, unit);
+        ArrayAdapter<String> productCategoryAdapter = new ArrayAdapter<>(activity.getBaseContext(), R.layout.dropdown_item, category);
+        ArrayAdapter<String> productUnitAdapter = new ArrayAdapter<>(activity.getBaseContext(), R.layout.dropdown_item, unit);
         productCategory_at.setAdapter(productCategoryAdapter);
         productUnit_at.setAdapter(productUnitAdapter);
         createImageSizeListener(new AddProductImageCallBack() {
@@ -186,7 +171,6 @@ public class AddProductDialog {
                     flag[1] = false;
                 } else {
                     productName_til.setError(null);
-
                     flag[1] = true;
                 }
             }
@@ -334,20 +318,10 @@ public class AddProductDialog {
             }
         });
 
-        cancel_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        cancel_btn.setOnClickListener(v -> dismissDialog());
 
-                dismissDialog();
-            }
-        });
+        product_image_iv.setOnClickListener(v -> showUploadDialog());
 
-        product_image_iv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showUploadDialog();
-            }
-        });
         add_image_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -671,9 +645,8 @@ public class AddProductDialog {
 
     public interface AddProductDialogCallback {
         void addOnDocumentAddedListener(boolean isAdded);
-
-
     }
+
     public interface AddProductImageCallBack{
         void addOnImageSizeListener(int imagesSize);
     }

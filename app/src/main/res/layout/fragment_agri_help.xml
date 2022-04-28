@@ -23,6 +23,7 @@
         android:layout_marginTop="31dp"
         android:src="@drawable/group_of_farmers" />
 <Button
+    android:id="@+id/requestAssistance_btn"
     android:layout_width="240dp"
     android:layout_height="wrap_content"
     android:text="Request Assistance"
@@ -31,7 +32,7 @@
     android:textColor="@color/army_green"
     android:textAllCaps="false"
     android:fontFamily="@font/montserrat_semibold"
-    android:textSize="13sp"
+    android:textSize="15sp"
     android:layout_gravity="center_horizontal"
     android:layout_marginTop="100dp"
     android:textFontWeight="600"/>

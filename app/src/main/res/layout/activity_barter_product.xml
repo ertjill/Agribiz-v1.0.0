@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".customer.BarterGoodsActivity">
+    tools:context=".farmer.BarterProductActivity">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/topAppBar_cl"
@@ -24,7 +24,7 @@
                 android:layout_height="?attr/actionBarSize"
                 android:background="@color/white"
                 app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
-                app:title="Barter Goods"
+                app:title="Barter Products"
                 app:titleTextColor="@color/brown" />
         </com.google.android.material.appbar.AppBarLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
@@ -41,9 +41,10 @@
         app:tabTextColor="@color/brown"/>
 
     <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/barter_goods_pager"
+        android:id="@+id/barter_product_pager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"/>
+
 
 </LinearLayout>

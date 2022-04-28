@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="320dp"
+    android:layout_height="700dp"
+    android:layout_gravity="center"
+    android:background="@drawable/whitebackground_roundedcorner">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="20dp">
+
+        <TextView
+            android:id="@+id/top_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="34dp"
+            android:fontFamily="@font/montserrat_semibold"
+            android:gravity="center"
+            android:text="Add Product to Barter"
+            android:textColor="@color/brown"
+            android:textFontWeight="400"
+            android:textSize="17sp" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_above="@+id/bottom_ll"
+            android:layout_below="@+id/top_tv"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/blank_photo_ll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/product_image_iv"
+                        android:layout_width="150dp"
+                        android:layout_height="151dp"
+                        android:layout_marginTop="5dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ic_baseline_add_photo_alternate_24" />
+
+                    <TextView
+                        android:id="@+id/add_product_pic_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/montserrat_regular"
+                        android:gravity="center"
+                        android:text="Tap to upload image"
+                        android:textColor="#505E3819"
+                        android:textSize="10sp" />
+                </LinearLayout>
+
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/imageSlider"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    android:layout_marginTop="25dp"
+                    android:visibility="gone" />
+
+                <Button
+                    android:id="@+id/add_image_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:alpha="0.53"
+                    android:backgroundTint="#FFBF03"
+                    android:fontFamily="@font/montserrat_bold"
+                    android:text="Add"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:textSize="13sp"
+                    android:visibility="gone"
+                    app:cornerRadius="25dp" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/itemName_til"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:backgroundTint="@color/army_green"
+                    app:boxBackgroundColor="@color/transparent"
+                    app:boxBackgroundMode="outline"
+                    app:boxCornerRadiusBottomEnd="15dp"
+                    app:boxCornerRadiusBottomStart="15dp"
+                    app:boxCornerRadiusTopEnd="15dp"
+                    app:boxCornerRadiusTopStart="15dp"
+                    app:boxStrokeColor="@color/army_green"
+                    app:errorEnabled="true"
+                    app:hintTextColor="@color/army_green">
+
+                    <EditText
+                        android:id="@+id/itemName_et"
+                        style="TextAppearance.App.TextIn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/montserrat_medium"
+                        android:hint="Item name"
+                        android:importantForAutofill="no"
+                        android:inputType="text"
+                        android:maxLength="50"
+                        android:paddingTop="20dp"
+                        android:textColorHint="@color/color_hint"
+                        android:textCursorDrawable="@null"
+                        android:textSize="16sp"
+                        tools:ignore="SpeakableTextPresentCheck" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/itemCondition_til"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/army_green"
+                    app:boxBackgroundColor="@color/transparent"
+                    app:boxBackgroundMode="outline"
+                    app:boxCornerRadiusBottomEnd="15dp"
+                    app:boxCornerRadiusBottomStart="15dp"
+                    app:boxCornerRadiusTopEnd="15dp"
+                    app:boxCornerRadiusTopStart="15dp"
+                    app:boxStrokeColor="@color/army_green"
+                    app:endIconTint="@color/army_green"
+                    app:errorEnabled="true"
+                    app:hintTextColor="@color/army_green">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/itemCondition_at"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/montserrat_medium"
+                        android:hint="Item condition"
+                        android:inputType="none" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/itemQuantity_til"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/army_green"
+                    app:boxBackgroundColor="@color/transparent"
+                    app:boxBackgroundMode="outline"
+                    app:boxCornerRadiusBottomEnd="15dp"
+                    app:boxCornerRadiusBottomStart="15dp"
+                    app:boxCornerRadiusTopEnd="15dp"
+                    app:boxCornerRadiusTopStart="15dp"
+                    app:boxStrokeColor="@color/army_green"
+                    app:errorEnabled="true"
+                    app:hintTextColor="@color/army_green">
+
+                    <EditText
+                        android:id="@+id/itemQuantity_et"
+                        style="TextAppearance.App.TextIn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/montserrat_medium"
+                        android:hint="Quantity"
+                        android:importantForAutofill="no"
+                        android:inputType="number"
+                        android:maxLength="50"
+                        android:paddingTop="20dp"
+                        android:textColorHint="@color/color_hint"
+                        android:textCursorDrawable="@null"
+                        android:textSize="16sp"
+                        tools:ignore="SpeakableTextPresentCheck" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/description_til"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/army_green"
+                    app:boxBackgroundColor="@color/transparent"
+                    app:boxBackgroundMode="outline"
+                    app:boxCornerRadiusBottomEnd="15dp"
+                    app:boxCornerRadiusBottomStart="15dp"
+                    app:boxCornerRadiusTopEnd="15dp"
+                    app:boxCornerRadiusTopStart="15dp"
+                    app:boxStrokeColor="@color/army_green"
+                    app:errorEnabled="true"
+                    app:hintTextColor="@color/army_green">
+
+                    <EditText
+                        android:id="@+id/description_et"
+                        style="TextAppearance.App.TextIn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/montserrat_medium"
+                        android:gravity="top"
+                        android:hint="Write a short description"
+                        android:importantForAutofill="no"
+                        android:inputType="textMultiLine"
+                        android:lines="5"
+                        android:maxLength="50"
+                        android:overScrollMode="always"
+                        android:paddingTop="20dp"
+                        android:scrollbarStyle="insideInset"
+                        android:scrollbars="vertical"
+                        android:scrollHorizontally="false"
+                        android:textColorHint="@color/color_hint"
+                        android:textCursorDrawable="@null"
+                        android:textSize="16sp"
+                        tools:ignore="SpeakableTextPresentCheck" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+        </ScrollView>
+
+        <RelativeLayout
+            android:id="@+id/bottom_ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp">
+
+            <Button
+                android:id="@+id/cancel_btn"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:backgroundTint="#C4C4C4"
+                android:fontFamily="@font/montserrat_bold"
+                android:text="Cancel"
+                android:textAllCaps="false"
+                android:textSize="13sp"
+                app:cornerRadius="25dp" />
+
+            <Button
+                android:id="@+id/addItem_btn"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:backgroundTint="#F2B705"
+                android:fontFamily="@font/montserrat_bold"
+                android:text="Add Barter"
+                android:textAllCaps="false"
+                android:textColor="@color/army_green"
+                android:textSize="13sp"
+                app:cornerRadius="25dp" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/loder_rl"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/whitebackground_roundedcorner"
+        android:backgroundTint="#99000000"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="100dp"
+            android:fontFamily="@font/montserrat_bold"
+            android:text="Uploading Product"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/add_product_progress"
+            style="@style/Widget.App.CircularProgressIndicator"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_centerInParent="true"
+            android:indeterminate="true"
+            android:visibility="visible"
+            app:indicatorColor="@color/yellow_orange"
+            app:indicatorDirectionCircular="clockwise"
+            app:indicatorSize="100dp" />
+        <TextView
+            android:layout_width="250dp"
+            android:layout_below="@+id/add_product_progress"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="50dp"
+            android:fontFamily="@font/montserrat_bold"
+            android:text="Please wait..."
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
+        <TextView
+            android:id="@+id/count_done_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:fontFamily="@font/montserrat_bold"
+            android:textColor="@color/white"
+            android:textSize="30sp" />
+    </RelativeLayout>
+
+
+</RelativeLayout>

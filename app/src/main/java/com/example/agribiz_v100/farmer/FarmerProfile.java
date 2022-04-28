@@ -17,6 +17,7 @@ import com.bumptech.glide.Glide;
 import com.example.agribiz_v100.LoginActivity;
 import com.example.agribiz_v100.R;
 import com.example.agribiz_v100.agrovit.AgrovitMainActivity;
+import com.example.agribiz_v100.customer.BarterGoodsActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -25,28 +26,38 @@ import javax.microedition.khronos.opengles.GL;
 public class FarmerProfile extends Fragment {
 
     CardView logout_card;
-    TextView displayName_tv;
+    TextView displayName_tv, farmerMessages_tv, farmerBarter_tv;
     ImageView displayImage_iv;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view=inflater.inflate(R.layout.fragment_farmer_profile, container, false);
+
         logout_card = view.findViewById(R.id.logout_card);
         displayName_tv=view.findViewById(R.id.displayName_tv);
         displayName_tv.setText(user.getDisplayName().substring(0,user.getDisplayName().length()-2));
         displayImage_iv = view.findViewById(R.id.displayImage_iv);
 
+        farmerMessages_tv = view.findViewById(R.id.farmerMessages_tv);
+        farmerBarter_tv = view.findViewById(R.id.farmerBarter_tv);
+
         Glide.with(getContext())
                 .load(user.getPhotoUrl())
                 .into(displayImage_iv);
+
+        farmerBarter_tv.setOnClickListener(v -> {
+            startActivity(new Intent(getActivity(), BarterProductActivity.class));
+        });
 
         logout_card.setOnClickListener(vi->{
             FirebaseAuth.getInstance().signOut();
             startActivity(new Intent(getContext(), LoginActivity.class));
             getActivity().finish();
         });
+
         return view;
     }
 }

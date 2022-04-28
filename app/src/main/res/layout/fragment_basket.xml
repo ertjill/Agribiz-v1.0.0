@@ -23,6 +23,7 @@
                 android:layout_height="?attr/actionBarSize"
                 android:background="@color/white"
                 app:title="My Basket"
+                android:fontFamily="@font/montserrat_regular"
                 app:titleTextColor="@color/brown" />
 
         </com.google.android.material.appbar.AppBarLayout>

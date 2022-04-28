@@ -19,6 +19,12 @@
         android:theme="@style/Theme.Agribizv100"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".farmer.BarterProductActivity"
+            android:exported="false" />
+        <activity
+            android:name=".customer.MessagesActivity"
+            android:exported="false" />
+        <activity
             android:name=".customer.MyAddressesActivity"
             android:exported="false" />
 

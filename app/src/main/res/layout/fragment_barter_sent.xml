@@ -1,14 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".customer.BarterSentFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ListView
+        android:id="@+id/customer_barter_sent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:divider="@null"
+        android:visibility="gone"/>
 
-</FrameLayout>
+    <LinearLayout
+        android:id="@+id/no_product_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="51dp"
+        android:gravity="center_horizontal"
+        android:visibility="visible">
+
+        <ImageView
+            android:layout_width="181dp"
+            android:layout_height="195dp"
+            android:src="@drawable/farmer_no_produce"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:fontFamily="@font/montserrat_regular"
+            android:text="No barters has been sent yet"
+            android:textColor="#5E381932"
+            android:textFontWeight="400"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+</RelativeLayout>

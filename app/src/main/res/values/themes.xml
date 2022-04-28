@@ -53,6 +53,15 @@
         <item name="android:textColor">@color/brown</item>
     </style>
 
+    <!--    CustomBarterTabText-->
+    <style name="CustomBarterTabText" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">18.1sp</item>
+        <item name="android:fontFamily">@font/montserrat_regular</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="textAllCaps">false</item>
+        <item name="android:textColor">@color/brown</item>
+    </style>
+
     <!--    <style name="CustomAppBar" parent="">-->
     <!--        <item name="android:textColor">@color/army_green</item>-->
     <!--        <item name="titleTextColor">@color/brown</item>-->
@@ -105,5 +114,6 @@
     <style name="ThemeOverlay.App.CircularProgressIndicator" parent="">
         <item name="colorPrimary">@color/yellow_orange</item>
     </style>
+
 
 </resources>

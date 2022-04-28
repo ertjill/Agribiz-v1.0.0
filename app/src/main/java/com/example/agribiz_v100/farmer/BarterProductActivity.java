@@ -1,4 +1,4 @@
-package com.example.agribiz_v100.customer;
+package com.example.agribiz_v100.farmer;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,44 +10,48 @@ import androidx.viewpager2.widget.ViewPager2;
 import android.os.Bundle;
 
 import com.example.agribiz_v100.R;
+import com.example.agribiz_v100.customer.BarterBrowserFragment;
+import com.example.agribiz_v100.customer.BarterGoodsActivity;
+import com.example.agribiz_v100.customer.BarterReceivedFragment;
+import com.example.agribiz_v100.customer.BarterSentFragment;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
-public class BarterGoodsActivity extends AppCompatActivity {
+public class BarterProductActivity extends AppCompatActivity {
 
-    FragmentStateAdapter barterPager;
+    FragmentStateAdapter barterProductsPager;
 
     // tab titles
-    private final String[] titles = new String[]{ "Browse Items", "Sent Barter", "Received Barter" };
+    private final String[] titles = new String[] { "Add Barter", "Barter Requests"};
 
     MaterialToolbar topAppBar;
     TabLayout tab_layout;
-    ViewPager2 barter_goods_pager;
+    ViewPager2 barter_product_pager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_barter_goods);
+        setContentView(R.layout.activity_barter_product);
 
         references();
 
-        barterPager = new BarterPagerFragmentAdapter(this);
-        barter_goods_pager.setAdapter(barterPager);
+        barterProductsPager = new BarterProductActivity.BarterProductFragmentAdapter(this);
+        barter_product_pager.setAdapter(barterProductsPager);
 
-        new TabLayoutMediator(tab_layout, barter_goods_pager, (tab, position) -> tab.setText(titles[position])).attach();
+        new TabLayoutMediator(tab_layout, barter_product_pager, (tab, position) -> tab.setText(titles[position])).attach();
 
         topAppBar.setNavigationOnClickListener(v -> finish());
     }
 
-    private void references() {
+    public void references() {
         topAppBar = findViewById(R.id.topAppBar);
         tab_layout = findViewById(R.id.tab_layout);
-        barter_goods_pager = findViewById(R.id.barter_goods_pager);
+        barter_product_pager = findViewById(R.id.barter_product_pager);
     }
 
-    private class BarterPagerFragmentAdapter extends FragmentStateAdapter {
-        public BarterPagerFragmentAdapter(FragmentActivity fa) {
+    private class BarterProductFragmentAdapter extends FragmentStateAdapter {
+        public BarterProductFragmentAdapter(FragmentActivity fa) {
             super(fa);
         }
 
@@ -55,11 +59,11 @@ public class BarterGoodsActivity extends AppCompatActivity {
         @Override
         public Fragment createFragment(int position) {
             if (position == 0) {
-                return new BarterBrowserFragment();
+                return new BarterProduct();
             } else if (position == 1) {
-                return new BarterSentFragment();
+                return new BarterRequests();
             } else {
-                return new BarterReceivedFragment();
+                return new BarterProduct();
             }
         }
 
