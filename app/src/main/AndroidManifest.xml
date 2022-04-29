@@ -19,6 +19,9 @@
         android:theme="@style/Theme.Agribizv100"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".farmer.FarmerMessagesActivity"
+            android:exported="false" />
+        <activity
             android:name=".farmer.BarterProductActivity"
             android:exported="false" />
         <activity

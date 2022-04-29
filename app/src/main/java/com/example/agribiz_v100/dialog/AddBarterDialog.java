@@ -216,11 +216,7 @@ public class AddBarterDialog {
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
                             AuthValidation.successToast(activity.getBaseContext(), "Successfully added barter item").show();
-
-                            FirebaseFirestore db =FirebaseFirestore.getInstance();
-                            db.collection("barters").document(barter.getBarterId());
                             addBarterDialogCallback.addOnDocumentAddedListener(true);
-
                             dismissDialog();
                             reset();
                         } else {

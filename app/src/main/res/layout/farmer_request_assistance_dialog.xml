@@ -25,7 +25,6 @@
         android:id="@+id/radioGroup_assistanceType"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:checkedButton="@+id/financialSupport_rb"
         android:layout_marginBottom="10dp">
 
         <RadioButton
@@ -53,6 +52,37 @@
             android:textColor="@color/brown"
             android:text="Borrow Money"/>
     </RadioGroup>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/assistanceAmount_til"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/army_green"
+        app:boxBackgroundColor="@color/transparent"
+        app:boxBackgroundMode="outline"
+        app:boxCornerRadiusBottomEnd="15dp"
+        app:boxCornerRadiusBottomStart="15dp"
+        app:boxCornerRadiusTopEnd="15dp"
+        app:boxCornerRadiusTopStart="15dp"
+        app:boxStrokeColor="@color/army_green"
+        app:errorEnabled="true"
+        android:visibility="gone"
+        android:hint="Enter amount"
+        app:hintTextColor="@color/army_green">
+
+        <EditText
+            android:id="@+id/assistanceAmount_et"
+            style="TextAppearance.App.TextIn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/montserrat_medium"
+            android:importantForAutofill="no"
+            android:inputType="number"
+            android:textColorHint="@color/color_hint"
+            android:textCursorDrawable="@null"
+            android:textSize="16sp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/assistanceDescription_til"

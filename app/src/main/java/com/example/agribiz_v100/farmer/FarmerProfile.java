@@ -18,6 +18,7 @@ import com.example.agribiz_v100.LoginActivity;
 import com.example.agribiz_v100.R;
 import com.example.agribiz_v100.agrovit.AgrovitMainActivity;
 import com.example.agribiz_v100.customer.BarterGoodsActivity;
+import com.example.agribiz_v100.customer.MessagesActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -47,6 +48,10 @@ public class FarmerProfile extends Fragment {
         Glide.with(getContext())
                 .load(user.getPhotoUrl())
                 .into(displayImage_iv);
+
+        farmerMessages_tv.setOnClickListener(v -> {
+            startActivity(new Intent(getActivity(), FarmerMessagesActivity.class));
+        });
 
         farmerBarter_tv.setOnClickListener(v -> {
             startActivity(new Intent(getActivity(), BarterProductActivity.class));
