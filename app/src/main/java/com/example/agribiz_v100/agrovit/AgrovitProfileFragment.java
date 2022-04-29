@@ -1,4 +1,4 @@
-package com.example.agribiz_v100.farmer;
+package com.example.agribiz_v100.agrovit;
 
 import android.content.Intent;
 import android.media.Image;
@@ -19,18 +19,18 @@ import com.example.agribiz_v100.R;
 import com.example.agribiz_v100.agrovit.AgrovitMainActivity;
 import com.example.agribiz_v100.customer.BarterGoodsActivity;
 import com.example.agribiz_v100.customer.EditProfile;
+import com.example.agribiz_v100.farmer.FarmerEditProfileActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import javax.microedition.khronos.opengles.GL;
 
-public class FarmerProfile extends Fragment {
+public class AgrovitProfileFragment extends Fragment {
 
     CardView logout_card;
-    TextView displayName_tv, farmerMessages_tv, farmerBarter_tv,edit_profile_tv;
+    TextView displayName_tv, farmerMessages_tv,edit_profile_tv;
     ImageView displayImage_iv;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
     @Override
     public void onResume() {
         super.onResume();
@@ -39,12 +39,11 @@ public class FarmerProfile extends Fragment {
                 .into(displayImage_iv);
         displayName_tv.setText(user.getDisplayName().substring(0,user.getDisplayName().length()-2));
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view=inflater.inflate(R.layout.fragment_farmer_profile, container, false);
+        View view=inflater.inflate(R.layout.fragment_agrovit_profile, container, false);
 
         logout_card = view.findViewById(R.id.logout_card);
         displayName_tv=view.findViewById(R.id.displayName_tv);
@@ -52,11 +51,8 @@ public class FarmerProfile extends Fragment {
         displayImage_iv = view.findViewById(R.id.displayImage_iv);
         edit_profile_tv = view.findViewById(R.id.edit_profile_tv);
         farmerMessages_tv = view.findViewById(R.id.farmerMessages_tv);
-        farmerBarter_tv = view.findViewById(R.id.farmerBarter_tv);
 
-        Glide.with(getContext())
-                .load(user.getPhotoUrl())
-                .into(displayImage_iv);
+        Glide.with(getContext()).load(user.getPhotoUrl()).into(displayImage_iv);
 
         edit_profile_tv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,10 +60,6 @@ public class FarmerProfile extends Fragment {
                 Intent intent = new Intent(getContext(), FarmerEditProfileActivity.class);
                 startActivity(intent);
             }
-        });
-
-        farmerBarter_tv.setOnClickListener(v -> {
-            startActivity(new Intent(getActivity(), BarterProductActivity.class));
         });
 
         logout_card.setOnClickListener(vi->{

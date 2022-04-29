@@ -1,4 +1,4 @@
-package com.example.agribiz_v100.customer;
+package com.example.agribiz_v100.farmer;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -50,7 +50,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.UploadTask;
 import com.theartofdev.edmodo.cropper.CropImage;
 
-public class EditProfile extends AppCompatActivity {
+public class FarmerEditProfileActivity extends AppCompatActivity {
 
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     ActivityResultLauncher<Intent> selectFromGallery;
@@ -67,13 +67,13 @@ public class EditProfile extends AppCompatActivity {
     RadioGroup radioYesNo;
     MaterialToolbar topAppBar;
     ImageButton email_edit_ib, email_cancel_ib, email_update_ib,username_edit_ib, username_cancel_ib, username_update_ib;
-
+    String newMobileNUM = "";
     private AuthManagement am;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_profile);
+        setContentView(R.layout.activity_farmer_edit_profile);
         //
         am = new AuthManagement(this);
         uploadPhotoDialog = new Dialog(this);
@@ -235,22 +235,25 @@ public class EditProfile extends AppCompatActivity {
             password_til.setError(null);
             con_password_til.setError(null);
 
-            if(TextUtils.isEmpty(newPassword)) {
-                password_til.setError("Required password");
+            if(!AuthValidation.validatePassword(newPassword).equals("")) {
+                password_til.setError(AuthValidation.validatePassword(newPassword));
             }
             else if (!newPassword.equals(confirmPassword)) {
                 con_password_til.setError("Passwords do not match");
                 // AuthValidation.failedToast(getApplicationContext(), "Passwords do not match").show();
             }
             else {
+                ProgressDialog progressDialog;
+                progressDialog = new ProgressDialog(FarmerEditProfileActivity.this);
+                progressDialog.setMessage("Updating password, please wait!");
+                progressDialog.setCancelable(false);
+                progressDialog.show();
                 user.updatePassword(newPassword).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
                             Log.d("EditProfile", "User password updated.");
                             AuthValidation.successToast(getApplicationContext(), "Successfully updated password").show();
-                            password_et.setFocusable(false);
-                            con_password_et.setFocusable(false);
                             password_til.setError(null);
                             con_password_til.setError(null);
                             radioYesNo.check(R.id.radioNo);
@@ -261,6 +264,9 @@ public class EditProfile extends AppCompatActivity {
                             password_til.setError(task.getException().getMessage());
                             con_password_til.setError(task.getException().getMessage());
                         }
+                        password_et.setText("");
+                        con_password_et.setText("");
+                        progressDialog.dismiss();
                     }
                 });
             }
@@ -270,7 +276,7 @@ public class EditProfile extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Dialog verificationDialog = new Dialog(EditProfile.this);
+                Dialog verificationDialog = new Dialog(FarmerEditProfileActivity.this);
                 verificationDialog.setContentView(R.layout.enter_verification_code_dialog);
                 verificationDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 verificationDialog.setCancelable(false);
@@ -307,6 +313,7 @@ public class EditProfile extends AppCompatActivity {
                             change_num_ll.setVisibility(View.GONE);
                             update_num_ll.setVisibility(View.VISIBLE);
                             populatePhoneNumber.setText(phoneNo);
+                            newMobileNUM=new_mobile_num.getText().toString();
                         }
                         else{
                             new_mobile_num.setError("Enter a valid mobile number.");
@@ -330,12 +337,13 @@ public class EditProfile extends AppCompatActivity {
                             public void onComplete(@NonNull Task<Void> task) {
                                 if(task.isSuccessful()) {
                                     Log.d("EditProfile", "Updated phone number");
-                                    Toast.makeText(EditProfile.this, "You successfully updated your phone number.", Toast.LENGTH_SHORT).show();
+                                    AuthValidation.successToast(FarmerEditProfileActivity.this,"You successfully updated your phone number.").show();
+                                    number_et.setText(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
                                     verificationDialog.dismiss();
                                 }
                                 else {
                                     Log.d("EditProfile", "Failed to update phone number");
-                                    Toast.makeText(EditProfile.this, "Failed to update phone number.", Toast.LENGTH_SHORT).show();
+                                    AuthValidation.failedToast(FarmerEditProfileActivity.this, "Failed to update phone number.").show();
                                     verificationDialog.dismiss();
                                     change_num_ll.setVisibility(View.VISIBLE);
                                     update_num_ll.setVisibility(View.GONE);
@@ -362,7 +370,7 @@ public class EditProfile extends AppCompatActivity {
 
         upload_tv.setText("Upload profile photo");
         close_ib.setOnClickListener(v -> {
-           uploadPhotoDialog.dismiss();
+            uploadPhotoDialog.dismiss();
         });
         camera_ib.setOnClickListener(v1 -> {
             // addFromCamera();
@@ -376,7 +384,7 @@ public class EditProfile extends AppCompatActivity {
     }
 
     private void pickFromGallery() {
-        CropImage.activity().start(EditProfile.this);
+        CropImage.activity().start(FarmerEditProfileActivity.this);
     }
 
     @Override

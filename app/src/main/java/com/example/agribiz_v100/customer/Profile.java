@@ -1,5 +1,7 @@
 package com.example.agribiz_v100.customer;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -33,7 +35,7 @@ public class Profile extends Fragment {
         Glide.with(getContext())
             .load(user.getPhotoUrl())
             .into(userImage_iv);
-
+        displayName_tv.setText(user.getDisplayName().substring(0,user.getDisplayName().length()-2));
     }
 
     @Override
@@ -48,7 +50,7 @@ public class Profile extends Fragment {
         edit_profile_tv = view.findViewById(R.id.edit_profile_tv);
         barter_goods_tv = view.findViewById(R.id.barter_goods_tv);
         messages_tv = view.findViewById(R.id.messages_tv);
-
+        AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
         my_address_tv.setOnClickListener(t->{
             startActivity(new Intent(getActivity(), MyAddressesActivity.class));
         });
@@ -88,11 +90,18 @@ public class Profile extends Fragment {
         logout_card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AuthManagement.logoutAccount();
-                Intent i = new Intent(getContext(), LoginActivity.class);
-                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(i);
-                getActivity().finishAffinity();
+                alert.setTitle("Logging out");
+                alert.setMessage("Do you want to Logout?");
+                alert.setNegativeButton("No", null);
+                alert.setPositiveButton("Yes", (dialog, which) -> {
+                    AuthManagement.logoutAccount();
+                    Intent i = new Intent(getContext(), LoginActivity.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(i);
+                    getActivity().finishAffinity();
+                });
+                alert.show();
+
             }
         });
 

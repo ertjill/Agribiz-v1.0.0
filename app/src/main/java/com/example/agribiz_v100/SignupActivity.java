@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.agribiz_v100.validation.AuthValidation;
 import com.google.android.material.textfield.TextInputLayout;
 
 public class SignupActivity extends AppCompatActivity {
@@ -50,39 +51,28 @@ public class SignupActivity extends AppCompatActivity {
                 textInputLayout_usernameCustomer.setError("Username should not be empty!");
                 //Toast.makeText(getApplicationContext(), "Username should not be empty!", Toast.LENGTH_SHORT).show();
             }
-            else if(!Verification.verifyUsername(username)){
+            else if(!AuthValidation.validateUsername(username)){
                 textInputLayout_usernameCustomer.setError("Username should be at least 6 characters and no white space");
                 //Toast.makeText(getApplicationContext(), "Username should be at least 6 characters and no white space", Toast.LENGTH_SHORT).show();
             }
 
             else if(TextUtils.isEmpty(phone)){
-
                 textInputLayout_numberCustomer.setError("Phone number should not be empty!");
                 //Toast.makeText(getApplicationContext(), "Phone number should not be empty!", Toast.LENGTH_SHORT).show();
             }
-            else if(!Verification.verifyPhone(phone)){
+            else if(!AuthValidation.validatePhoneNumber(phone)){
                 textInputLayout_numberCustomer.setError("Invalid phone number");
                 //Toast.makeText(getApplicationContext(), "Invalid phone number", Toast.LENGTH_SHORT).show();
             }
-            else if(TextUtils.isEmpty(email)){
-                textInputLayout_emailCustomer.setError("Email should not be empty!");
-                //Toast.makeText(getApplicationContext(), "Email should not be empty!", Toast.LENGTH_SHORT).show();
-            }
-            else if(!Verification.verifyEmail(email)){
-                textInputLayout_emailCustomer.setError("Invalid Email");
+            else if(!AuthValidation.validateEmail(email).equals("")){
+                textInputLayout_emailCustomer.setError(AuthValidation.validateEmail(email));
                 //Toast.makeText(getApplicationContext(), "Invalid Email", Toast.LENGTH_SHORT).show();
             }
-            else if(TextUtils.isEmpty(password)){
-
-                textInputLayout_password.setError("Password should not be empty!");
-                //Toast.makeText(getApplicationContext(), "Password should not be empty!", Toast.LENGTH_SHORT).show();
-            }
-            else if(!Verification.verifyPassword(password)){
-                textInputLayout_password.setError("Password must at least 8 characters with at least one digit, uppercase and lower case letter!");
+            else if(!AuthValidation.validatePassword(password).equals("")){
+                textInputLayout_password.setError(AuthValidation.validatePassword(password));
                 //Toast.makeText(getApplicationContext(), "Password must at least 8 characters with at least one digit, special character[@#$%^&+=()], uppercase and lower case letter!", Toast.LENGTH_SHORT).show();
             }
             else if(TextUtils.isEmpty(confirm_password) || !Verification.verifyConfirmPassword(password,confirm_password)){
-
                 textInputLayout_conPasswordCustomer.setError("Confirm password must match with the password!");
                 //Toast.makeText(getApplicationContext(), "Confirm password must match with the password!", Toast.LENGTH_SHORT).show();
             }

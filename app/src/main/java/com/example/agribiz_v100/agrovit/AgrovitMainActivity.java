@@ -85,7 +85,7 @@ public class AgrovitMainActivity extends AppCompatActivity {
                 return new Finance();
             }
             else {
-                return new FarmerProfile();
+                return new AgrovitProfileFragment();
             }
 
         }

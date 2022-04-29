@@ -38,7 +38,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="35dp"
         android:fontFamily="@font/montserrat_regular"
-        android:text="A verification code is sent by SMS to"
+        android:text="A verification code is sent via SMS to"
         android:textAlignment="center"
         android:textColor="@color/brown"
         android:textSize="16sp" />

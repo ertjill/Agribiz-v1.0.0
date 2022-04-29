@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".customer.EditProfile">
+    tools:context=".farmer.FarmerEditProfileActivity">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/top_cl"
@@ -53,8 +53,8 @@
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        app:cardCornerRadius="50dp"
-                        android:backgroundTint="@color/yellow_orange">
+                        android:backgroundTint="@color/yellow_orange"
+                        app:cardCornerRadius="50dp">
 
                         <ImageView
                             android:id="@+id/profile_iv"
@@ -76,9 +76,10 @@
                         android:layout_gravity="center"
                         android:layout_marginStart="35dp"
                         android:layout_marginTop="35dp"
-                        android:outlineSpotShadowColor="@color/transparent"
+                        android:backgroundTint="@color/transparent"
                         android:outlineAmbientShadowColor="@color/transparent"
-                        android:backgroundTint="@color/transparent">
+                        android:outlineSpotShadowColor="@color/transparent">
+
                         <ImageButton
                             android:id="@+id/edit_image_ib"
                             android:layout_width="wrap_content"
@@ -88,7 +89,6 @@
                             android:src="@drawable/ic_baseline_add_a_photo_30"
                             app:tint="@color/yellow_orange" />
                     </androidx.cardview.widget.CardView>
-
 
 
                 </FrameLayout>
