@@ -19,7 +19,7 @@
         android:theme="@style/Theme.Agribizv100"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".farmer.FarmerMessagesActivity"
+            android:name=".farmer.FarmerEditProfileActivity"
             android:exported="false" />
         <activity
             android:name=".farmer.BarterProductActivity"

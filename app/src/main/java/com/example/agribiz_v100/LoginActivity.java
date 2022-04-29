@@ -95,20 +95,8 @@ public class LoginActivity extends AppCompatActivity {
                             Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     } else {
-                        try {
-                            if (task.getException() != null) {
-                                // If sign in fails, display a message to the user.
-                                String errorCode = ((FirebaseAuthException)task.getException()).getErrorCode();
-                                Log.d(Tag, AuthResponse.getAuthError(errorCode)); // for developers
-                                // Return error message for errorCode
-                                Toast.makeText(LoginActivity.this, AuthResponse.getAuthError(errorCode),
-                                        Toast.LENGTH_LONG).show();
-                            }
-                        } catch (Exception e) {
-                            Toast.makeText(LoginActivity.this, "Malicious login detected. " +
-                                    "Your account has been temporarily put on hold for a day..",
+                            Toast.makeText(LoginActivity.this, task.getException().getLocalizedMessage(),
                                     Toast.LENGTH_SHORT).show();
-                        }
                     }
                 });
             }

@@ -2,12 +2,15 @@ package com.example.agribiz_v100.services;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.example.agribiz_v100.LoginActivity;
 import com.example.agribiz_v100.controller.AuthController;
 import com.example.agribiz_v100.entities.UserModel;
 import com.example.agribiz_v100.validation.AuthValidation;
@@ -94,7 +97,11 @@ public class AuthManagement {
                 @Override
                 public void onVerificationFailed(@NonNull FirebaseException e) {
                     Log.d(TAG, "On verification failed", e);
-                    Toast.makeText(activity, "Failed to update phone number", Toast.LENGTH_SHORT).show();
+                    AlertDialog.Builder alert = new AlertDialog.Builder(activity);
+                    alert.setTitle("Verify Phone Number:");
+                    alert.setMessage(e.getMessage());
+                    alert.setPositiveButton("Ok", null);
+                    alert.show();
                 }
             };
 
@@ -222,6 +229,11 @@ public class AuthManagement {
 
     public Task<Void> updateUsername(String username) {
         FirebaseUser user = mAuth.getCurrentUser();
+        ProgressDialog progressDialog;
+        progressDialog = new ProgressDialog(activity);
+        progressDialog.setMessage("Updating Username, please wait!");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                 .setDisplayName(username)
                 .build();
@@ -242,10 +254,10 @@ public class AuthManagement {
                                     }
                                 }
                             });
-                }
-                {
+                } else {
                     AuthValidation.failedToast(activity, "Failed to update email");
                 }
+                progressDialog.dismiss();
             }
         });
 
@@ -256,6 +268,11 @@ public class AuthManagement {
     }
 
     public Task<Void> updateEmail(String email) {
+        ProgressDialog progressDialog;
+        progressDialog = new ProgressDialog(activity);
+        progressDialog.setMessage("Updating Email, please wait!");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
         return mAuth.getCurrentUser().updateEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
@@ -263,16 +280,21 @@ public class AuthManagement {
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
                     DocumentReference emailRef = db.collection("users").document(mAuth.getCurrentUser().getUid());
                     emailRef.update("userEmail", email);
-                }
-                {
+                } else {
                     AuthValidation.failedToast(activity, "Failed to update email");
                 }
+                progressDialog.dismiss();
             }
         });
     }
 
     // Update phone number
     public Task<Void> updatePhoneNumber(String code) {
+        ProgressDialog progressDialog;
+        progressDialog = new ProgressDialog(activity);
+        progressDialog.setMessage("Updating Phone Number, please wait!");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
         Log.d("PhoneNumber", "Verifying " + code);
         PhoneAuthCredential credential = PhoneAuthProvider.getCredential(codeBySystem, code);
 
@@ -288,18 +310,28 @@ public class AuthManagement {
                             mobileRef.update("userPhoneNumber", mAuth.getCurrentUser().getPhoneNumber())
                                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            if (task.isSuccessful()) {
+                                        public void onComplete(@NonNull Task<Void> task1) {
+                                            if (task1.isSuccessful()) {
                                                 AuthValidation.successToast(activity, "Successfully updated phone number");
                                             } else {
-                                                AuthValidation.failedToast(activity, "Failed to update phone number");
+                                                AlertDialog.Builder alert = new AlertDialog.Builder(activity);
+                                                alert.setTitle("Update Phone Number:");
+                                                alert.setMessage(task1.getException().getMessage());
+                                                alert.setPositiveButton("Ok", null);
+                                                alert.show();
                                             }
                                         }
                                     });
                         }
+                        else
                         {
-                            AuthValidation.failedToast(activity, "Failed to update email");
+                            AlertDialog.Builder alert = new AlertDialog.Builder(activity);
+                            alert.setTitle("Update Phone Number:");
+                            alert.setMessage(task.getException().getMessage());
+                            alert.setPositiveButton("Ok", null);
+                            alert.show();
                         }
+                        progressDialog.dismiss();
                     }
                 });
 

@@ -1,6 +1,8 @@
 package com.example.agribiz_v100.services;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
@@ -38,7 +40,11 @@ public class ProfileManagement {
     public static StorageTask<UploadTask.TaskSnapshot> updateImage(Activity activity, Uri imageURI, FirebaseUser user) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference imageProfile = db.collection("users").document(user.getUid());
-
+        ProgressDialog progressDialog;
+        progressDialog = new ProgressDialog(activity);
+        progressDialog.setMessage("Uploading Image, please wait!");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
         return StorageManagement.uploadImage("profile", imageURI, user.getUid())
                 .addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                     @Override
@@ -46,37 +52,63 @@ public class ProfileManagement {
                         if (task.isSuccessful()) {
                             task.getResult().getStorage().getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
                                 @Override
-                                public void onComplete(@NonNull Task<Uri> task) {
-                                    if (task.isSuccessful()) {
-                                        Uri image = task.getResult();
+                                public void onComplete(@NonNull Task<Uri> task1) {
+                                    if (task1.isSuccessful()) {
+                                        Uri image = task1.getResult();
                                         Log.d(TAG, image.toString());
                                         imageProfile.update("userImage", image.toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
                                             @Override
-                                            public void onComplete(@NonNull Task<Void> task) {
-                                                if (task.isSuccessful()) {
+                                            public void onComplete(@NonNull Task<Void> task2) {
+                                                if (task2.isSuccessful()) {
                                                     UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                                                             .setPhotoUri(image)
                                                             .build();
                                                     user.updateProfile(profileUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                         @Override
-                                                        public void onComplete(@NonNull Task<Void> task) {
-                                                            if (task.isSuccessful()) {
+                                                        public void onComplete(@NonNull Task<Void> task3) {
+                                                            if (task3.isSuccessful()) {
                                                                 AuthValidation.successToast(activity, "Successfully updated profile").show();
                                                             } else {
-                                                                AuthValidation.failedToast(activity, "Failed to update profile.");
+                                                                //AuthValidation.failedToast(activity, "Failed to update profile.").show();
+                                                                AlertDialog.Builder alert = new AlertDialog.Builder(activity);
+                                                                alert.setTitle("Update Profile:");
+                                                                alert.setMessage(task3.getException().getMessage());
+                                                                alert.setPositiveButton("Ok", null);
+                                                                alert.show();
                                                             }
+                                                            progressDialog.dismiss();
                                                         }
                                                     });
+                                                }
+                                                else{
+                                                    AlertDialog.Builder alert = new AlertDialog.Builder(activity);
+                                                    alert.setTitle("Update Profile:");
+                                                    alert.setMessage(task2.getException().getMessage());
+                                                    alert.setPositiveButton("Ok", null);
+                                                    alert.show();
+                                                    progressDialog.dismiss();
                                                 }
                                             }
                                         });
                                     } else {
-                                        AuthValidation.failedToast(activity, "Failed to update profile.");
+                                        //AuthValidation.failedToast(activity, task.getException().getMessage()).show();
+                                        AlertDialog.Builder alert = new AlertDialog.Builder(activity);
+                                        alert.setTitle("Update Profile:");
+                                        alert.setMessage(task1.getException().getMessage());
+                                        alert.setPositiveButton("Ok", null);
+                                        alert.show();
+                                        progressDialog.dismiss();
                                     }
                                 }
                             });
                         } else {
-                            AuthValidation.failedToast(activity, "Failed to update profile").show();
+                            //AuthValidation.failedToast(activity, "Failed to update profile").show();
+                            AlertDialog.Builder alert = new AlertDialog.Builder(activity);
+                            alert.setTitle("Update Profile:");
+                            alert.setMessage(task.getException().getMessage());
+                            alert.setPositiveButton("Ok", null);
+                            alert.show();
+                            progressDialog.dismiss();
                         }
                     }
                 });
