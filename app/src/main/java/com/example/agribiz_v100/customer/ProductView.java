@@ -34,6 +34,7 @@ import com.example.agribiz_v100.FirebaseHelper;
 import com.example.agribiz_v100.ProductItem;
 import com.example.agribiz_v100.R;
 import com.example.agribiz_v100.farmer.MyProduct;
+import com.example.agribiz_v100.services.BasketManagement;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -41,7 +42,11 @@ import com.google.android.material.badge.BadgeUtils;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Transaction;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -51,7 +56,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.zip.Inflater;
 
-public class ProductView extends AppCompatActivity implements FirebaseHelper.FirebaseHelperCallback {
+public class ProductView extends AppCompatActivity {
 
     private static final String TAG = "ProductView";
     ProductItem farmerProductItem;
@@ -63,12 +68,12 @@ public class ProductView extends AppCompatActivity implements FirebaseHelper.Fir
     Dialog addProductToBasket;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-    FirebaseHelper firebaseHelper;
     ViewPager2 imageSlider;
     int itemsCount = 0;
     TextView itemCounter;
     ImageViewPagerAdapter imageViewPagerAdapter;
     List<String> images;
+    BasketManagement basketManagement;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -77,7 +82,7 @@ public class ProductView extends AppCompatActivity implements FirebaseHelper.Fir
         setContentView(R.layout.activity_product_view);
 //        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
 //                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-        firebaseHelper = new FirebaseHelper(this);
+        basketManagement = new BasketManagement(this);
         topAppBar = findViewById(R.id.topAppBar);
         imageSlider = findViewById(R.id.imageSlider);
         imageViewPagerAdapter = new ImageViewPagerAdapter();
@@ -145,7 +150,7 @@ public class ProductView extends AppCompatActivity implements FirebaseHelper.Fir
 //                        Log.d(TAG, product.get("productBasketQuantity").toString() + " " + user.getUid());
 //                        firebaseHelper.addProductToBasket(product, productId, user.getUid(), hubId);
 //                        CustomerMainActivity cm = (CustomerMainActivity)
-                        addToBasket(product);
+                        basketManagement.addToBasket(product);
                         addProductToBasket.dismiss();
                     }
                 });
@@ -233,47 +238,6 @@ public class ProductView extends AppCompatActivity implements FirebaseHelper.Fir
             Log.d("ProductView", "Number of Item: " + farmerProductItem.getProductFarmImage());
         }
         Log.d("ProductView", "getIntent().getExtras().toString())");
-    }
-
-    public void addToBasket(Map<String,Object> product){
-        db.collection("users").document(user.getUid())
-                .collection("basket").document(product.get("productId").toString())
-                .set(product)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "DocumentSnapshot successfully written!");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error writing document", e);
-                    }
-                });
-    }
-
-    @Override
-    public void isProductAddedToBasket(boolean added) {
-        if (added)
-            Toast.makeText(this, "Successfully added product to basket", Toast.LENGTH_LONG).show();
-        else
-            Toast.makeText(this, "Failed to add product on basket!", Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void getProductFromBasket(SparseArray<Object> productFromBasket) {
-
-    }
-
-    @Override
-    public void getProducts(SparseArray<ProductItem> products, SparseArray<ProductItem> topProducst) {
-
-    }
-
-    @Override
-    public void getToProducst(SparseArray<ProductItem> topProducts) {
-
     }
 
     public class ImageViewPagerAdapter extends RecyclerView.Adapter<ImageViewPagerAdapter.SlideViewHolder> {

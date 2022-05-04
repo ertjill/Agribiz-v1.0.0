@@ -34,6 +34,7 @@ import com.bumptech.glide.Glide;
 import com.example.agribiz_v100.FirebaseHelper;
 import com.example.agribiz_v100.ProductItem;
 import com.example.agribiz_v100.R;
+import com.example.agribiz_v100.services.ProductManagement;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
@@ -178,12 +179,12 @@ public class Store extends Fragment {
                                 Glide.with(getContext())
                                         .load(document.getData().get("userImage"))
                                         .into(farmerProfile);
-                                farmers.setText(document.getData().get("username").toString());
+                                farmers.setText(document.getData().get("userDisplayName").toString().substring(0,document.getData().get("userDisplayName").toString().length()-2));
                                 farmers.setOnClickListener(v1 -> {
-                                    Toast.makeText(getContext(), document.getData().get("userName").toString(), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getContext(), document.getData().get("userDisplayName").toString(), Toast.LENGTH_SHORT).show();
                                 });
                                 farmersHub_ll.addView(v);
-                                Log.d("FirebaseHelper", document.getData().get("username").toString());
+                                Log.d("FirebaseHelper", document.getData().get("userDisplayName").toString());
                             }
 
                         } else {
@@ -194,7 +195,7 @@ public class Store extends Fragment {
 
     }
     public void displayTopProducts(){
-        db.collection("products").limit(6)
+        ProductManagement.getTopSellingProduct()
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -221,7 +222,7 @@ public class Store extends Fragment {
                                             DocumentSnapshot doc = task.getResult();
                                             if (doc.exists()) {
                                                 item.setProductFarmImage(doc.getData().get("userImage").toString());
-                                                item.setProductFarmName(doc.getData().get("username").toString());
+                                                item.setProductFarmName(doc.getData().get("userDisplayName").toString());
                                             } else {
                                                 Log.d(TAG, "No such document");
                                             }

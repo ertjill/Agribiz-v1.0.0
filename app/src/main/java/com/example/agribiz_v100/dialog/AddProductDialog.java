@@ -383,7 +383,7 @@ public class AddProductDialog {
                                     Uri file = Uri.parse(arrayOfImages.get(i));
                                     StorageReference ref = storageRef.child("products").child(product.getProductId()).child(String.valueOf(i));
                                     int finalI = i;
-                                    StorageManagement.uploadProductImage(ref, file).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                                     StorageManagement.uploadProductImage(ref, file).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                                         @Override
                                         public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
                                             double progress = (100.0 * snapshot.getBytesTransferred()) / snapshot.getTotalByteCount();
@@ -402,10 +402,10 @@ public class AddProductDialog {
                                         }
                                     }).addOnCompleteListener(new OnCompleteListener<Uri>() {
                                         @Override
-                                        public void onComplete(@NonNull Task<Uri> task) {
-                                            if (task.isSuccessful()) {
-                                                String downloadUri = task.getResult().toString();
-                                                Log.d("imagess", "uploaded : " + downloadUri);
+                                        public void onComplete(@NonNull Task<Uri> task1) {
+                                            if (task1.isSuccessful()) {
+                                                String downloadUri = task1.getResult().toString();
+                                                Log.d("images", "uploaded : " + downloadUri);
                                                 product.getProductImage().add(downloadUri);
                                                 if (finalI == arrayOfImages.size()-1) {
 
@@ -421,7 +421,7 @@ public class AddProductDialog {
                                                     dismissDialog();
                                                 }
                                             } else {
-                                                AuthValidation.failedToast(activity.getBaseContext(),"Failed to upload Product Images").show();
+                                                AuthValidation.failedToast(activity.getBaseContext(),task1.getException().getMessage()).show();
                                             }
                                         }
                                     });

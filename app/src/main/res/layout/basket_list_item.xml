@@ -1,31 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/highlight_back"
+    android:paddingLeft="10dp"
     android:paddingTop="10dp"
-    android:paddingBottom="14dp"
-    android:paddingLeft="10dp">
+    android:paddingBottom="14dp">
+
     <CheckBox
         android:id="@+id/item_checkbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/yellow_orange"
-        android:buttonTint="@color/army_green"
         android:layout_gravity="center_vertical"
-        />
+        android:buttonTint="@color/army_green"
+        android:textColor="@color/yellow_orange" />
+
     <ImageView
         android:id="@+id/item_image"
         android:layout_width="72dp"
         android:layout_height="72dp"
-        android:src="@drawable/sample"
-        android:layout_gravity="center_vertical"/>
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/sample" />
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_marginLeft="18dp">
+        android:layout_marginLeft="18dp"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/item_name"
@@ -68,46 +70,57 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="26dp"
-            android:layout_marginBottom="14dp">
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="76dp"
+            android:layout_marginBottom="14dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="17dp"
                 android:layout_height="17dp"
                 android:background="#CECECE"
                 android:fontFamily="@font/montserrat_semibold"
+                android:gravity="center"
                 android:text="-"
                 android:textColor="@color/army_green"
                 android:textFontWeight="700"
-                android:textSize="12sp"
-                android:gravity="center"/>
+                android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/productBasketQuantity_tv"
                 android:layout_width="31dp"
                 android:layout_height="16dp"
                 android:background="@color/army_green"
+                android:fontFamily="@font/montserrat_semibold"
+                android:gravity="center"
+                android:lineHeight="17.07sp"
                 android:text="1"
                 android:textColor="@color/white"
-                android:gravity="center"
-                android:fontFamily="@font/montserrat_semibold"
-                android:textSize="10sp"
-                android:lineHeight="17.07sp"/>
+                android:textSize="10sp" />
 
             <TextView
                 android:layout_width="17dp"
                 android:layout_height="17dp"
                 android:background="@color/yellow_orange"
+                android:gravity="center"
                 android:text="+"
                 android:textColor="@color/army_green"
-                android:textSize="12sp"
-                android:gravity="center"/>
+                android:textSize="12sp" />
         </LinearLayout>
-    </RelativeLayout>
 
+        <ImageButton
+            android:id="@+id/delete_ib"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="15dp"
+            android:background="@color/transparent"
+            android:paddingRight="10dp"
+            android:src="@drawable/ic_baseline_delete_forever_24"
+            app:tint="@color/red" />
+    </RelativeLayout>
 
 </LinearLayout>

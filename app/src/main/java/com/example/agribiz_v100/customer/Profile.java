@@ -50,7 +50,7 @@ public class Profile extends Fragment {
         edit_profile_tv = view.findViewById(R.id.edit_profile_tv);
         barter_goods_tv = view.findViewById(R.id.barter_goods_tv);
         messages_tv = view.findViewById(R.id.messages_tv);
-        AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+
         my_address_tv.setOnClickListener(t->{
             startActivity(new Intent(getActivity(), MyAddressesActivity.class));
         });
@@ -90,6 +90,7 @@ public class Profile extends Fragment {
         logout_card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
                 alert.setTitle("Logging out");
                 alert.setMessage("Do you want to Logout?");
                 alert.setNegativeButton("No", null);

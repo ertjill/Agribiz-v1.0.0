@@ -7,22 +7,17 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
-import android.annotation.SuppressLint;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 
 import com.example.agribiz_v100.R;
-import com.example.agribiz_v100.farmer.AgriHelp;
-import com.example.agribiz_v100.farmer.FarmerMainActivity;
 import com.example.agribiz_v100.farmer.FarmerProfile;
 import com.example.agribiz_v100.farmer.Finance;
 import com.example.agribiz_v100.farmer.Product;
 import com.example.agribiz_v100.farmer.Shipment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
-import com.google.android.material.tabs.TabLayout;
 
 public class AgrovitMainActivity extends AppCompatActivity {
     static String TAG="AgrovitMainActivity";
@@ -75,17 +70,18 @@ public class AgrovitMainActivity extends AppCompatActivity {
         @Override
         public Fragment createFragment(int position) {
 
-            if(position==0){
-                return new AgrovitProduct();
-            }
-            else if(position==1){
-                return new Shipment();
-            }
-            else if(position==2){
-                return new Finance();
-            }
-            else {
-                return new AgrovitProfileFragment();
+            switch (position) {
+                case 0:
+                    return new Product();
+                case 1:
+                    return new Shipment();
+                case 2:
+                    return new Finance();
+                case 3:
+                    return new FarmerProfile();
+                default:
+                    return null;
+
             }
 
         }

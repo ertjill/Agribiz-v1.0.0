@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -7,33 +7,54 @@
 
     >
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
+        android:layout_height="wrap_content"
         android:background="@color/highlight_back"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+
         android:paddingLeft="10dp">
+
         <CheckBox
             android:id="@+id/header_checkbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/yellow_orange"
+            android:layout_centerVertical="true"
             android:buttonTint="@color/army_green"
-            />
+            android:textColor="@color/yellow_orange" />
+
         <ImageView
+            android:id="@+id/farmImage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_store_24"/>
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/header_checkbox"
+            android:src="@drawable/ic_baseline_store_24" />
+
         <TextView
             android:id="@+id/farmer_hub_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
+            android:layout_toEndOf="@id/farmImage"
+            android:fontFamily="@font/montserrat_semibold"
             android:text="Farmers"
             android:textColor="@color/brown"
-            android:layout_marginLeft="5dp"
-            android:fontFamily="@font/montserrat_semibold"
             android:textFontWeight="600"
-            android:textSize="14sp"/>
-    </LinearLayout>
-</LinearLayout>
+            android:textSize="14sp" />
+
+        <ImageButton
+            android:id="@+id/delete_ib"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="15dp"
+            android:background="@color/transparent"
+            android:paddingRight="10dp"
+            android:src="@drawable/ic_baseline_delete_forever_24" />
+    </RelativeLayout>
+
+</RelativeLayout>

@@ -1,10 +1,15 @@
 package com.example.agribiz_v100.services;
 
 import android.net.Uri;
+import android.os.Handler;
 import android.util.Log;
+import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.example.agribiz_v100.ProductItem;
+import com.example.agribiz_v100.customer.ProductGridAdapter;
 import com.example.agribiz_v100.entities.ProductModel;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -15,6 +20,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -98,8 +104,9 @@ public class ProductManagement {
         return productsRef.set(product);
     }
 
-    public static void deleteProduct(ProductModel product) {
-
+    public static Query getTopSellingProduct(){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        return db.collection("products").orderBy("productSold", Query.Direction.DESCENDING).limit(6);
     }
 
     public static void getProductSales() {

@@ -1,6 +1,8 @@
 package com.example.agribiz_v100.farmer;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -19,9 +21,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.agribiz_v100.LoginActivity;
 import com.example.agribiz_v100.R;
 import com.example.agribiz_v100.dialog.AddProductDialog;
 import com.example.agribiz_v100.entities.ProductModel;
+import com.example.agribiz_v100.services.AuthManagement;
 import com.example.agribiz_v100.services.ProductManagement;
 import com.example.agribiz_v100.services.StorageManagement;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -169,44 +173,62 @@ public class MyProduct extends Fragment {
             delete_ib.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    FirebaseFirestore db = FirebaseFirestore.getInstance();
-                    DocumentReference productRef = db.collection("products").document(productList.get(position).getProductId());
-                    String id = productList.get(position).getProductId();
-                            StorageReference listRef = FirebaseStorage.getInstance().getReference().child("products/" + id);
-                            listRef.listAll()
-                                    .addOnSuccessListener(new OnSuccessListener<ListResult>() {
-                                        @Override
-                                        public void onSuccess(ListResult listResult) {
-                                            for (StorageReference prefix : listResult.getPrefixes()) {
-                                                // All the prefixes under listRef.
-                                                // You may call listAll() recursively on them.
-                                            }
-                                            int i = 0;
-                                            for (StorageReference item : listResult.getItems()) {
-                                                // All the items under listRef.
-                                                Log.d("path", item.getPath());
-                                                StorageManagement.deleteFile(item.getPath());
-                                                if (i == listResult.getItems().size()-1) {
-                                                    ProductManagement.deleteProduct(id)
-                                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                                @Override
-                                                                public void onComplete(@NonNull Task<Void> task) {
-                                                                    if (task.isSuccessful()) {
-                                                                        productList.remove(position);
-                                                                        notifyDataSetChanged();
-                                                                    }
+                    AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+                    alert.setTitle("Deleter Product");
+                    alert.setMessage("Are you sure to delete dis product?");
+                    alert.setNegativeButton("No", null);
+                    alert.setPositiveButton("Yes", (dialog, which) -> {
+                        FirebaseFirestore db = FirebaseFirestore.getInstance();
+                        DocumentReference productRef = db.collection("products").document(productList.get(position).getProductId());
+                        String id = productList.get(position).getProductId();
+                        StorageReference listRef = FirebaseStorage.getInstance().getReference().child("products/" + id);
+                        listRef.listAll()
+                                .addOnSuccessListener(new OnSuccessListener<ListResult>() {
+                                    @Override
+                                    public void onSuccess(ListResult listResult) {
+                                        for (StorageReference prefix : listResult.getPrefixes()) {
+                                            // All the prefixes under listRef.
+                                            // You may call listAll() recursively on them.
+                                        }
+                                        int i = 0;
+                                        for (StorageReference item : listResult.getItems()) {
+                                            // All the items under listRef.
+                                            Log.d("path", item.getPath());
+                                            StorageManagement.deleteFile(item.getPath());
+                                            if (i == listResult.getItems().size() - 1) {
+                                                ProductManagement.deleteProduct(id)
+                                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<Void> task) {
+                                                                if (task.isSuccessful()) {
+                                                                    productList.remove(position);
+                                                                    notifyDataSetChanged();
                                                                 }
-                                                            });
-                                                }
+                                                                else{
+                                                                    AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+                                                                    alert.setTitle("Deleter Product:");
+                                                                    alert.setMessage(task.getException().getMessage());
+                                                                    alert.setPositiveButton("Yes",null);
+                                                                }
+                                                            }
+                                                        });
                                             }
                                         }
-                                    })
-                                    .addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            // Uh-oh, an error occurred!
-                                        }
-                                    });
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        // Uh-oh, an error occurred!
+                                        AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+                                        alert.setTitle("Deleter Product:");
+                                        alert.setMessage(e.getMessage());
+                                        alert.setPositiveButton("Yes",null);
+                                    }
+                                });
+                    });
+                    alert.show();
+
 
                 }
             });

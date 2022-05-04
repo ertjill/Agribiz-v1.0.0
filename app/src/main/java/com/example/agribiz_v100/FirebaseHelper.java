@@ -91,7 +91,7 @@ public class FirebaseHelper implements Parcelable {
                                             DocumentSnapshot doc = task.getResult();
                                             if (doc.exists()) {
                                                 item.setProductFarmImage(doc.getData().get("userImage").toString());
-                                                item.setProductFarmName(doc.getData().get("username").toString());
+                                                item.setProductFarmName(doc.getData().get("userDisplayName").toString());
                                             } else {
                                                 Log.d(TAG, "No such document");
                                             }
@@ -237,7 +237,7 @@ public class FirebaseHelper implements Parcelable {
                                             DocumentSnapshot doc = task.getResult();
                                             if (doc.exists()) {
                                                 basketHeader.setFarmId(doc.getId());
-                                                basketHeader.setFarmName((doc.getData().get("username")).toString());
+                                                basketHeader.setFarmName((doc.getData().get("userDisplayName")).toString());
                                                 if (tempId[0].equals("") || !tempId[0].equals(doc.getId())) {
                                                     addProductObject(i[0]++, basketHeader);
                                                     tempId[0] = doc.getId();
