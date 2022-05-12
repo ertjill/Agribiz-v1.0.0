@@ -17,8 +17,8 @@ public class BarterValidation {
         if(TextUtils.isEmpty(name)){
             return "Item name is required.";
         }
-        else if(name.length() < 5){
-            return "Item name must at least have 5 characters";
+        else if(name.length() < 3){
+            return "Item name must at least have 3 characters";
         }
         return "";
     }
@@ -50,8 +50,8 @@ public class BarterValidation {
         if(TextUtils.isEmpty(desc)){
             return "Description is required.";
         }
-        else if(desc.length() < 5){
-            return "Item description must have at least 5 characters";
+        else if(desc.length() < 3){
+            return "Item description must have at least 3 characters";
         }
         return "";
     }

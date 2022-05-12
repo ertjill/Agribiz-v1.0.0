@@ -133,7 +133,6 @@ public class ProfileManagement {
                     throw new FirebaseFirestoreException("Address exceeds limit",
                             FirebaseFirestoreException.Code.ABORTED);
                 }
-                // Success
                 return null;
             }
         }).addOnCompleteListener(new OnCompleteListener<Void>() {
