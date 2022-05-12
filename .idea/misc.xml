@@ -10,12 +10,15 @@
         <entry key="..\:/Emerson Agribiz/app/src/main/res/drawable/ic_baseline_add_circle_24.xml" value="0.20945945945945946" />
         <entry key="..\:/Emerson Agribiz/app/src/main/res/drawable/ic_baseline_add_photo_alternate_24.xml" value="0.1891891891891892" />
         <entry key="..\:/Emerson Agribiz/app/src/main/res/drawable/ic_baseline_camera_alt_24.xml" value="0.1965" />
+        <entry key="..\:/Emerson Agribiz/app/src/main/res/drawable/ic_baseline_cancel_24.xml" value="0.2825" />
         <entry key="..\:/Emerson Agribiz/app/src/main/res/drawable/ic_baseline_chat_24.xml" value="0.2335" />
         <entry key="..\:/Emerson Agribiz/app/src/main/res/drawable/ic_baseline_close_24.xml" value="0.1965" />
         <entry key="..\:/Emerson Agribiz/app/src/main/res/drawable/ic_baseline_search_24.xml" value="0.2545045045045045" />
         <entry key="..\:/Emerson Agribiz/app/src/main/res/drawable/ic_baseline_star.xml" value="0.1615" />
         <entry key="..\:/Emerson Agribiz/app/src/main/res/drawable/ic_baseline_star_outline_24.xml" value="0.1615" />
         <entry key="..\:/Emerson Agribiz/app/src/main/res/drawable/ic_baseline_store_24.xml" value="0.2545045045045045" />
+        <entry key="..\:/Emerson Agribiz/app/src/main/res/drawable/ic_outline_cancel_24.xml" value="0.2825" />
+        <entry key="..\:/Emerson Agribiz/app/src/main/res/drawable/ic_outline_delete_forever_24.xml" value="0.2825" />
         <entry key="..\:/Emerson Agribiz/app/src/main/res/drawable/ic_outline_location_on_24.xml" value="0.2355" />
         <entry key="..\:/Emerson Agribiz/app/src/main/res/drawable/ic_round_account_circle_70.xml" value="0.19864864864864865" />
         <entry key="..\:/Emerson Agribiz/app/src/main/res/drawable/ic_round_check_circle_24.xml" value="0.173" />
@@ -45,7 +48,7 @@
         <entry key="..\:/Emerson Agribiz/app/src/main/res/layout/activity_splash.xml" value="0.25" />
         <entry key="..\:/Emerson Agribiz/app/src/main/res/layout/activity_verification_code.xml" value="0.33" />
         <entry key="..\:/Emerson Agribiz/app/src/main/res/layout/activity_view_all_product.xml" value="0.23733333333333334" />
-        <entry key="..\:/Emerson Agribiz/app/src/main/res/layout/activity_view_all_products.xml" value="0.24054054054054055" />
+        <entry key="..\:/Emerson Agribiz/app/src/main/res/layout/activity_view_all_products.xml" value="0.2536231884057971" />
         <entry key="..\:/Emerson Agribiz/app/src/main/res/layout/add_product_picture_dialog.xml" value="0.33" />
         <entry key="..\:/Emerson Agribiz/app/src/main/res/layout/add_to_basket_dialog.xml" value="0.33" />
         <entry key="..\:/Emerson Agribiz/app/src/main/res/layout/badge.xml" value="0.9" />

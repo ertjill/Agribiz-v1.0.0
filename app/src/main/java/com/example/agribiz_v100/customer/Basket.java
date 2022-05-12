@@ -23,6 +23,7 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -329,6 +330,22 @@ public class Basket extends Fragment {
                 case ITEM:
 
                     convertView = layoutInflater.inflate(R.layout.basket_list_item, null);
+                    LinearLayout delete_cancel_ll = convertView.findViewById(R.id.delete_cancel_ll);
+                    ImageButton cancel_ib = convertView.findViewById(R.id.cancel_ib);
+                    cancel_ib.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            delete_cancel_ll.setVisibility(View.GONE);
+                        }
+                    });
+                    convertView.setOnLongClickListener(new View.OnLongClickListener() {
+                        @Override
+                        public boolean onLongClick(View v) {
+                            delete_cancel_ll.setVisibility(View.VISIBLE);
+
+                            return false;
+                        }
+                    });
                     ImageView deletei_ib = convertView.findViewById(R.id.delete_ib);
                     deletei_ib.setOnClickListener(new View.OnClickListener() {
                         @Override

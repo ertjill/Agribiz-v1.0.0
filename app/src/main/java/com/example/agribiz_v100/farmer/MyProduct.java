@@ -9,7 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
-import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +27,7 @@ import com.example.agribiz_v100.entities.ProductModel;
 import com.example.agribiz_v100.services.AuthManagement;
 import com.example.agribiz_v100.services.ProductManagement;
 import com.example.agribiz_v100.services.StorageManagement;
+import com.example.agribiz_v100.validation.AuthValidation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -42,11 +42,14 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.ListResult;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MyProduct extends Fragment {
     String TAG = "MyProduct";
     ListView farmer_product_lv;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-    SparseArray<ProductModel> productItems;
+    List<ProductModel> productItems;
     FarmerProductAdapter farmerProductAdapter;
     LinearLayout no_product_ll;
     ImageButton add_product_ib;
@@ -61,8 +64,8 @@ public class MyProduct extends Fragment {
         addProductDialog = new AddProductDialog(getActivity(), this);
         add_product_ib = view.findViewById(R.id.add_product_ib);
 
-        productItems = new SparseArray<>();
-        farmerProductAdapter = new FarmerProductAdapter(getContext(), productItems);
+        productItems = new ArrayList<>();
+        farmerProductAdapter = new FarmerProductAdapter(getContext());
 
         addProductDialog.buildDialog();
 
@@ -101,7 +104,7 @@ public class MyProduct extends Fragment {
                                 Log.d("tag", "hereee inside");
                                 for (DocumentSnapshot document : task.getResult().getDocuments()) {
                                     ProductModel item = document.toObject(ProductModel.class);
-                                    productItems.append(i++, item);
+                                    productItems.add(item);
                                     Log.d("tag", "hereee inside inside");
                                 }
                                 farmerProductAdapter.notifyDataSetChanged();
@@ -117,18 +120,16 @@ public class MyProduct extends Fragment {
     public class FarmerProductAdapter extends BaseAdapter {
 
         Context context;
-        SparseArray<ProductModel> productList;
         LayoutInflater layoutInflater;
 
-        public FarmerProductAdapter(Context context, SparseArray<ProductModel> productList) {
+        public FarmerProductAdapter(Context context) {
             this.context = context;
-            this.productList = productList;
             layoutInflater = LayoutInflater.from(context);
         }
 
         @Override
         public int getCount() {
-            return productList.size();
+            return productItems.size();
         }
 
         @Override
@@ -162,13 +163,13 @@ public class MyProduct extends Fragment {
 
 
             Glide.with(context)
-                    .load(productList.get(position).getProductImage().size() < 1 ? "" : productList.get(position).getProductImage().get(0))
+                    .load(productItems.get(position).getProductImage().size() < 1 ? "" : productItems.get(position).getProductImage().get(0))
                     .into(product_image_iv);
-            product_name_unit.setText(new StringBuilder().append(productList.get(position).getProductName()).append(" (per ").append(productList.get(position).getProductQuantity()).append(" ").append(productList.get(position).getProductUnit()).append(")").toString());
-            product_stocks.setText(new StringBuilder().append("Stocks: ").append(productList.get(position).getProductStocks()).toString());
-            product_sold.setText(new StringBuilder().append("Sold: ").append(productList.get(position).getProductSold()).toString());
-            product_category.setText(new StringBuilder().append("Category: ").append(productList.get(position).getProductCategory()).toString());
-            product_price.setText(new StringBuilder().append("Price: Php ").append(productList.get(position).getProductPrice()).toString());
+            product_name_unit.setText(new StringBuilder().append(productItems.get(position).getProductName()).append(" (per ").append(productItems.get(position).getProductQuantity()).append(" ").append(productItems.get(position).getProductUnit()).append(")").toString());
+            product_stocks.setText(new StringBuilder().append("Stocks: ").append(productItems.get(position).getProductStocks()).toString());
+            product_sold.setText(new StringBuilder().append("Sold: ").append(productItems.get(position).getProductSold()).toString());
+            product_category.setText(new StringBuilder().append("Category: ").append(productItems.get(position).getProductCategory()).toString());
+            product_price.setText(new StringBuilder().append("Price: Php ").append(productItems.get(position).getProductPrice()).toString());
 
             delete_ib.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -179,53 +180,71 @@ public class MyProduct extends Fragment {
                     alert.setNegativeButton("No", null);
                     alert.setPositiveButton("Yes", (dialog, which) -> {
                         FirebaseFirestore db = FirebaseFirestore.getInstance();
-                        DocumentReference productRef = db.collection("products").document(productList.get(position).getProductId());
-                        String id = productList.get(position).getProductId();
-                        StorageReference listRef = FirebaseStorage.getInstance().getReference().child("products/" + id);
-                        listRef.listAll()
-                                .addOnSuccessListener(new OnSuccessListener<ListResult>() {
+                        DocumentReference productRef = db.collection("products").document(productItems.get(position).getProductId());
+                        String id = productItems.get(position).getProductId();
+                        ProductManagement.deleteProduct(id)
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
-                                    public void onSuccess(ListResult listResult) {
-                                        for (StorageReference prefix : listResult.getPrefixes()) {
-                                            // All the prefixes under listRef.
-                                            // You may call listAll() recursively on them.
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            AuthValidation.successToast(getContext(),"Successfully deleted a product").show();
+                                            productItems.remove(position);
+                                            notifyDataSetChanged();
+                                        } else {
+                                            task.getException().getStackTrace();
+                                            AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+                                            alert.setTitle("Delete Product:");
+                                            alert.setMessage(task.getException().getMessage());
+                                            alert.setPositiveButton("Yes", null);
+                                            alert.show();
                                         }
-                                        int i = 0;
-                                        for (StorageReference item : listResult.getItems()) {
-                                            // All the items under listRef.
-                                            Log.d("path", item.getPath());
-                                            StorageManagement.deleteFile(item.getPath());
-                                            if (i == listResult.getItems().size() - 1) {
-                                                ProductManagement.deleteProduct(id)
-                                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                            @Override
-                                                            public void onComplete(@NonNull Task<Void> task) {
-                                                                if (task.isSuccessful()) {
-                                                                    productList.remove(position);
-                                                                    notifyDataSetChanged();
-                                                                }
-                                                                else{
-                                                                    AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
-                                                                    alert.setTitle("Deleter Product:");
-                                                                    alert.setMessage(task.getException().getMessage());
-                                                                    alert.setPositiveButton("Yes",null);
-                                                                }
-                                                            }
-                                                        });
-                                            }
-                                        }
-                                    }
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        // Uh-oh, an error occurred!
-                                        AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
-                                        alert.setTitle("Deleter Product:");
-                                        alert.setMessage(e.getMessage());
-                                        alert.setPositiveButton("Yes",null);
                                     }
                                 });
+                        StorageReference listRef = FirebaseStorage.getInstance().getReference().child("products/" + id);
+//                        listRef.listAll()
+//                                .addOnSuccessListener(new OnSuccessListener<ListResult>() {
+//                                    @Override
+//                                    public void onSuccess(ListResult listResult) {
+//                                        for (StorageReference prefix : listResult.getPrefixes()) {
+//                                            // All the prefixes under listRef.
+//                                            // You may call listAll() recursively on them.
+//                                        }
+//                                        int i = 0;
+//                                        for (StorageReference item : listResult.getItems()) {
+//                                            // All the items under listRef.
+//                                            Log.d("path", item.getPath());
+//                                            StorageManagement.deleteFile(item.getPath());
+//                                            if (i == listResult.getItems().size() - 1) {
+//                                                ProductManagement.deleteProduct(id)
+//                                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+//                                                            @Override
+//                                                            public void onComplete(@NonNull Task<Void> task) {
+//                                                                if (task.isSuccessful()) {
+//                                                                    productItems.remove(position);
+//                                                                    notifyDataSetChanged();
+//                                                                } else {
+//                                                                    task.getException().getStackTrace();
+//                                                                    AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+//                                                                    alert.setTitle("Delete Product:");
+//                                                                    alert.setMessage(task.getException().getMessage());
+//                                                                    alert.setPositiveButton("Yes", null);
+//                                                                }
+//                                                            }
+//                                                        });
+//                                            }
+//                                        }
+//                                    }
+//                                })
+//                                .addOnFailureListener(new OnFailureListener() {
+//                                    @Override
+//                                    public void onFailure(@NonNull Exception e) {
+//                                        // Uh-oh, an error occurred!
+//                                        AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+//                                        alert.setTitle("Deleter Product:");
+//                                        alert.setMessage(e.getMessage());
+//                                        alert.setPositiveButton("Yes", null);
+//                                    }
+//                                });
                     });
                     alert.show();
 

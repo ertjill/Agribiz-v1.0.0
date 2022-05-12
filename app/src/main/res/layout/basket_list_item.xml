@@ -5,8 +5,7 @@
     android:layout_height="wrap_content"
     android:background="@color/highlight_back"
     android:paddingLeft="10dp"
-    android:paddingTop="10dp"
-    android:paddingBottom="14dp">
+    android:gravity="center">
 
     <CheckBox
         android:id="@+id/item_checkbox"
@@ -21,7 +20,9 @@
         android:layout_width="72dp"
         android:layout_height="72dp"
         android:layout_gravity="center_vertical"
-        android:src="@drawable/sample" />
+        android:src="@drawable/sample"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -35,7 +36,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/montserrat_semibold"
             android:lineHeight="17.07dp"
-
+            android:layout_marginTop="10dp"
             android:text="Fresh Tomato (per kg)"
             android:textColor="@color/brown"
             android:textFontWeight="600"
@@ -72,7 +73,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginEnd="76dp"
+            android:layout_marginEnd="106dp"
             android:layout_marginBottom="14dp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
@@ -110,17 +111,31 @@
                 android:textSize="12sp" />
         </LinearLayout>
 
-        <ImageButton
-            android:id="@+id/delete_ib"
+        <LinearLayout
+            android:id="@+id/delete_cancel_ll"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_marginTop="15dp"
-            android:background="@color/transparent"
-            android:paddingRight="10dp"
-            android:src="@drawable/ic_baseline_delete_forever_24"
-            app:tint="@color/red" />
+            android:orientation="horizontal"
+            android:visibility="gone">
+            <ImageButton
+                android:id="@+id/cancel_ib"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:padding="10dp"
+                android:background="#dda15e"
+                android:src="@drawable/ic_baseline_cancel_27"
+                app:tint="@color/red" />
+            <ImageButton
+                android:id="@+id/delete_ib"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:padding="10dp"
+                android:background="@color/yellow"
+                android:src="@drawable/ic_baseline_delete_forever_24"
+                app:tint="@color/red" />
+
+        </LinearLayout>
     </RelativeLayout>
 
 </LinearLayout>

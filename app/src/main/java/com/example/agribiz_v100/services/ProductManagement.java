@@ -1,26 +1,19 @@
 package com.example.agribiz_v100.services;
 
 import android.net.Uri;
-import android.os.Handler;
 import android.util.Log;
-import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import com.example.agribiz_v100.ProductItem;
-import com.example.agribiz_v100.customer.ProductGridAdapter;
 import com.example.agribiz_v100.entities.ProductModel;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -102,6 +95,38 @@ public class ProductManagement {
 //        product.setProductImage(uploadProductImage(product.getProductImage(), product.getProductUserId()));
         DocumentReference productsRef = db.collection("products").document(user.getUid());
         return productsRef.set(product);
+    }
+
+    public static Query getProducts(DocumentSnapshot last){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        if (last == null) {
+            return db.collection("products").orderBy("productDateUploaded", Query.Direction.DESCENDING).limit(8);
+
+        } else {
+            return db.collection("products").orderBy("productDateUploaded", Query.Direction.DESCENDING).startAfter(last).limit(8);
+        }
+
+    }
+    public static Query searchProducts(DocumentSnapshot last, String search){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+//        return db.collection("products").orderBy("productName")
+//                .startAt(search)
+//                .endAt(search + "\uf8ff").limit(30);
+        if (last == null) {
+//            return db.collection("products").whereIn("productName", array).orderBy("productDateUploaded", Query.Direction.DESCENDING).limit(8);
+//            return db.collection("products").whereGreaterThanOrEqualTo("productName", array).orderBy("productDateUploaded", Query.Direction.DESCENDING).limit(8);
+            return db.collection("products").orderBy("productName")
+                    .startAt(search)
+                    .endAt(search + "\uf8ff").limit(8);
+
+        } else {
+//            return db.collection("products").whereIn("productName", array).orderBy("productDateUploaded", Query.Direction.DESCENDING).startAfter(last).limit(8);
+//            return db.collection("products").whereGreaterThanOrEqualTo("productName", array).orderBy("productDateUploaded", Query.Direction.DESCENDING).startAfter(last).limit(8);
+            return db.collection("products").orderBy("productName")
+                    .startAfter(last)
+                    .endAt(search + "\uf8ff").limit(8);
+        }
+
     }
 
     public static Query getTopSellingProduct(){
