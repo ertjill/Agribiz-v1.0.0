@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/highlight_back"
+    android:orientation="horizontal"
+    android:paddingStart="20dp"
+    android:paddingLeft="20dp"
+    android:paddingTop="0dp"
+    android:paddingBottom="14dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginTop="15dp"
+        android:orientation="vertical"
+        android:paddingEnd="20dp">
+
+        <TextView
+            android:id="@+id/sent_requestTitle_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/montserrat_semibold"
+            android:lineHeight="20dp"
+            android:paddingEnd="6dp"
+            android:text="Sent Request"
+            android:textColor="@color/brown"
+            android:textFontWeight="600"
+            android:textSize="16sp" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/assistanceStatus_chip"
+            style="@style/Widget.MaterialComponents.Chip.Action"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/sent_requestTitle_tv"
+            android:fontFamily="@font/montserrat_semibold"
+            android:padding="0dp"
+            android:textAllCaps="true"
+            android:text="Status"
+            android:layout_marginTop="3dp"
+            android:textColor="@color/white"
+            app:chipBackgroundColor="@color/army_green"
+            app:chipCornerRadius="20dp"
+            app:chipMinHeight="15dp"
+            app:ensureMinTouchTargetSize="false" />
+
+        <LinearLayout
+            android:id="@+id/request_ll"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/request_type_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="22dp"
+                android:fontFamily="@font/montserrat_regular"
+                android:text="Selected radio button"
+                android:textColor="@color/brown"
+                android:textFontWeight="400"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/request_amountEquipment_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="0dp"
+                android:fontFamily="@font/montserrat_regular"
+                android:text="Amount: "
+                android:textColor="@color/brown"
+                android:textFontWeight="400"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/request_desc_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="0dp"
+                android:fontFamily="@font/montserrat_regular"
+                android:text="Description"
+                android:textColor="@color/brown"
+                android:textFontWeight="400"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/repayDate_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="0dp"
+                android:fontFamily="@font/montserrat_regular"
+                android:text="Repay Date:"
+                android:textColor="@color/brown"
+                android:textFontWeight="400"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/delete_request_ib"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/request_ll"
+            android:background="@color/transparent"
+            android:visibility="gone"
+            android:src="@drawable/ic_round_do_not_disturb_24"
+            app:tint="@color/red" />
+    </RelativeLayout>
+</LinearLayout>

@@ -68,6 +68,10 @@ public class FarmerProfile extends Fragment {
             }
         });
 
+        farmerMessages_tv.setOnClickListener(v -> {
+            startActivity(new Intent(getActivity(), FarmerMessagesActivity.class));
+        });
+
         farmerBarter_tv.setOnClickListener(v -> {
             startActivity(new Intent(getActivity(), BarterProductActivity.class));
         });
