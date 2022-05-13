@@ -29,12 +29,47 @@
         </com.google.android.material.appbar.AppBarLayout>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    <LinearLayout
+        android:id="@+id/top_ll"
+        android:layout_below="@+id/topAppBar_cl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp">
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/input_lay_address"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/army_green"
+            android:hint="Address"
+            app:boxBackgroundColor="@color/transparent"
+            app:boxBackgroundMode="outline"
+            app:boxCornerRadiusBottomEnd="15dp"
+            app:boxCornerRadiusBottomStart="15dp"
+            app:boxCornerRadiusTopEnd="15dp"
+            app:boxCornerRadiusTopStart="15dp"
+            app:boxStrokeColor="@color/army_green"
+            app:hintTextColor="@color/army_green">
 
+            <AutoCompleteTextView
+                android:id="@+id/address_act"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_medium"
+                android:inputType="none"
+                android:enabled="false"
+                android:singleLine="true"
+                android:textColorHint="@color/color_hint"
+                tools:ignore="TextContrastCheck" />
+        </com.google.android.material.textfield.TextInputLayout>
+    </LinearLayout>
     <LinearLayout
         android:id="@+id/empty_basket_ll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/topAppBar_cl"
+        android:layout_below="@+id/top_ll"
         android:gravity="center"
         android:orientation="vertical"
         android:visibility="gone">
@@ -60,7 +95,7 @@
         android:id="@+id/mid_ll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/topAppBar_cl"
+        android:layout_below="@+id/top_ll"
         android:layout_above="@+id/bottom_rl"
         android:layout_alignParentBottom="true"
         android:visibility="visible"

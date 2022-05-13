@@ -9,7 +9,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.util.HashMap;
 import java.util.Map;
 
-public class BasketProductItem extends ProductItem implements Parcelable {
+public class BasketProductItem extends ProductItem{
     private int productBasketQuantity;
     private boolean checked=false;
 

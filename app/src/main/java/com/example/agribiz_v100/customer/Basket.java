@@ -1,6 +1,7 @@
 package com.example.agribiz_v100.customer;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
@@ -21,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
@@ -37,7 +39,11 @@ import com.bumptech.glide.request.transition.Transition;
 import com.example.agribiz_v100.FirebaseHelper;
 import com.example.agribiz_v100.ProductItem;
 import com.example.agribiz_v100.R;
+import com.example.agribiz_v100.entities.BasketProductModel;
+import com.example.agribiz_v100.entities.LocationModel;
+import com.example.agribiz_v100.entities.OrderProductModel;
 import com.example.agribiz_v100.services.BasketManagement;
+import com.example.agribiz_v100.services.OrderManagement;
 import com.example.agribiz_v100.validation.AuthValidation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -61,16 +67,17 @@ import com.squareup.picasso.Picasso;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class Basket extends Fragment {
     private static final String TAG = "Basket";
-    int itemsCount = 3;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     List<Object> basketItems;
     BasketListAdapter basketListAdapter;
-    List<BasketProductItem> items;
+    List<BasketProductModel> items;
     Bundle bundle;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     ListView basket_item_list;
@@ -78,6 +85,9 @@ public class Basket extends Fragment {
     LinearLayout empty_basket_ll, mid_ll;
     TextView totalAmount_tv;
     ListenerRegistration registration;
+    Button checkout_btn;
+    LocationModel location;
+    List<String> listAdd;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,16 +114,98 @@ public class Basket extends Fragment {
         basketListAdapter = new BasketListAdapter(getContext());
         empty_basket_ll = view.findViewById(R.id.empty_basket_ll);
         mid_ll = view.findViewById(R.id.mid_ll);
-
+        checkout_btn = view.findViewById(R.id.checkout_btn);
         basket_item_list = view.findViewById(R.id.basket_item_list);
         select_all_cb = view.findViewById(R.id.select_all_cb);
         totalAmount_tv = view.findViewById(R.id.totalAmount_tv);
+        location = new LocationModel();
+        listAdd = new ArrayList<>();
+        DocumentReference docRef = db.collection("users").document(user.getUid());
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                        List<Object> loc = Arrays.asList(document.get("userLocation"));
+                        for(Object l :loc){
+                            Log.d(TAG, ((Map<String,Object>) l).get("userBarangay").toString());
+                        }
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
+
+        checkout_btn.setOnClickListener(v -> {
+            items.clear();
+            String itemNames = "";
+            double total = 0;
+            for (Object i : basketItems) {
+                if (i instanceof BasketProductModel && ((BasketProductModel) i).isChecked()) {
+                    items.add((BasketProductModel) i);
+                    itemNames += ((BasketProductModel) i).getProductName() + " = ₱" + (((BasketProductModel) i).getProductPrice() * ((BasketProductModel) i).getProductBasketQuantity()) + " \n";
+                    total += (((BasketProductModel) i).getProductPrice() * ((BasketProductModel) i).getProductBasketQuantity());
+                }
+            }
+            AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+            alert.setTitle("Make an Order");
+            if (items.size() > 0)
+                alert.setMessage("Are you sure to proceed this order with " + items.size() + " number of Items : \n" + itemNames + "=====================\nTotal = ₱ " + total);
+            else
+                alert.setMessage("Select a Product to Checkout!");
+
+            alert.setCancelable(false);
+            alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if (items.size() > 0) {
+                        ProgressDialog progressDialog;
+                        progressDialog = new ProgressDialog(getContext());
+                        progressDialog.setMessage("Processing your Order, please wait!");
+                        progressDialog.setCancelable(false);
+                        progressDialog.show();
+                        OrderManagement.createOrder(getActivity(), items, location)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        progressDialog.dismiss();
+                                        Log.d(TAG, "Transaction success!");
+                                        AuthValidation.successToast(getContext(), "Order made Successfully").show();
+
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.w(TAG, "Transaction failure.", e);
+                                        progressDialog.dismiss();
+                                        AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+                                        alert.setTitle("Failed to make an Order:");
+                                        alert.setMessage(e.getLocalizedMessage());
+                                        alert.setCancelable(false);
+                                        alert.setPositiveButton("Ok", null);
+                                        alert.show();
+
+                                    }
+                                });
+                    }
+                }
+            });
+            alert.setNegativeButton("Cancel", null);
+            alert.show();
+        });
+
         select_all_cb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 for (int i = 0; i < basketItems.size(); i++) {
-                    if (basketItems.get(i) instanceof BasketProductItem) {
-                        ((BasketProductItem) basketItems.get(i)).setChecked(select_all_cb.isChecked());
+                    if (basketItems.get(i) instanceof BasketProductModel) {
+                        ((BasketProductModel) basketItems.get(i)).setChecked(select_all_cb.isChecked());
                     } else
                         ((BasketHeader) basketItems.get(i)).setChecked(select_all_cb.isChecked());
                 }
@@ -163,42 +255,54 @@ public class Basket extends Fragment {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
                         basketItems.clear();
+                        if(value.isEmpty()){
+                            empty_basket_ll.setVisibility(View.VISIBLE);
+                            mid_ll.setVisibility(View.GONE);
+                        }
+                        else {
+                            empty_basket_ll.setVisibility(View.GONE);
+                            mid_ll.setVisibility(View.VISIBLE);
+                        }
                         if (e != null) {
                             Log.d(TAG, "Listen failed.", e);
                             return;
                         }
                         final String[] tempId = {""};
+
                         for (QueryDocumentSnapshot document : value) {
-                            BasketProductItem item = new BasketProductItem(document);
+                            BasketProductModel item = document.toObject(BasketProductModel.class);
                             BasketHeader basketHeader = new BasketHeader();
                             //Log.d(TAG, document.getId() + " => " + document.getData().get("productUserId"));
                             db.collection("users")
                                     .document(document.getData().get("productUserId").toString())
                                     .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                    if (task.isSuccessful()) {
-                                        DocumentSnapshot doc = task.getResult();
-                                        if (doc.exists()) {
-                                            basketHeader.setFarmId(doc.getId());
-                                            basketHeader.setFarmName((doc.getData().get("userDisplayName")).toString());
-                                            if (tempId[0].equals("") || !tempId[0].equals(doc.getId())) {
-                                                basketItems.add(basketHeader);
-                                                tempId[0] = doc.getId();
+                                        @Override
+                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                            if (task.isSuccessful()) {
+                                                DocumentSnapshot doc = task.getResult();
+                                                if (doc.exists()) {
+                                                    basketHeader.setFarmId(doc.getId());
+                                                    basketHeader.setFarmName((doc.getData().get("userDisplayName")).toString());
+                                                    if (tempId[0].equals("") || !tempId[0].equals(doc.getId())) {
+                                                        basketItems.add(basketHeader);
+                                                        tempId[0] = doc.getId();
+                                                    }
+                                                    basketItems.add(item);
+                                                    basketListAdapter.notifyDataSetChanged();
+                                                    Log.d(TAG, "DocumentSnapshot data: " + basketItems.size());
+                                                } else {
+                                                    Log.d(TAG, "No such document");
+                                                    basketListAdapter.notifyDataSetChanged();
+                                                }
+                                            } else {
+                                                Log.d(TAG, "get failed with ", task.getException());
+                                                basketListAdapter.notifyDataSetChanged();
                                             }
-                                            basketItems.add(item);
-                                            basketListAdapter.notifyDataSetChanged();
-                                            Log.d(TAG, "DocumentSnapshot data: " + basketItems.size());
-                                        } else {
-                                            Log.d(TAG, "No such document");
                                         }
-                                    } else {
-                                        Log.d(TAG, "get failed with ", task.getException());
-                                    }
-                                }
-                            });
+                                    });
                         }
                         Log.d(TAG, "Current cites in CA: ");
+                        basketListAdapter.notifyDataSetChanged();
                     }
                 });
 
@@ -214,7 +318,7 @@ public class Basket extends Fragment {
 //                            final int[] i = {0};
 //                            final String[] tempId = {""};
 //                            for (QueryDocumentSnapshot document : task.getResult()) {
-//                                BasketProductItem item = new BasketProductItem(document);
+//                                BasketProductModel item = new BasketProductModel(document);
 //                                BasketHeader basketHeader = new BasketHeader();
 //                                //Log.d(TAG, document.getId() + " => " + document.getData().get("productUserId"));
 //                                db.collection("users")
@@ -272,7 +376,7 @@ public class Basket extends Fragment {
 
         @Override
         public int getItemViewType(int position) {
-            if (basketItems.get(position) instanceof BasketProductItem) {
+            if (basketItems.get(position) instanceof BasketProductModel) {
                 return ITEM;
             } else
                 return HEADER;
@@ -303,7 +407,7 @@ public class Basket extends Fragment {
                     convertView = layoutInflater.inflate(R.layout.basket_list_item_header, null);
                     ImageView delete_ib = convertView.findViewById(R.id.delete_ib);
                     TextView farmer_hub_name = convertView.findViewById(R.id.farmer_hub_name);
-                    farmer_hub_name.setText(((BasketHeader) basketItems.get(position)).getFarmName().substring(0,((BasketHeader) basketItems.get(position)).getFarmName().length()-2));
+                    farmer_hub_name.setText(((BasketHeader) basketItems.get(position)).getFarmName().substring(0, ((BasketHeader) basketItems.get(position)).getFarmName().length() - 2));
                     CheckBox header_checkbox = convertView.findViewById(R.id.header_checkbox);
                     header_checkbox.setChecked(((BasketHeader) basketItems.get(position)).isChecked());
                     delete_ib.setOnClickListener(new View.OnClickListener() {
@@ -356,14 +460,14 @@ public class Basket extends Fragment {
                             alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    BasketManagement bm =new BasketManagement(getActivity());
-                                    bm.deleteFromBasket(((BasketProductItem)basketItems.get(position)).getProductId()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    BasketManagement bm = new BasketManagement(getActivity());
+                                    bm.deleteFromBasket(((BasketProductModel) basketItems.get(position)).getProductId()).addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
-                                            if(task.isSuccessful()){
-                                                AuthValidation.successToast(getContext(),"Item removed").show();
+                                            if (task.isSuccessful()) {
+                                                AuthValidation.successToast(getContext(), "Item removed").show();
                                                 notifyDataSetChanged();
-                                            }else{
+                                            } else {
                                                 AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
                                                 alert.setTitle("Error");
                                                 alert.setMessage(task.getException().getLocalizedMessage());
@@ -373,7 +477,7 @@ public class Basket extends Fragment {
                                     });
                                 }
                             });
-                            alert.setNegativeButton("No",null);
+                            alert.setNegativeButton("No", null);
                             alert.show();
                         }
                     });
@@ -382,7 +486,7 @@ public class Basket extends Fragment {
 //                        public void onClick(View v) {
 //                            AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
 //                            alert.setTitle("Basket Item:");
-//                            alert.setMessage(((BasketProductItem) basketItems.get(position)).getProductName());
+//                            alert.setMessage(((BasketProductModel) basketItems.get(position)).getProductName());
 //                            alert.setPositiveButton("Ok", null);
 //                            alert.show();
 //                        }
@@ -393,22 +497,22 @@ public class Basket extends Fragment {
                     TextView item_price = convertView.findViewById(R.id.item_price);
                     TextView item_stocks = convertView.findViewById(R.id.item_stocks);
 
-                    item_name.setText(((BasketProductItem) basketItems.get(position)).getProductName());
-                    item_price.setText("Php " + String.format("%.2f", ((BasketProductItem) basketItems.get(position)).getProductPrice()));
-                    item_stocks.setText("Stocks: " + ((BasketProductItem) basketItems.get(position)).getProductStocks());
+                    item_name.setText(((BasketProductModel) basketItems.get(position)).getProductName());
+                    item_price.setText("Php " + String.format("%.2f", ((BasketProductModel) basketItems.get(position)).getProductPrice()));
+                    item_stocks.setText("Stocks: " + ((BasketProductModel) basketItems.get(position)).getProductStocks());
                     CheckBox item_checkbox = convertView.findViewById(R.id.item_checkbox);
-                    item_checkbox.setChecked(((BasketProductItem) basketItems.get(position)).isChecked());
-                    String sp = ((BasketProductItem) basketItems.get(position)).getProductImage().get(0);
+                    item_checkbox.setChecked(((BasketProductModel) basketItems.get(position)).isChecked());
+                    String sp = ((BasketProductModel) basketItems.get(position)).getProductImage().get(0);
 //                    .split("[\\[\\]]")
                     Glide.with(context)
                             .load(sp)
                             .centerCrop()
                             .into(item_image);
-                    productBasketQuantity_tv.setText(String.valueOf(((BasketProductItem) basketItems.get(position)).getProductBasketQuantity()));
+                    productBasketQuantity_tv.setText(String.valueOf(((BasketProductModel) basketItems.get(position)).getProductBasketQuantity()));
                     item_checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                         @Override
                         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                            ((BasketProductItem) basketItems.get(position)).setChecked(isChecked);
+                            ((BasketProductModel) basketItems.get(position)).setChecked(isChecked);
                             unCheckHeader(isChecked, position);
                             isCheckAll();
                             notifyDataSetChanged();
@@ -425,8 +529,8 @@ public class Basket extends Fragment {
         private void getTotal() {
             double total = 0;
             for (int i = 0; i < basketItems.size(); i++) {
-                if (basketItems.get(i) instanceof BasketProductItem) {
-                    BasketProductItem pi = (BasketProductItem) basketItems.get(i);
+                if (basketItems.get(i) instanceof BasketProductModel) {
+                    BasketProductModel pi = (BasketProductModel) basketItems.get(i);
                     if (pi.isChecked())
                         total += (pi.getProductBasketQuantity() * pi.getProductPrice());
                 }
@@ -438,7 +542,7 @@ public class Basket extends Fragment {
         private void isCheckAll() {
             boolean overAllItemCheckFlag = true;
             for (int i = 0; i < basketItems.size(); i++) {
-                if (getItemViewType(i) == ITEM && !((BasketProductItem) basketItems.get(i)).isChecked()) {
+                if (getItemViewType(i) == ITEM && !((BasketProductModel) basketItems.get(i)).isChecked()) {
                     overAllItemCheckFlag = false;
                     break;
                 }
@@ -452,7 +556,7 @@ public class Basket extends Fragment {
             int locator = 0;
             if (!isChecked) {
                 for (int x = 0; x < basketItems.size(); x++) {
-                    if (getItemViewType(x) == HEADER && ((BasketProductItem) basketItems.get(position)).getProductUserId().equals(((BasketHeader) basketItems.get(x)).getFarmId())) {
+                    if (getItemViewType(x) == HEADER && ((BasketProductModel) basketItems.get(position)).getProductUserId().equals(((BasketHeader) basketItems.get(x)).getFarmId())) {
                         ((BasketHeader) basketItems.get(x)).setChecked(false);
                         notifyDataSetChanged();
                         break;
@@ -460,8 +564,8 @@ public class Basket extends Fragment {
                 }
             } else {
                 for (int x = 0; x < basketItems.size(); x++) {
-                    if (getItemViewType(x) == ITEM && ((BasketProductItem) basketItems.get(position)).getProductUserId().equals(((BasketProductItem) basketItems.get(x)).getProductUserId()) && position != x) {
-                        if (!((BasketProductItem) basketItems.get(x)).isChecked()) {
+                    if (getItemViewType(x) == ITEM && ((BasketProductModel) basketItems.get(position)).getProductUserId().equals(((BasketProductModel) basketItems.get(x)).getProductUserId()) && position != x) {
+                        if (!((BasketProductModel) basketItems.get(x)).isChecked()) {
                             allCheckFlag = false;
                             locator = x;
                             break;
@@ -471,7 +575,7 @@ public class Basket extends Fragment {
                 }
                 if (allCheckFlag)
                     for (int x = 0; x < basketItems.size(); x++) {
-                        if (getItemViewType(x) == HEADER && ((BasketHeader) basketItems.get(x)).getFarmId().equals(((BasketProductItem) basketItems.get(position)).getProductUserId())) {
+                        if (getItemViewType(x) == HEADER && ((BasketHeader) basketItems.get(x)).getFarmId().equals(((BasketProductModel) basketItems.get(position)).getProductUserId())) {
                             ((BasketHeader) basketItems.get(x)).setChecked(true);
                             //basket_item_list.setAdapter(new BasketListAdapter(getContext(), basketItems));
                             notifyDataSetChanged();
@@ -484,8 +588,8 @@ public class Basket extends Fragment {
 
         private void setCheckAll(boolean isChecked, int position) {
             for (int x = 0; x < basketItems.size(); x++) {
-                if (getItemViewType(x) == ITEM && ((BasketProductItem) basketItems.get(x)).getProductUserId().equals(((BasketHeader) basketItems.get(position)).getFarmId())) {
-                    ((BasketProductItem) basketItems.get(x)).setChecked(isChecked);
+                if (getItemViewType(x) == ITEM && ((BasketProductModel) basketItems.get(x)).getProductUserId().equals(((BasketHeader) basketItems.get(position)).getFarmId())) {
+                    ((BasketProductModel) basketItems.get(x)).setChecked(isChecked);
                 }
             }
             //basket_item_list.setAdapter(new BasketListAdapter(getContext(), basketItems));
