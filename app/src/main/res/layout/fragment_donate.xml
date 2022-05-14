@@ -36,7 +36,7 @@
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:fontFamily="@font/montserrat_regular"
-        android:hint="Search any donation here"
+        android:hint="Search a farmer"
         android:lineHeight="19.5sp"
         android:padding="10dp"
         android:singleLine="true"
@@ -44,117 +44,61 @@
         android:textColorHint="@color/army_green"
         android:textSize="16sp"
         android:layout_gravity="center_horizontal"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/titleHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="27dp"
+            android:text="Donate Farmers"
+            android:textColor="@color/brown"
+            android:fontFamily="@font/montserrat_bold"
+            android:textSize="20sp"
+            android:textFontWeight="700"
+            android:lineHeight="24.38sp"/>
+
+        <Button
+            android:id="@+id/donate_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="80dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="0dp"
+            android:layout_toEndOf="@id/titleHeader"
+            android:backgroundTint="@color/yellow_orange"
+            android:fontFamily="@font/montserrat_bold"
+            android:minHeight="55dp"
+            android:text="Donate"
+            android:textAllCaps="false"
+            android:textColor="@color/army_green"
+            android:textSize="13sp"
+            app:cornerRadius="24dp" />
+
+    </RelativeLayout>
+
+    <ListView
+        android:id="@+id/farmer_list_lv"
+        android:layout_width="match_parent"
+        android:layout_marginTop="15dp"
+        android:layout_height="425dp"
+        android:divider="#F1EEEE"
+        android:dividerHeight="1dp"/>
+
     <TextView
+        android:id="@+id/not_available2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="23dp"
-        android:text="Donations"
-        android:textColor="@color/brown"
-        android:fontFamily="@font/montserrat_bold"
-        android:textSize="20sp"
-        android:textFontWeight="700"
-        android:lineHeight="24.38sp"
-        />
-
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="85dp"
-        android:backgroundTint="@color/yellow_orange"
-        app:cardCornerRadius="10dp"
-        android:layout_marginTop="14dp">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/donate_equipment_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginRight="20dp"
-                android:fontFamily="@font/montserrat_semibold"
-                android:text="Donate Your Farm Equipment to Help Veterans"
-                android:textColor="@color/army_green"
-                android:textSize="14sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="6dp"
-                android:layout_marginBottom="10dp"
-                android:drawableStart="@drawable/ic_baseline_supervisor_account_24"
-                android:fontFamily="@font/montserrat_semibold"
-                android:gravity="center_vertical"
-                android:text="  0 collected"
-                android:textColor="@color/white"
-                android:textSize="15sp" />
-        </RelativeLayout>
-
-    </androidx.cardview.widget.CardView>
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="85dp"
-        android:backgroundTint="@color/yellow_orange"
-        app:cardCornerRadius="10dp"
-        android:layout_marginTop="14dp">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/donate_monet_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Help Farmers Get Better"
-                android:textColor="@color/army_green"
-                android:fontFamily="@font/montserrat_semibold"
-                android:textSize="14sp"
-                android:layout_marginTop="12dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:orientation="horizontal"
-                android:layout_marginLeft="20dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/montserrat_bold"
-                    android:text="₱"
-                    android:textColor="@color/white"
-                    android:textSize="17sp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginLeft="5dp"/>
-
-                <TextView
-                    android:id="@+id/money_given_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-
-                    android:layout_marginBottom="10dp"
-                    android:fontFamily="@font/montserrat_semibold"
-                    android:gravity="center_vertical"
-                    android:text="0.00 collected"
-                    android:textColor="@color/white"
-                    android:textSize="15sp" />
-            </LinearLayout>
-        </RelativeLayout>
-
-    </androidx.cardview.widget.CardView>
-
-
-
-
-
+        android:fontFamily="@font/montserrat_medium"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center"
+        android:textColor="#5E3819"
+        android:alpha=".5"
+        android:text="No registered farmers yet."/>
 
 </LinearLayout>

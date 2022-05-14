@@ -209,7 +209,6 @@ public class AddBarterDialog {
                         if (task.isSuccessful()) {
                             AuthValidation.successToast(activity.getBaseContext(), "Successfully added barter item").show();
                             reset();
-                            addBarterDialogCallback.addOnDocumentAddedListener(true);
                             dismissDialog();
                         } else {
                             AuthValidation.failedToast(activity.getBaseContext(), task.getException().getLocalizedMessage()).show();

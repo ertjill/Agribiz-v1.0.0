@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".farmer.BarterProduct">
+    tools:context=".farmer.AddBarterItem">
 
     <ListView
         android:id="@+id/farmer_barter_lv"
@@ -13,6 +13,7 @@
         android:divider="@null">
 
     </ListView>
+
 
     <LinearLayout
         android:id="@+id/no_barter_product_ll"
