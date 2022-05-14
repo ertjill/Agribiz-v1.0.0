@@ -15,6 +15,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
@@ -27,6 +29,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -512,10 +515,43 @@ public class Basket extends Fragment {
 //                    });
                     ImageView item_image = convertView.findViewById(R.id.item_image);
                     TextView item_name = convertView.findViewById(R.id.item_name);
-                    TextView productBasketQuantity_tv = convertView.findViewById(R.id.productBasketQuantity_tv);
+                    EditText productBasketQuantity_et = convertView.findViewById(R.id.productBasketQuantity_et);
+                    productBasketQuantity_et.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+                                try{
+                                    Integer.parseInt(s.toString());
+                                }catch (Exception e){
+                                    productBasketQuantity_et.setText(String.valueOf(((BasketProductModel) basketItems.get(position)).getProductBasketQuantity()));
+                                }
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable s) {
+
+                        }
+                    });
                     TextView item_price = convertView.findViewById(R.id.item_price);
                     TextView item_stocks = convertView.findViewById(R.id.item_stocks);
+                    TextView minus_tv = convertView.findViewById(R.id.minus_tv);
+                    minus_tv.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
 
+                        }
+                    });
+                    TextView add_tv = convertView.findViewById(R.id.add_tv);
+                    add_tv.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                        }
+                    });
                     item_name.setText(((BasketProductModel) basketItems.get(position)).getProductName());
                     item_price.setText("Php " + String.format("%.2f", ((BasketProductModel) basketItems.get(position)).getProductPrice()));
                     item_stocks.setText("Stocks: " + ((BasketProductModel) basketItems.get(position)).getProductStocks());
@@ -527,7 +563,7 @@ public class Basket extends Fragment {
                             .load(sp)
                             .centerCrop()
                             .into(item_image);
-                    productBasketQuantity_tv.setText(String.valueOf(((BasketProductModel) basketItems.get(position)).getProductBasketQuantity()));
+                    productBasketQuantity_et.setText(String.valueOf(((BasketProductModel) basketItems.get(position)).getProductBasketQuantity()));
                     item_checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                         @Override
                         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

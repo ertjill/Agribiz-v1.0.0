@@ -1,11 +1,13 @@
 package com.example.agribiz_v100.customer;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -24,6 +26,7 @@ import android.widget.BaseAdapter;
 import android.widget.GridLayout;
 import android.widget.GridView;
 import android.widget.HorizontalScrollView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -35,18 +38,24 @@ import com.example.agribiz_v100.FirebaseHelper;
 import com.example.agribiz_v100.R;
 import com.example.agribiz_v100.entities.ProductModel;
 import com.example.agribiz_v100.services.ProductManagement;
+import com.example.agribiz_v100.validation.AuthValidation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -63,13 +72,14 @@ public class Store extends Fragment {
     String[] item_may_like = {"Sweet Tomato", "Sweet Tomato", "Sweet Tomato", "Sweet Tomato", "Sweet Tomato"};
     SparseArray<ProductModel> productItems, topProducts;
     ProductGridAdapter productGridAdapter;
-    FirebaseUser user;
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     Bundle bundle;
-
+    List<ProductModel> itemLike;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         topProducts = new SparseArray<>();
+        itemLike = new ArrayList<>();
         productGridAdapter = new ProductGridAdapter(getContext(), topProducts);
         Log.d(TAG, "Creating Store...");
         if (getArguments() != null) {
@@ -110,6 +120,7 @@ public class Store extends Fragment {
                 @Override
                 public void onRefresh() {
                     Toast.makeText(getContext(), "Refreshing...", Toast.LENGTH_SHORT).show();
+                    displayTopProducts();
                     swipeRefreshLayout.setRefreshing(false);
                 }
             });
@@ -151,7 +162,6 @@ public class Store extends Fragment {
 //                    bundle.putSerializable("item",topProducts.get(position));
                     intent.putExtra("item", (Parcelable) topProducts.get(position));
                     intent.putExtras(bundle);
-                    intent.putExtra("user", user);
                     startActivity(intent);
                 }
             });
@@ -163,15 +173,50 @@ public class Store extends Fragment {
     }
 
     private void setupItemsYouLike() {
-        ItemMayLikeAdapter itemMayLikeAdapter = new ItemMayLikeAdapter(getContext(), item_may_like);
+        ItemMayLikeAdapter itemMayLikeAdapter = new ItemMayLikeAdapter(getContext(), itemLike);
         item_may_like_lv.setAdapter(itemMayLikeAdapter);
+        db.collection("orders").document(user.getUid()).collection("products")
+                .orderBy("orderDate", Query.Direction.DESCENDING)
+                .limit(1)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d(TAG, document.getId() + " => " + document.getData());
+                                db.collection("products").whereEqualTo("productCategory",document.getData().get("productCategory"))
+                                        .limit(5)
+                                        .get()
+                                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                if(task.isSuccessful()){
+                                                    for (QueryDocumentSnapshot document : task.getResult()) {
+                                                        Log.d(TAG, document.getId() + " => " + document.getData());
+                                                        itemLike.add(document.toObject(ProductModel.class));
+                                                    }
+                                                    itemMayLikeAdapter.notifyDataSetChanged();
+                                                }
+                                                else{
+
+                                                }
+                                            }
+                                        });
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+
     }
+
 
     public void setupFarmerHubs() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("users")
                 .whereNotEqualTo("userType", "customer")
-                .whereEqualTo("userStatus","active")
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value,
@@ -180,10 +225,15 @@ public class Store extends Fragment {
                             Log.w(TAG, "Listen failed.", e);
                             return;
                         }
-
+                        else{
+                            Log.w(TAG, "Listen failed.");
+                        }
+                        farmersHub_ll.removeAllViews();
                         for (QueryDocumentSnapshot document : value) {
                             LayoutInflater i = getLayoutInflater();
                             View v = i.inflate(R.layout.fragment_farmer_hub_card, null);
+                            CardView is_active_cv= v.findViewById(R.id.is_active_cv);
+                            is_active_cv.setVisibility(document.getData().get("userStatus")!=null?document.getData().get("userStatus").toString().equals("active")?View.VISIBLE:View.GONE:View.GONE);
                             TextView farmers = v.findViewById(R.id.farmer);
                             ImageView farmerProfile = v.findViewById(R.id.farmerProfile);
                             Glide.with(getContext())
@@ -278,6 +328,5 @@ public class Store extends Fragment {
                     }
                 });
     }
-
 
 }
