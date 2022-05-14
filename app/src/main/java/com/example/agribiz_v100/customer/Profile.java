@@ -11,11 +11,13 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.agribiz_v100.LoginActivity;
+import com.example.agribiz_v100.OrdersActivity;
 import com.example.agribiz_v100.R;
 import com.example.agribiz_v100.services.AuthManagement;
 import com.google.firebase.auth.FirebaseAuth;
@@ -28,7 +30,7 @@ public class Profile extends Fragment {
     TextView displayName_tv, edit_profile_tv,my_address_tv, barter_goods_tv, messages_tv;
     ImageView userImage_iv;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
+    ImageView to_prepare_ib,to_ship_ib,to_receive_ib,rate_ib;
     @Override
     public void onResume() {
         super.onResume();
@@ -50,7 +52,46 @@ public class Profile extends Fragment {
         edit_profile_tv = view.findViewById(R.id.edit_profile_tv);
         barter_goods_tv = view.findViewById(R.id.barter_goods_tv);
         messages_tv = view.findViewById(R.id.messages_tv);
-
+        to_prepare_ib=view.findViewById(R.id.to_prepare_ib);
+        to_prepare_ib.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(getContext(), OrdersActivity.class);
+                intent.putExtra("tab",0);
+//                intent.setClassName(getContext(), OrdersActivity.class);
+                startActivity(intent);
+            }
+        });
+        to_ship_ib=view.findViewById(R.id.to_ship_ib);
+        to_ship_ib.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(getContext(), OrdersActivity.class);
+                intent.putExtra("tab",1);
+//                intent.setClassName(getContext(),"com.example.agribiz_v100.OrdersActivity");
+                startActivity(intent);
+            }
+        });
+        to_receive_ib=view.findViewById(R.id.to_receive_ib);
+        to_receive_ib.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(getContext(), OrdersActivity.class);
+                intent.putExtra("tab",2);
+                //intent.setClassName(getContext(),"com.example.agribiz_v100.OrdersActivity");
+                startActivity(intent);
+            }
+        });
+        rate_ib=view.findViewById(R.id.rate_ib);
+        rate_ib.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(getContext(), OrdersActivity.class);
+                intent.putExtra("tab",3);
+                //intent.setClassName(getContext(),"com.example.agribiz_v100.OrdersActivity");
+                startActivity(intent);
+            }
+        });
         my_address_tv.setOnClickListener(t->{
             startActivity(new Intent(getActivity(), MyAddressesActivity.class));
         });

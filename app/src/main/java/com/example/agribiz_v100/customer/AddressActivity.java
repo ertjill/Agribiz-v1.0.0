@@ -42,7 +42,6 @@ public class AddressActivity extends AppCompatActivity {
     Button add_address_btn;
 
     List<JSONObject> citiesList;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

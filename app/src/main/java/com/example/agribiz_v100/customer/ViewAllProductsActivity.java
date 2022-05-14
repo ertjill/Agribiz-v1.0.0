@@ -39,7 +39,6 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.agribiz_v100.FirebaseHelper;
-import com.example.agribiz_v100.ProductItem;
 import com.example.agribiz_v100.R;
 import com.example.agribiz_v100.services.ProductManagement;
 import com.example.agribiz_v100.validation.AuthValidation;
@@ -68,14 +67,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-
+import com.example.agribiz_v100.entities.ProductModel;
 public class ViewAllProductsActivity extends AppCompatActivity {
     String TAG = "ViewAllProductsActivity";
     LinearLayout no_product_ll;
     RecyclerView viewAll_rv;
     ViewAllProductAdapter viewAllProductAdapter;
     MaterialToolbar topAppBar;
-    SparseArray<ProductItem> productItems;
+    SparseArray<ProductModel> productItems;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     FirebaseUser user;
     Bundle bundle;
@@ -190,7 +189,7 @@ public class ViewAllProductsActivity extends AppCompatActivity {
                 if (ChildView != null && gestureDetector.onTouchEvent(e)) {
                     RecyclerViewItemPosition = rv.getChildAdapterPosition(ChildView);
                     Intent intent = new Intent(ViewAllProductsActivity.this, ProductView.class);
-                    intent.putExtra("item", productItems.get(RecyclerViewItemPosition));
+                    intent.putExtra("item", (Parcelable) productItems.get(RecyclerViewItemPosition));
                     intent.putExtra("user", user);
                     startActivity(intent);
                 }
@@ -235,7 +234,7 @@ public class ViewAllProductsActivity extends AppCompatActivity {
                         public void onSuccess(QuerySnapshot documentSnapshots) {
                             // ...
                             for (QueryDocumentSnapshot dc : documentSnapshots) {
-                                ProductItem i = new ProductItem(dc);
+                                ProductModel i = dc.toObject(ProductModel.class);
                                 productItems.append(count++, i);
                             }
 
@@ -266,7 +265,7 @@ public class ViewAllProductsActivity extends AppCompatActivity {
                         public void onSuccess(QuerySnapshot documentSnapshots) {
                             // ...
                             for (QueryDocumentSnapshot dc : documentSnapshots) {
-                                ProductItem i = new ProductItem(dc);
+                                ProductModel i = dc.toObject(ProductModel.class);
                                 productItems.append(count++, i);
                             }
 

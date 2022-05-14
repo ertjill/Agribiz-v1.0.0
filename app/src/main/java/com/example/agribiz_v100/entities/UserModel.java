@@ -16,14 +16,20 @@ public class UserModel implements Serializable {
     private String userPhoneNumber;
     private boolean userIsActive;
     private String userType;
+    private String userStatus;
+
+    public String getUserStatus() {
+        return userStatus;
+    }
+
+    public void setUserStatus(String userStatus) {
+        this.userStatus = userStatus;
+    }
 
     public UserModel() {
     }
 
-    public UserModel(String userEmail, String userID, String userImage,
-                     List<LocationModel> userLocation, String userDisplayName,
-                     String userFirstName, String userLastName, String userMiddleName,
-                     String userPhoneNumber, boolean userIsActive, String userType) {
+    public UserModel(String userEmail, String userID, String userImage, List<LocationModel> userLocation, String userDisplayName, String userFirstName, String userLastName, String userMiddleName, String userPhoneNumber, boolean userIsActive, String userType, String userStatus) {
         this.userEmail = userEmail;
         this.userID = userID;
         this.userImage = userImage;
@@ -35,6 +41,7 @@ public class UserModel implements Serializable {
         this.userPhoneNumber = userPhoneNumber;
         this.userIsActive = userIsActive;
         this.userType = userType;
+        this.userStatus = userStatus;
     }
 
     public String getUserEmail() {

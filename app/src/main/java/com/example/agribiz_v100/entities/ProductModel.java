@@ -1,11 +1,14 @@
 package com.example.agribiz_v100.entities;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.firebase.Timestamp;
 
 import java.io.Serializable;
 import java.util.List;
 
-public class ProductModel implements Serializable {
+public class ProductModel implements Serializable, Parcelable {
     //Product Properties
     private String productId;
     private String productUserId;
@@ -45,6 +48,39 @@ public class ProductModel implements Serializable {
         this.productNoCustomerRate = productNoCustomerRate;
         this.productDateUploaded = productDateUploaded;
     }
+
+    protected ProductModel(Parcel in) {
+        productId = in.readString();
+        productUserId = in.readString();
+        productName = in.readString();
+        productDescription = in.readString();
+        productImage = in.createStringArrayList();
+        productCategory = in.readString();
+        if (in.readByte() == 0) {
+            productPrice = null;
+        } else {
+            productPrice = in.readDouble();
+        }
+        productUnit = in.readString();
+        productQuantity = in.readInt();
+        productStocks = in.readInt();
+        productSold = in.readInt();
+        productRating = in.readInt();
+        productNoCustomerRate = in.readInt();
+        productDateUploaded = in.readParcelable(Timestamp.class.getClassLoader());
+    }
+
+    public static final Creator<ProductModel> CREATOR = new Creator<ProductModel>() {
+        @Override
+        public ProductModel createFromParcel(Parcel in) {
+            return new ProductModel(in);
+        }
+
+        @Override
+        public ProductModel[] newArray(int size) {
+            return new ProductModel[size];
+        }
+    };
 
     public String getProductId() {
         return productId;
@@ -158,4 +194,31 @@ public class ProductModel implements Serializable {
         this.productDateUploaded = productDateUploaded;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(productId);
+        dest.writeString(productUserId);
+        dest.writeString(productName);
+        dest.writeString(productDescription);
+        dest.writeStringList(productImage);
+        dest.writeString(productCategory);
+        if (productPrice == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeDouble(productPrice);
+        }
+        dest.writeString(productUnit);
+        dest.writeInt(productQuantity);
+        dest.writeInt(productStocks);
+        dest.writeInt(productSold);
+        dest.writeInt(productRating);
+        dest.writeInt(productNoCustomerRate);
+        dest.writeParcelable(productDateUploaded, flags);
+    }
 }

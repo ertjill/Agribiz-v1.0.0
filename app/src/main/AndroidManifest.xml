@@ -18,7 +18,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Agribizv100"
         android:usesCleartextTraffic="true">
-
+        <activity
+            android:name=".OrdersActivity"
+            android:exported="false" />
         <!-- Account Creation -->
         <activity
             android:name=".SignupActivity"
@@ -28,9 +30,7 @@
             android:exported="false" />
         <activity
             android:name=".ResetPasswordActivity"
-            android:exported="false" />
-
-        <!-- Main Activities -->
+            android:exported="false" /> <!-- Main Activities -->
         <activity
             android:name=".customer.CustomerMainActivity"
             android:alwaysRetainTaskState="true"
@@ -41,9 +41,7 @@
             android:exported="false" />
         <activity
             android:name=".farmer.FarmerMainActivity"
-            android:exported="true" />
-
-        <!-- Profiles -->
+            android:exported="true" /> <!-- Profiles -->
         <activity
             android:name=".farmer.FarmerEditProfileActivity"
             android:exported="false" />
@@ -55,25 +53,19 @@
             android:exported="false" />
         <activity
             android:name=".customer.MyAddressesActivity"
-            android:exported="false" />
-
-        <!-- Barters -->
+            android:exported="false" /> <!-- Barters -->
         <activity
             android:name=".farmer.BarterProductActivity"
             android:exported="false" />
         <activity
             android:name=".customer.BarterGoodsActivity"
-            android:exported="false" />
-
-        <!-- Messages -->
+            android:exported="false" /> <!-- Messages -->
         <activity
             android:name=".customer.MessagesActivity"
             android:exported="false" />
         <activity
             android:name=".farmer.FarmerMessagesActivity"
-            android:exported="false" />
-
-        <!-- Products -->
+            android:exported="false" /> <!-- Products -->
         <activity
             android:name=".customer.ProductView"
             android:exported="false" />
@@ -81,9 +73,7 @@
             android:name=".customer.ViewAllProductsActivity"
             android:alwaysRetainTaskState="true"
             android:exported="false"
-            android:launchMode="singleInstance" />
-
-        <!-- Misc -->
+            android:launchMode="singleInstance" /> <!-- Misc -->
         <activity
             android:name=".SplashActivity"
             android:exported="true">
@@ -93,15 +83,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".VerificationCodeActivity"
             android:exported="false" />
         <activity
             android:name=".OnBoard"
-            android:exported="true" />
-
-        <!-- APIs -->
+            android:exported="true" /> <!-- APIs -->
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
@@ -112,7 +99,6 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-
     </application>
 
 </manifest>

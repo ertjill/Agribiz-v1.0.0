@@ -31,12 +31,16 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.agribiz_v100.FirebaseHelper;
-import com.example.agribiz_v100.ProductItem;
 import com.example.agribiz_v100.R;
+import com.example.agribiz_v100.entities.BasketProductModel;
+import com.example.agribiz_v100.entities.ProductModel;
+import com.example.agribiz_v100.entities.UserModel;
 import com.example.agribiz_v100.farmer.MyProduct;
 import com.example.agribiz_v100.services.BasketManagement;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.badge.BadgeUtils;
 import com.google.firebase.Timestamp;
@@ -59,7 +63,7 @@ import java.util.zip.Inflater;
 public class ProductView extends AppCompatActivity {
 
     private static final String TAG = "ProductView";
-    ProductItem farmerProductItem;
+    ProductModel farmerProductItem;
     ImageView product_image_iv;
     ImageView hub_profile_image;
     LinearLayout rating_ll;
@@ -74,7 +78,7 @@ public class ProductView extends AppCompatActivity {
     ImageViewPagerAdapter imageViewPagerAdapter;
     List<String> images;
     BasketManagement basketManagement;
-
+    UserModel userModel;
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,7 +117,7 @@ public class ProductView extends AppCompatActivity {
                 return true;
             }
         });
-
+        userModel =new UserModel();
         addProductToBasket = new Dialog(this);
         addProductToBasket.setContentView(R.layout.add_to_basket_dialog);
         addProductToBasket.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -140,18 +144,41 @@ public class ProductView extends AppCompatActivity {
                 add_basket_product_btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Map<String, Object> product = farmerProductItem.getProductMap();
-                        Date date =new Date();
-                        Timestamp productDateAdded = new Timestamp(date);
-                        product.put("productBasketQuantity", Integer.parseInt(product_quantity_tv.getText().toString()));
-                        product.put("productDateAdded",productDateAdded);
-                        String hubId = product.get("productUserId").toString();
-                        String productId = product.get("productId").toString();
+                        DocumentReference docRef = db.collection("products").document(farmerProductItem.getProductId());
+                        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    DocumentSnapshot document = task.getResult();
+                                    if (document.exists()) {
+                                        Timestamp productDateAdded = new Timestamp(new Date());
+                                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                                        BasketProductModel basketProductModel = document.toObject(BasketProductModel.class);
+                                        basketProductModel.setProductBasketQuantity(Integer.parseInt(product_quantity_tv.getText().toString()));
+                                        basketProductModel.setProductDateAdded(productDateAdded);
+                                        basketManagement.addToBasket(basketProductModel);
+                                        addProductToBasket.dismiss();
+                                    } else {
+                                        Log.d(TAG, "No such document");
+                                        addProductToBasket.dismiss();
+                                    }
+                                } else {
+                                    Log.d(TAG, "get failed with ", task.getException());
+                                    addProductToBasket.dismiss();
+                                }
+                            }
+                        });
+                        //Map<String, Object> product = (Map<String, Object>) farmerProductItem;
+//                        Timestamp productDateAdded = new Timestamp(new Date());
+//                        product.put("productBasketQuantity", Integer.parseInt(product_quantity_tv.getText().toString()));
+//                        product.put("productDateAdded",productDateAdded);
+//                        String hubId = product.get("productUserId").toString();
+//                        String productId = product.get("productId").toString();
 //                        Log.d(TAG, product.get("productBasketQuantity").toString() + " " + user.getUid());
 //                        firebaseHelper.addProductToBasket(product, productId, user.getUid(), hubId);
 //                        CustomerMainActivity cm = (CustomerMainActivity)
-                        basketManagement.addToBasket(product);
-                        addProductToBasket.dismiss();
+//                        basketManagement.addToBasket(product);
+//                        addProductToBasket.dismiss();
                     }
                 });
                 minus_tv.setOnClickListener(new View.OnClickListener() {
@@ -192,6 +219,7 @@ public class ProductView extends AppCompatActivity {
         productPrice = findViewById(R.id.productPrice);
         productSold = findViewById(R.id.productSold);
         hubName = findViewById(R.id.hubName);
+
         productStocks = findViewById(R.id.productStocks);
         productLocation = findViewById(R.id.productLocation);
         rating_ll = findViewById(R.id.rating_ll);
@@ -233,9 +261,24 @@ public class ProductView extends AppCompatActivity {
                     rating_ll.addView(start);
                 }
             }
-
-
-            Log.d("ProductView", "Number of Item: " + farmerProductItem.getProductFarmImage());
+            DocumentReference docRef = db.collection("users").document(farmerProductItem.getProductUserId());
+            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                            userModel.setUserDisplayName(document.get("userDisplayName").toString());
+                            hubName.setText(userModel.getUserDisplayName().substring(0,userModel.getUserDisplayName().length()-2));
+                        } else {
+                            Log.d(TAG, "No such document");
+                        }
+                    } else {
+                        Log.d(TAG, "get failed with ", task.getException());
+                    }
+                }
+            });
         }
         Log.d("ProductView", "getIntent().getExtras().toString())");
     }

@@ -114,6 +114,7 @@
                 android:gravity="center">
 
                 <ImageView
+                    android:id="@+id/to_prepare_ib"
                     android:layout_width="64dp"
                     android:layout_height="64dp"
                     android:contentDescription="@string/to_pay"
@@ -145,6 +146,7 @@
                 android:gravity="center">
 
                 <ImageView
+                    android:id="@+id/to_ship_ib"
                     android:layout_width="64dp"
                     android:layout_height="64dp"
                     android:contentDescription="@string/to_ship"
@@ -176,6 +178,7 @@
                 android:gravity="center">
 
                 <ImageView
+                    android:id="@+id/to_receive_ib"
                     android:layout_width="64dp"
                     android:layout_height="64dp"
                     android:contentDescription="@string/to_receive"
@@ -207,6 +210,7 @@
                 android:gravity="center">
 
                 <ImageView
+                    android:id="@+id/rate_ib"
                     android:layout_width="64dp"
                     android:layout_height="64dp"
                     android:contentDescription="@string/rate_orders"

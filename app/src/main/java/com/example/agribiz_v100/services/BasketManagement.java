@@ -7,6 +7,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.example.agribiz_v100.entities.BasketProductModel;
 import com.example.agribiz_v100.validation.AuthValidation;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -31,14 +32,14 @@ public class BasketManagement {
         this.activity = activity;
     }
 
-    public void addToBasket(Map<String, Object> product) {
+    public void addToBasket(BasketProductModel product) {
         ProgressDialog progressDialog;
         progressDialog = new ProgressDialog(activity);
         progressDialog.setMessage("Adding product to basket...");
         progressDialog.setCancelable(false);
         progressDialog.show();
-        final DocumentReference prodDocRef = db.collection("products").document(product.get("productId").toString());
-        final DocumentReference basketProdRef = db.collection("basket").document(user.getUid()).collection("products").document(product.get("productId").toString());
+        final DocumentReference prodDocRef = db.collection("products").document(product.getProductId());
+        final DocumentReference basketProdRef = db.collection("basket").document(user.getUid()).collection("products").document(product.getProductId());
         db.runTransaction(new Transaction.Function<Void>() {
             @Override
             public Void apply(Transaction transaction) throws FirebaseFirestoreException {
@@ -46,7 +47,7 @@ public class BasketManagement {
                 // Note: this could be done without a transaction
                 //       by updating the population using FieldValue.increment()
                 long stocks = snapshot.getLong("productStocks");
-                if ((int) product.get("productBasketQuantity") <= stocks) {
+                if ((int) product.getProductBasketQuantity() <= stocks) {
                     transaction.set(basketProdRef, product);
 
                 } else {

@@ -21,6 +21,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -86,8 +88,11 @@ public class Basket extends Fragment {
     TextView totalAmount_tv;
     ListenerRegistration registration;
     Button checkout_btn;
-    LocationModel location;
+    Map<String, Object> location;
     List<String> listAdd;
+    List<Map<String, Object>> listLocation;
+    AutoCompleteTextView address_act;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,8 +123,10 @@ public class Basket extends Fragment {
         basket_item_list = view.findViewById(R.id.basket_item_list);
         select_all_cb = view.findViewById(R.id.select_all_cb);
         totalAmount_tv = view.findViewById(R.id.totalAmount_tv);
-        location = new LocationModel();
+        address_act = view.findViewById(R.id.address_act);
         listAdd = new ArrayList<>();
+        listLocation = new ArrayList<>();
+
         DocumentReference docRef = db.collection("users").document(user.getUid());
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -128,10 +135,15 @@ public class Basket extends Fragment {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                        List<Object> loc = Arrays.asList(document.get("userLocation"));
-                        for(Object l :loc){
-                            Log.d(TAG, ((Map<String,Object>) l).get("userBarangay").toString());
+                        List<Object> loc = (List<Object>) document.getData().get("userLocation");
+                        for (Object l : loc) {
+                            Log.d(TAG, l.toString());
+                            Map<String, Object> adds = (Map<String, Object>) l;
+                            listAdd.add(adds.get("userBarangay").toString());
+                            listLocation.add(adds);
                         }
+                        ArrayAdapter<String> addAdapter = new ArrayAdapter<String>(getContext(), R.layout.dropdown_item, listAdd);
+                        address_act.setAdapter(addAdapter);
                     } else {
                         Log.d(TAG, "No such document");
                     }
@@ -140,7 +152,13 @@ public class Basket extends Fragment {
                 }
             }
         });
-
+        address_act.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                location = listLocation.get(position);
+                Toast.makeText(getContext(), "hahahha", Toast.LENGTH_SHORT).show();
+            }
+        });
         checkout_btn.setOnClickListener(v -> {
             items.clear();
             String itemNames = "";
@@ -154,16 +172,18 @@ public class Basket extends Fragment {
             }
             AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
             alert.setTitle("Make an Order");
-            if (items.size() > 0)
+            if(location==null) {
+                alert.setMessage("Select or select address!");
+            }else if (items.size() > 0) {
                 alert.setMessage("Are you sure to proceed this order with " + items.size() + " number of Items : \n" + itemNames + "=====================\nTotal = ₱ " + total);
-            else
+            }else {
                 alert.setMessage("Select a Product to Checkout!");
-
+            }
             alert.setCancelable(false);
-            alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            alert.setPositiveButton("Proceed", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    if (items.size() > 0) {
+                    if (items.size() > 0 && location!=null) {
                         ProgressDialog progressDialog;
                         progressDialog = new ProgressDialog(getContext());
                         progressDialog.setMessage("Processing your Order, please wait!");
@@ -255,11 +275,10 @@ public class Basket extends Fragment {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
                         basketItems.clear();
-                        if(value.isEmpty()){
+                        if (value.isEmpty()) {
                             empty_basket_ll.setVisibility(View.VISIBLE);
                             mid_ll.setVisibility(View.GONE);
-                        }
-                        else {
+                        } else {
                             empty_basket_ll.setVisibility(View.GONE);
                             mid_ll.setVisibility(View.VISIBLE);
                         }

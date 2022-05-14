@@ -9,7 +9,7 @@ public class OrderProductModel extends BasketProductModel implements Serializabl
     String orderID;
     Timestamp orderDate;
     String orderStatus="pending";
-    LocationModel location;
+    Object location;
 
     public String getOrderID() {
         return orderID;
@@ -30,7 +30,7 @@ public class OrderProductModel extends BasketProductModel implements Serializabl
     public OrderProductModel(){
     }
 
-    public OrderProductModel(int productBasketQuantity, Timestamp productDateAdded, boolean checked, String orderID, Timestamp orderDate, String orderStatus, LocationModel location) {
+    public OrderProductModel(int productBasketQuantity, Timestamp productDateAdded, boolean checked, String orderID, Timestamp orderDate, String orderStatus, Object location) {
         super(productBasketQuantity, productDateAdded, checked);
         this.orderID = orderID;
         this.orderDate = orderDate;
@@ -38,7 +38,7 @@ public class OrderProductModel extends BasketProductModel implements Serializabl
         this.location = location;
     }
 
-    public OrderProductModel(String productId, String productUserId, String productName, String productDescription, List<String> productImage, String productCategory, Double productPrice, String productUnit, int productQuantity, int productStocks, int productSold, int productRating, int productNoCustomerRate, Timestamp productDateUploaded, Double productShippingFee, Double productOldPrice, int productSalesTo, int productBasketQuantity, Timestamp productDateAdded, boolean checked, String orderID, Timestamp orderDate, String orderStatus, LocationModel location) {
+    public OrderProductModel(String productId, String productUserId, String productName, String productDescription, List<String> productImage, String productCategory, Double productPrice, String productUnit, int productQuantity, int productStocks, int productSold, int productRating, int productNoCustomerRate, Timestamp productDateUploaded, Double productShippingFee, Double productOldPrice, int productSalesTo, int productBasketQuantity, Timestamp productDateAdded, boolean checked, String orderID, Timestamp orderDate, String orderStatus, Object location) {
         super(productId, productUserId, productName, productDescription, productImage, productCategory, productPrice, productUnit, productQuantity, productStocks, productSold, productRating, productNoCustomerRate, productDateUploaded, productShippingFee, productOldPrice, productSalesTo, productBasketQuantity, productDateAdded, checked);
         this.orderID = orderID;
         this.orderDate = orderDate;
@@ -54,11 +54,11 @@ public class OrderProductModel extends BasketProductModel implements Serializabl
         this.orderDate = orderDate;
     }
 
-    public LocationModel getLocation() {
+    public Object getLocation() {
         return location;
     }
 
-    public void setLocation(LocationModel location) {
+    public void setLocation(Object location) {
         this.location = location;
     }
 }

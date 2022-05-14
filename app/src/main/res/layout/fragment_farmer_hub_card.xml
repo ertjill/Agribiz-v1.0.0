@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:layout_width="wrap_content"
+    android:layout_width="65dp"
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
     android:paddingTop="1dp"
@@ -11,30 +11,48 @@
     android:paddingRight="5dp"
     android:id="@+id/farmerHub">
 
-    <com.google.android.material.card.MaterialCardView
+    <RelativeLayout
+        android:id="@+id/top_rl"
         android:layout_width="54dp"
-        android:layout_height="54dp"
-        android:backgroundTint="@color/brown"
-        app:cardCornerRadius="27dp">
-        <ImageView
-            android:id="@+id/farmerProfile"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/yellow"
+        android:layout_height="54dp">
 
-            />
-    </com.google.android.material.card.MaterialCardView>
 
+        <androidx.cardview.widget.CardView
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:backgroundTint="@color/logo_green"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="39dp"
+            app:cardCornerRadius="7.5dp" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/image_mcv"
+            android:layout_width="54dp"
+            android:layout_height="54dp"
+            android:layout_centerHorizontal="true"
+            android:backgroundTint="@color/brown"
+            app:cardCornerRadius="27dp">
+
+            <ImageView
+                android:id="@+id/farmerProfile"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/yellow"
+
+                />
+        </com.google.android.material.card.MaterialCardView>
+    </RelativeLayout>
     <TextView
         android:id="@+id/farmer"
-        android:layout_width="match_parent"
-        android:singleLine="true"
+        android:layout_width="60dp"
         android:layout_height="24dp"
+        android:layout_below="@+id/top_rl"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="6dp"
         android:fontFamily="@font/montserrat_regular"
-        android:gravity="center_horizontal"
         android:lineHeight="12dp"
         android:maxLines="2"
+        android:singleLine="true"
         android:text="Farmer Farmer"
         android:textColor="@color/brown"
         android:textFontWeight="400"
@@ -42,4 +60,4 @@
 
 
 
-</LinearLayout>
+</RelativeLayout>

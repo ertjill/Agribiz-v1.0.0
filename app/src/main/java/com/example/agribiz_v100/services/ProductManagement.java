@@ -1,30 +1,115 @@
 package com.example.agribiz_v100.services;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.example.agribiz_v100.entities.OrderProductModel;
 import com.example.agribiz_v100.entities.ProductModel;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.Transaction;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ProductManagement {
 
     ManageProductCallback manageProductCallback;
+
+    public static Task<Void> rateProduct(Activity activity, OrderProductModel order,String feedback){
+        ProgressDialog progressDialog;
+        progressDialog = new ProgressDialog(activity);
+        progressDialog.setMessage("Rating Product, please wait!");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        DocumentReference ordDocRef = db.collection("orders").document(user.getUid())
+                .collection("products").document(order.getOrderID());
+        DocumentReference pocRef = db.collection("products").document(order.getProductId());
+        DocumentReference rating = db.collection("rating").document(user.getUid())
+                .collection("products").document(order.getProductId());
+
+        return db.runTransaction(new Transaction.Function<Void>() {
+                    @Override
+                    public Void apply(Transaction transaction) throws FirebaseFirestoreException {
+                        DocumentSnapshot ratingSnapshot = transaction.get(rating);
+                        DocumentSnapshot prodDocRef = transaction.get(pocRef);
+
+//                        int rate = Integer.parseInt(ratingSnapshot.get("productNoCustomerRate").toString());
+                        long noUserRated = prodDocRef.getLong("productNoCustomerRate")+1;
+
+                        int rate = Integer.parseInt(prodDocRef.get("productRating").toString());
+                        if(rate>0){
+                            rate+=order.getProductRating();
+                            rate/=2;
+                        }
+                        else{
+                            rate=order.getProductRating();
+                        }
+
+                        if (!ratingSnapshot.exists()) {
+                            Map<String,Object> rat = new HashMap<>();
+                            transaction.update(ordDocRef,"productNoCustomerRate",1);
+                            transaction.update(ordDocRef,"productRating",order.getProductRating());
+
+                            transaction.update(pocRef,"productNoCustomerRate",noUserRated);
+                            transaction.update(pocRef,"productRating",rate);
+
+                            rat.put("userId",user.getUid());
+                            rat.put("productNoCustomerRate",1);
+                            rat.put("productRating",order.getProductRating());
+                            rat.put("productId",order.getProductId());
+                            rat.put("ratingFeedback",feedback);
+                            transaction.set(rating, rat);
+
+                            return null;
+                        } else {
+                            throw new FirebaseFirestoreException("Rated already",
+                                    FirebaseFirestoreException.Code.ABORTED);
+                        }
+                    }
+                }).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                progressDialog.dismiss();
+            }
+        });
+
+
+//        .addOnSuccessListener(new OnSuccessListener<Double>() {
+//            @Override
+//            public void onSuccess(Double result) {
+//                Log.d(TAG, "Transaction success: " + result);
+//            }
+//        })
+//                .addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//                        Log.w(TAG, "Transaction failure.", e);
+//                    }
+//                });
+    }
+
     public static Task<Void> addProduct(ProductModel product) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         return db.collection("products").document(product.getProductId()).set(product);

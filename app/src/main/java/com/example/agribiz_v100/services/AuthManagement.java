@@ -216,7 +216,18 @@ public class AuthManagement {
 
     public Task<AuthResult> loginAccount(String email, String password) {
         // Holds a task that returns AuthResult, which is a FirebaseAuth object
-        return mAuth.signInWithEmailAndPassword(email, password);
+        ProgressDialog progressDialog;
+        progressDialog = new ProgressDialog(activity);
+        progressDialog.setMessage("Logging in, please wait!");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+        return mAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        progressDialog.dismiss();
+                    }
+                });
     }
 
     public void verifyReceivedCode(String code) {
@@ -336,7 +347,11 @@ public class AuthManagement {
                 });
 
     }
-
+    public static void setUserStatus(String id,String status ){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("users").document(id)
+                .update("userStatus", 13);
+    }
     public static void logoutAccount() {
         FirebaseAuth.getInstance().signOut();
     }

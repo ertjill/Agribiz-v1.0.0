@@ -20,15 +20,18 @@ import com.example.agribiz_v100.customer.Donate;
 import com.example.agribiz_v100.customer.Profile;
 import com.example.agribiz_v100.customer.Search;
 import com.example.agribiz_v100.customer.Store;
+import com.example.agribiz_v100.services.AuthManagement;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class FarmerMainActivity extends AppCompatActivity {
     static String TAG = "FarmerMainActivity";
     ViewPager2 farmerMain_vp;
     BottomNavigationView bottom_navigation;
-
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private NavigationBarView.OnItemSelectedListener navigationListener = new NavigationBarView.OnItemSelectedListener() {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -71,6 +74,18 @@ public class FarmerMainActivity extends AppCompatActivity {
         bottom_navigation = findViewById(R.id.bottom_navigation);
         bottom_navigation.setOnItemSelectedListener(navigationListener);
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        AuthManagement.setUserStatus(user.getUid(),"active");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        AuthManagement.setUserStatus(user.getUid(),"inactive");
     }
 
     private class ViewPagerAdapter extends FragmentStateAdapter {

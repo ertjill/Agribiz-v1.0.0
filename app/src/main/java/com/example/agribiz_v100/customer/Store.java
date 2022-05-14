@@ -32,15 +32,17 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.agribiz_v100.FirebaseHelper;
-import com.example.agribiz_v100.ProductItem;
 import com.example.agribiz_v100.R;
+import com.example.agribiz_v100.entities.ProductModel;
 import com.example.agribiz_v100.services.ProductManagement;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -59,7 +61,7 @@ public class Store extends Fragment {
     TextView viewAll_tv;
     GridView topProduce_gv;
     String[] item_may_like = {"Sweet Tomato", "Sweet Tomato", "Sweet Tomato", "Sweet Tomato", "Sweet Tomato"};
-    SparseArray<ProductItem> productItems, topProducts;
+    SparseArray<ProductModel> productItems, topProducts;
     ProductGridAdapter productGridAdapter;
     FirebaseUser user;
     Bundle bundle;
@@ -134,7 +136,7 @@ public class Store extends Fragment {
 //                    i.putExtras(bundle);
 //                    startActivity(i);
                     Intent intent=new Intent();
-                    intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+//                    intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                     intent.setClassName(getContext(),"com.example.agribiz_v100.customer.ViewAllProductsActivity");
                     startActivity(intent);
                 }
@@ -145,7 +147,10 @@ public class Store extends Fragment {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Intent intent = new Intent(getContext(), ProductView.class);
-                    intent.putExtra("item", topProducts.get(position));
+//                    Bundle bundle =new Bundle();
+//                    bundle.putSerializable("item",topProducts.get(position));
+                    intent.putExtra("item", (Parcelable) topProducts.get(position));
+                    intent.putExtras(bundle);
                     intent.putExtra("user", user);
                     startActivity(intent);
                 }
@@ -166,32 +171,62 @@ public class Store extends Fragment {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("users")
                 .whereNotEqualTo("userType", "customer")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                .whereEqualTo("userStatus","active")
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                LayoutInflater i = getLayoutInflater();
-                                View v = i.inflate(R.layout.fragment_farmer_hub_card, null);
-                                TextView farmers = v.findViewById(R.id.farmer);
-                                ImageView farmerProfile = v.findViewById(R.id.farmerProfile);
-                                Glide.with(getContext())
-                                        .load(document.getData().get("userImage"))
-                                        .into(farmerProfile);
-                                farmers.setText(document.getData().get("userDisplayName").toString().substring(0,document.getData().get("userDisplayName").toString().length()-2));
-                                farmers.setOnClickListener(v1 -> {
-                                    Toast.makeText(getContext(), document.getData().get("userDisplayName").toString(), Toast.LENGTH_SHORT).show();
-                                });
-                                farmersHub_ll.addView(v);
-                                Log.d("FirebaseHelper", document.getData().get("userDisplayName").toString());
-                            }
+                    public void onEvent(@Nullable QuerySnapshot value,
+                                        @Nullable FirebaseFirestoreException e) {
+                        if (e != null) {
+                            Log.w(TAG, "Listen failed.", e);
+                            return;
+                        }
 
-                        } else {
-                            Log.d("FirebaseHelper", "Error getting documents: ", task.getException());
+                        for (QueryDocumentSnapshot document : value) {
+                            LayoutInflater i = getLayoutInflater();
+                            View v = i.inflate(R.layout.fragment_farmer_hub_card, null);
+                            TextView farmers = v.findViewById(R.id.farmer);
+                            ImageView farmerProfile = v.findViewById(R.id.farmerProfile);
+                            Glide.with(getContext())
+                                    .load(document.getData().get("userImage"))
+                                    .into(farmerProfile);
+                            farmers.setText(document.getData().get("userDisplayName").toString().substring(0,document.getData().get("userDisplayName").toString().length()-2));
+                            farmers.setOnClickListener(v1 -> {
+                                Toast.makeText(getContext(), document.getData().get("userDisplayName").toString(), Toast.LENGTH_SHORT).show();
+                            });
+                            farmersHub_ll.addView(v);
+                            Log.d("FirebaseHelper", document.getData().get("userDisplayName").toString());
                         }
                     }
                 });
+//        db.collection("users")
+//                .whereNotEqualTo("userType", "customer")
+//                .whereEqualTo("userStatus","active")
+//                .get()
+//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                        if (task.isSuccessful()) {
+//                            for (QueryDocumentSnapshot document : task.getResult()) {
+//                                LayoutInflater i = getLayoutInflater();
+//                                View v = i.inflate(R.layout.fragment_farmer_hub_card, null);
+//                                TextView farmers = v.findViewById(R.id.farmer);
+//                                ImageView farmerProfile = v.findViewById(R.id.farmerProfile);
+//                                Glide.with(getContext())
+//                                        .load(document.getData().get("userImage"))
+//                                        .into(farmerProfile);
+//                                farmers.setText(document.getData().get("userDisplayName").toString().substring(0,document.getData().get("userDisplayName").toString().length()-2));
+//                                farmers.setOnClickListener(v1 -> {
+//                                    Toast.makeText(getContext(), document.getData().get("userDisplayName").toString(), Toast.LENGTH_SHORT).show();
+//                                });
+//                                farmersHub_ll.addView(v);
+//                                Log.d("FirebaseHelper", document.getData().get("userDisplayName").toString());
+//                            }
+//
+//                        } else {
+//                            Log.d("FirebaseHelper", "Error getting documents: ", task.getException());
+//                        }
+//                    }
+//                });
 
     }
     public void displayTopProducts(){
@@ -213,7 +248,7 @@ public class Store extends Fragment {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 int size = task.getResult().size();
                                 Log.d(TAG, "TASK SIZE: " + size);
-                                ProductItem item = new ProductItem(document);
+                                ProductModel item = document.toObject(ProductModel.class);
                                 db.collection("users").document(document.getData().get("productUserId").toString())
                                         .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                     @Override
@@ -221,8 +256,8 @@ public class Store extends Fragment {
                                         if (task.isSuccessful()) {
                                             DocumentSnapshot doc = task.getResult();
                                             if (doc.exists()) {
-                                                item.setProductFarmImage(doc.getData().get("userImage").toString());
-                                                item.setProductFarmName(doc.getData().get("userDisplayName").toString());
+//                                                item.setProductFarmImage(doc.getData().get("userImage").toString());
+//                                                item.setProductFarmName(doc.getData().get("userDisplayName").toString());
                                             } else {
                                                 Log.d(TAG, "No such document");
                                             }
