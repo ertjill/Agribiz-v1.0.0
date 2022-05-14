@@ -350,7 +350,7 @@ public class AuthManagement {
     public static void setUserStatus(String id,String status ){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("users").document(id)
-                .update("userStatus", 13);
+                .update("userStatus", status);
     }
     public static void logoutAccount() {
         FirebaseAuth.getInstance().signOut();
