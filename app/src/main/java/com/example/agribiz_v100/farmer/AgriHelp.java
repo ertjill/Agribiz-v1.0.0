@@ -40,6 +40,7 @@ import java.util.List;
 
 public class AgriHelp extends Fragment {
 
+    TextView no_request;
     Button requestAssistance_btn;
     RequestAssistanceDialog requestAssistanceDialog;
 
@@ -57,6 +58,7 @@ public class AgriHelp extends Fragment {
         View view = inflater.inflate(R.layout.fragment_agri_help, container, false);
         requestAssistance_btn = view.findViewById(R.id.requestAssistance_btn);
         request_item_list = view.findViewById(R.id.request_item_list);
+        no_request = view.findViewById(R.id.no_request);
 
         requestAssistanceDialog = new RequestAssistanceDialog(getActivity(), this);
         requestAssistanceDialog.buildDialog();
@@ -64,6 +66,7 @@ public class AgriHelp extends Fragment {
         assistanceItems = new ArrayList<>();
         arAdapter = new AssistanceRequestAdapter(getContext(), assistanceItems);
         request_item_list.setAdapter(arAdapter);
+        request_item_list.setEmptyView(no_request);
 
         requestAssistance_btn.setOnClickListener(view1 -> {
             requestAssistanceDialog.showDialog();
@@ -213,8 +216,11 @@ public class AgriHelp extends Fragment {
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
                                     AuthValidation.successToast(context, "Cancelled request").show();
-                                    assistanceItems.remove(i);
-                                    notifyDataSetChanged();
+                                    if (i != -1 && i < assistanceItems.size())
+                                    {
+                                        assistanceItems.remove(i);
+                                        notifyDataSetChanged();
+                                    }
                                 }
                                 else {
                                     AuthValidation.failedToast(context, task.getException().getMessage()).show();

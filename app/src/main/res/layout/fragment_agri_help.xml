@@ -36,12 +36,24 @@
         android:layout_marginTop="20dp"
         android:textFontWeight="600"/>
 
+    <TextView
+        android:id="@+id/no_request"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/montserrat_medium"
+        android:layout_marginTop="100dp"
+        android:layout_gravity="center"
+        android:textColor="#5E3819"
+        android:alpha=".5"
+        android:text="No assistance requests yet"/>
+
     <ListView
         android:id="@+id/request_item_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/add_new_address_btn"
         android:layout_marginTop="20dp"
+        android:visibility="gone"
         android:dividerHeight="1dp">
     </ListView>
 

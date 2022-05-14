@@ -175,7 +175,7 @@ public class MyProduct extends Fragment {
                 @Override
                 public void onClick(View view) {
                     AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
-                    alert.setTitle("Deleter Product");
+                    alert.setTitle("Delete Product");
                     alert.setMessage("Are you sure to delete dis product?");
                     alert.setNegativeButton("No", null);
                     alert.setPositiveButton("Yes", (dialog, which) -> {

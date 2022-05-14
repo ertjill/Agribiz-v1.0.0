@@ -16,7 +16,7 @@
     <string name="edit_profile">Edit Profile</string>
     <string name="my_orders">My Orders</string>
     <string name="view_order_history">View Order History</string>
-    <string name="to_pay">To Pay</string>
+    <string name="to_prepare">To Prepare</string>
     <string name="to_ship">To Ship</string>
     <string name="to_receive">To Receive</string>
     <string name="rate_orders">Rate Orders</string>
