@@ -61,10 +61,9 @@
         <item name="textAllCaps">false</item>
         <item name="android:textColor">@color/brown</item>
     </style>
-
     <!--    CustomBarterTabText-->
     <style name="CustomBarterTabText" parent="TextAppearance.Design.Tab">
-        <item name="android:textSize">18.1sp</item>
+        <item name="android:textSize">14sp</item>
         <item name="android:fontFamily">@font/montserrat_regular</item>
         <item name="android:textAllCaps">false</item>
         <item name="textAllCaps">false</item>

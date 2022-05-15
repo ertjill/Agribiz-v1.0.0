@@ -16,13 +16,8 @@ import com.google.android.material.tabs.TabLayoutMediator;
 
 public class BarterGoodsActivity extends AppCompatActivity {
 
-    FragmentStateAdapter barterPager;
-
-    // tab titles
-    private final String[] titles = new String[]{ "Browse Items", "Sent Barter", "Received Barter" };
-
     MaterialToolbar topAppBar;
-    TabLayout tab_layout;
+    TabLayout barterGoods_tab;
     ViewPager2 barter_goods_pager;
 
     @Override
@@ -32,22 +27,37 @@ public class BarterGoodsActivity extends AppCompatActivity {
 
         references();
 
-        barterPager = new BarterPagerFragmentAdapter(this);
-        barter_goods_pager.setAdapter(barterPager);
+        BarterGoodsActivity.BarterPagerAdapter bpa = new BarterPagerAdapter(this);
+        barter_goods_pager.setAdapter(bpa);
 
-        new TabLayoutMediator(tab_layout, barter_goods_pager, (tab, position) -> tab.setText(titles[position])).attach();
+        barterGoods_tab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                barter_goods_pager.setCurrentItem(tab.getPosition());
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
 
         topAppBar.setNavigationOnClickListener(v -> finish());
     }
 
     private void references() {
         topAppBar = findViewById(R.id.topAppBar);
-        tab_layout = findViewById(R.id.tab_layout);
+        barterGoods_tab = findViewById(R.id.barterGoods_tab);
         barter_goods_pager = findViewById(R.id.barter_goods_pager);
     }
 
-    private class BarterPagerFragmentAdapter extends FragmentStateAdapter {
-        public BarterPagerFragmentAdapter(FragmentActivity fa) {
+    private class BarterPagerAdapter extends FragmentStateAdapter {
+        public BarterPagerAdapter(FragmentActivity fa) {
             super(fa);
         }
 
@@ -65,7 +75,7 @@ public class BarterGoodsActivity extends AppCompatActivity {
 
         @Override
         public int getItemCount() {
-            return titles.length;
+            return 3;
         }
     }
 }

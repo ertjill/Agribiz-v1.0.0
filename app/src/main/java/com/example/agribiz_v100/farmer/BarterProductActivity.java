@@ -27,7 +27,7 @@ public class BarterProductActivity extends AppCompatActivity {
 
         references();
 
-        BarterProductActivity.BarterProductFragmentAdapter barterProductsPager = new BarterProductActivity.BarterProductFragmentAdapter(this);
+        BarterProductActivity.BarterProductFragmentAdapter barterProductsPager = new BarterProductFragmentAdapter(this);
         barter_product_pager.setAdapter(barterProductsPager);
 
         barter_tab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
