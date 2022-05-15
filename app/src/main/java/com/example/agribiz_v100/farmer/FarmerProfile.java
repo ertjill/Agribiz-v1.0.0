@@ -1,12 +1,15 @@
 package com.example.agribiz_v100.farmer;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.media.Image;
 import android.os.Bundle;
 
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,6 +46,7 @@ public class FarmerProfile extends Fragment {
         displayName_tv.setText(user.getDisplayName().substring(0,user.getDisplayName().length()-2));
     }
 
+    @SuppressLint("ResourceType")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -119,7 +123,7 @@ public class FarmerProfile extends Fragment {
         logout_card.setOnClickListener(vi->{
             AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
             alert.setTitle("Logging out");
-            alert.setMessage("Do you want to Logout?");
+            alert.setMessage("Do you want to logout?");
             alert.setNegativeButton("No", null);
             alert.setPositiveButton("Yes", (dialog, which) -> {
                 AuthManagement.logoutAccount();

@@ -12,6 +12,7 @@
         android:orientation="horizontal"
         android:paddingLeft="26dp"
         android:paddingTop="12dp"
+        android:paddingStart="5dp"
         android:paddingBottom="12dp">
 
         <androidx.cardview.widget.CardView

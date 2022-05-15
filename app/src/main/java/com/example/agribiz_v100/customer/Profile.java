@@ -27,7 +27,7 @@ public class Profile extends Fragment {
 
     private static final String TAG = "Profile";
     CardView logout_card;
-    TextView displayName_tv, edit_profile_tv,my_address_tv, barter_goods_tv, messages_tv;
+    TextView displayName_tv, edit_profile_tv,my_address_tv, barter_goods_tv, messages_tv, view_order_history;
     ImageView userImage_iv;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     ImageView to_prepare_ib,to_ship_ib,to_receive_ib,rate_ib;
@@ -45,7 +45,7 @@ public class Profile extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
-
+        view_order_history = view.findViewById(R.id.view_order_history);
         my_address_tv = view.findViewById(R.id.my_address_tv);
         displayName_tv = view.findViewById(R.id.displayName_tv);
         userImage_iv = view.findViewById(R.id.userImage_iv);
@@ -92,6 +92,11 @@ public class Profile extends Fragment {
                 startActivity(intent);
             }
         });
+
+        view_order_history.setOnClickListener(v -> {
+            startActivity(new Intent(getActivity(), OrdersActivity.class));
+        });
+
         my_address_tv.setOnClickListener(t->{
             startActivity(new Intent(getActivity(), MyAddressesActivity.class));
         });

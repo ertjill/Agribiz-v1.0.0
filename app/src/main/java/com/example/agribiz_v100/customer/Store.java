@@ -67,7 +67,7 @@ public class Store extends Fragment {
     LinearLayout farmersHub_ll;
     LinearLayout no_product_ll,top_products_ll;
     ListView item_may_like_lv;
-    TextView viewAll_tv;
+    TextView viewAll_tv, not_available1;
     GridView topProduce_gv;
     String[] item_may_like = {"Sweet Tomato", "Sweet Tomato", "Sweet Tomato", "Sweet Tomato", "Sweet Tomato"};
     SparseArray<ProductModel> productItems, topProducts;
@@ -114,6 +114,7 @@ public class Store extends Fragment {
             View view = inflater.inflate(R.layout.fragment_store, container, false);
             no_product_ll = view.findViewById(R.id.no_product_ll);
             top_products_ll=view.findViewById(R.id.top_products_ll);
+            not_available1 = view.findViewById(R.id.not_available1);
             SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refreshLayout);
 
             swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -175,6 +176,7 @@ public class Store extends Fragment {
     private void setupItemsYouLike() {
         ItemMayLikeAdapter itemMayLikeAdapter = new ItemMayLikeAdapter(getContext(), itemLike);
         item_may_like_lv.setAdapter(itemMayLikeAdapter);
+        item_may_like_lv.setEmptyView(not_available1);
         db.collection("orders").document(user.getUid()).collection("products")
                 .orderBy("orderDate", Query.Direction.DESCENDING)
                 .limit(1)

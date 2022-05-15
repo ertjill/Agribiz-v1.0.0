@@ -97,17 +97,16 @@
                 <LinearLayout
                     android:id="@+id/top_products_ll"
                     android:layout_width="match_parent"
-                    android:layout_height="846dp"
+                    android:layout_height="795dp"
                     android:orientation="vertical">
 
                     <GridView
                         android:id="@+id/topProduce_gv"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:gravity="center_horizontal"
                         android:numColumns="2"
-                        android:scrollbars="none"
-                        />
+                        android:scrollbars="none"/>
                 </LinearLayout>
                 <LinearLayout
                     android:id="@+id/no_product_ll"
@@ -155,9 +154,20 @@
                 <ListView
                     android:id="@+id/item_may_like_lv"
                     android:layout_width="match_parent"
-                    android:layout_height="395dp"
+                    android:layout_height="500dp"
                     android:divider="#F1EEEE"
-                    android:dividerHeight="1dp"></ListView>
+                    android:dividerHeight="1dp"/>
+
+                <TextView
+                    android:id="@+id/not_available1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_medium"
+                    android:layout_marginTop="20dp"
+                    android:layout_gravity="center"
+                    android:textColor="#5E3819"
+                    android:alpha=".5"
+                    android:text="Items you may like is not yet available."/>
 
             </LinearLayout>
         </ScrollView>

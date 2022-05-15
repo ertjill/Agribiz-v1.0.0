@@ -86,7 +86,13 @@ public class BarterManagement {
                     .startAfter(last)
                     .get();
         }
+    }
 
+    public static Query getBarter(String userId) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        return db.collection("barters")
+                .whereEqualTo("barterUserID", userId)
+                .orderBy("barterDateRequested", Query.Direction.DESCENDING);
     }
 
 }
