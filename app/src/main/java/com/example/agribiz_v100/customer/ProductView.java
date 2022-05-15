@@ -144,30 +144,37 @@ public class ProductView extends AppCompatActivity {
                 add_basket_product_btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        DocumentReference docRef = db.collection("products").document(farmerProductItem.getProductId());
-                        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                if (task.isSuccessful()) {
-                                    DocumentSnapshot document = task.getResult();
-                                    if (document.exists()) {
-                                        Timestamp productDateAdded = new Timestamp(new Date());
-                                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                                        BasketProductModel basketProductModel = document.toObject(BasketProductModel.class);
-                                        basketProductModel.setProductBasketQuantity(Integer.parseInt(product_quantity_tv.getText().toString()));
-                                        basketProductModel.setProductDateAdded(productDateAdded);
-                                        basketManagement.addToBasket(basketProductModel);
-                                        addProductToBasket.dismiss();
-                                    } else {
-                                        Log.d(TAG, "No such document");
+                        basketManagement.addToBasket(farmerProductItem.getProductId(),Integer.parseInt(product_quantity_tv.getText().toString()))
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
                                         addProductToBasket.dismiss();
                                     }
-                                } else {
-                                    Log.d(TAG, "get failed with ", task.getException());
-                                    addProductToBasket.dismiss();
-                                }
-                            }
-                        });
+                                });
+//                        DocumentReference docRef = db.collection("products").document(farmerProductItem.getProductId());
+//                        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//                            @Override
+//                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                                if (task.isSuccessful()) {
+//                                    DocumentSnapshot document = task.getResult();
+//                                    if (document.exists()) {
+//                                        Timestamp productDateAdded = new Timestamp(new Date());
+//                                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+//                                        BasketProductModel basketProductModel = document.toObject(BasketProductModel.class);
+//                                        basketProductModel.setProductBasketQuantity(Integer.parseInt(product_quantity_tv.getText().toString()));
+//                                        basketProductModel.setProductDateAdded(productDateAdded);
+//                                        basketManagement.addToBasket(basketProductModel);
+//                                        addProductToBasket.dismiss();
+//                                    } else {
+//                                        Log.d(TAG, "No such document");
+//                                        addProductToBasket.dismiss();
+//                                    }
+//                                } else {
+//                                    Log.d(TAG, "get failed with ", task.getException());
+//                                    addProductToBasket.dismiss();
+//                                }
+//                            }
+//                        });
                         //Map<String, Object> product = (Map<String, Object>) farmerProductItem;
 //                        Timestamp productDateAdded = new Timestamp(new Date());
 //                        product.put("productBasketQuantity", Integer.parseInt(product_quantity_tv.getText().toString()));

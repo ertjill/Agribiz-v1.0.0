@@ -72,6 +72,174 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="17dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginRight="17dp"
+            android:layout_marginBottom="12dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:fontFamily="@font/montserrat_regular"
+                android:text="Orders"
+                android:textColor="@color/brown"
+                android:textFontWeight="700"
+                android:textSize="18sp"
+                tools:ignore="RelativeOverlap,UnusedAttribute" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:fontFamily="@font/montserrat_regular"
+                android:text="@string/view_order_history"
+                android:textColor="@color/brown"
+                android:textFontWeight="600"
+                android:textSize="11sp"
+                tools:ignore="RelativeOverlap,UnusedAttribute" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/highlight_back"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:layout_width="73dp"
+                android:layout_height="97dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/to_prepare_ib"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:contentDescription="@string/to_pay"
+                    android:src="@drawable/to_pay_tab" />
+
+                <TextView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="-8dp"
+                    android:background="@drawable/round_red_11"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textFontWeight="600"
+                    android:textSize="15sp"
+                    android:textStyle="normal"
+                    android:visibility="invisible"
+                    tools:ignore="UnusedAttribute" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="73dp"
+                android:layout_height="97dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/to_ship_ib"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:contentDescription="@string/to_ship"
+                    android:src="@drawable/to_ship_tab" />
+
+                <TextView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="-8dp"
+                    android:background="@drawable/round_red_11"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textFontWeight="600"
+                    android:textSize="15sp"
+                    android:textStyle="normal"
+                    android:visibility="invisible"
+                    tools:ignore="UnusedAttribute" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="73dp"
+                android:layout_height="97dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/to_receive_ib"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:contentDescription="@string/to_receive"
+                    android:src="@drawable/to_receive_tab" />
+
+                <TextView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="-8dp"
+                    android:background="@drawable/round_red_11"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textFontWeight="600"
+                    android:textSize="15sp"
+                    android:textStyle="normal"
+                    android:visibility="invisible"
+                    tools:ignore="UnusedAttribute" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="73dp"
+                android:layout_height="97dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/rate_ib"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:contentDescription="@string/rate_orders"
+                    android:src="@drawable/rate_orders_tab" />
+
+                <TextView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="-8dp"
+                    android:background="@drawable/round_red_11"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textFontWeight="600"
+                    android:textSize="15sp"
+                    android:textStyle="normal"
+                    android:visibility="invisible"
+                    tools:ignore="UnusedAttribute" />
+
+            </RelativeLayout>
+        </LinearLayout>
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"

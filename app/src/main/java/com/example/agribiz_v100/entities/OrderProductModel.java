@@ -30,16 +30,16 @@ public class OrderProductModel extends BasketProductModel implements Serializabl
     public OrderProductModel(){
     }
 
-    public OrderProductModel(int productBasketQuantity, Timestamp productDateAdded, boolean checked, String orderID, Timestamp orderDate, String orderStatus, Object location) {
-        super(productBasketQuantity, productDateAdded, checked);
+    public OrderProductModel(int productBasketQuantity, Timestamp productDateAdded, String customerId, boolean checked, String orderID, Timestamp orderDate, String orderStatus, Object location) {
+        super(productBasketQuantity, productDateAdded, customerId, checked);
         this.orderID = orderID;
         this.orderDate = orderDate;
         this.orderStatus = orderStatus;
         this.location = location;
     }
 
-    public OrderProductModel(String productId, String productUserId, String productName, String productDescription, List<String> productImage, String productCategory, Double productPrice, String productUnit, int productQuantity, int productStocks, int productSold, int productRating, int productNoCustomerRate, Timestamp productDateUploaded, Double productShippingFee, Double productOldPrice, int productSalesTo, int productBasketQuantity, Timestamp productDateAdded, boolean checked, String orderID, Timestamp orderDate, String orderStatus, Object location) {
-        super(productId, productUserId, productName, productDescription, productImage, productCategory, productPrice, productUnit, productQuantity, productStocks, productSold, productRating, productNoCustomerRate, productDateUploaded, productShippingFee, productOldPrice, productSalesTo, productBasketQuantity, productDateAdded, checked);
+    public OrderProductModel(String productId, String productUserId, String productName, String productDescription, List<String> productImage, String productCategory, Double productPrice, String productUnit, int productQuantity, int productStocks, int productSold, int productRating, int productNoCustomerRate, Timestamp productDateUploaded, Double productShippingFee, Double productOldPrice, int productSalesTo, int productBasketQuantity, Timestamp productDateAdded, String customerId, boolean checked, String orderID, Timestamp orderDate, String orderStatus, Object location) {
+        super(productId, productUserId, productName, productDescription, productImage, productCategory, productPrice, productUnit, productQuantity, productStocks, productSold, productRating, productNoCustomerRate, productDateUploaded, productShippingFee, productOldPrice, productSalesTo, productBasketQuantity, productDateAdded, customerId, checked);
         this.orderID = orderID;
         this.orderDate = orderDate;
         this.orderStatus = orderStatus;

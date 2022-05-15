@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -36,7 +37,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.ListResult;
@@ -56,7 +61,7 @@ public class MyProduct extends Fragment {
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     DocumentSnapshot last = null;
     AddProductDialog addProductDialog;
-
+    ListenerRegistration registration;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -71,8 +76,6 @@ public class MyProduct extends Fragment {
 
         farmer_product_lv = view.findViewById(R.id.farmer_product_lv);
         farmer_product_lv.setAdapter(farmerProductAdapter);
-
-        displayMyProducts();
 
         no_product_ll = view.findViewById(R.id.no_product_ll);
         add_product_ib.setOnClickListener(v -> {
@@ -91,29 +94,61 @@ public class MyProduct extends Fragment {
 
     int i = 0;
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        registration.remove();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        displayMyProducts();
+    }
+
     public void displayMyProducts() {
         Log.d("tag", "hereee displayMyProducts");
-        ProductManagement.getProducts(last, user.getUid())
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            Log.d("tag", last != null ? last.getData().toString() : "null");
-                            Log.d("tag", "hereee out");
-                            if (task.getResult().getDocuments().size() > 0) {
-                                Log.d("tag", "hereee inside");
-                                for (DocumentSnapshot document : task.getResult().getDocuments()) {
-                                    ProductModel item = document.toObject(ProductModel.class);
-                                    productItems.add(item);
-                                    Log.d("tag", "hereee inside inside");
-                                }
-                                farmerProductAdapter.notifyDataSetChanged();
-                                last = task.getResult().getDocuments().get(task.getResult().getDocuments().size() - 1);
-                            }
+        registration=ProductManagement.getProducts(last, user.getUid())
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value,
+                                @Nullable FirebaseFirestoreException e) {
+                productItems.clear();
+                if (e != null) {
+                    Log.w(TAG, "Listen failed.", e);
+                    return;
+                }
 
-                        }
-                    }
-                });
+//                List<ProductModel> prod = new ArrayList<>();
+                for (QueryDocumentSnapshot doc : value) {
+                    productItems.add(doc.toObject(ProductModel.class));
+                }
+
+                farmerProductAdapter.notifyDataSetChanged();
+                last = value.getDocuments().get(value.size()-1);
+//                Log.d(TAG, "Current cites in CA: " + cities);
+            }
+        });
+//                addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                        if (task.isSuccessful()) {
+//                            Log.d("tag", last != null ? last.getData().toString() : "null");
+//                            Log.d("tag", "hereee out");
+//                            if (task.getResult().getDocuments().size() > 0) {
+//                                Log.d("tag", "hereee inside");
+//                                for (DocumentSnapshot document : task.getResult().getDocuments()) {
+//                                    ProductModel item = document.toObject(ProductModel.class);
+//                                    productItems.add(item);
+//                                    Log.d("tag", "hereee inside inside");
+//                                }
+//                                farmerProductAdapter.notifyDataSetChanged();
+//                                last = task.getResult().getDocuments().get(task.getResult().getDocuments().size() - 1);
+//                            }
+//
+//                        }
+//                    }
+//                });
 
     }
 
@@ -188,8 +223,8 @@ public class MyProduct extends Fragment {
                                     public void onComplete(@NonNull Task<Void> task) {
                                         if (task.isSuccessful()) {
                                             AuthValidation.successToast(getContext(),"Successfully deleted a product").show();
-                                            productItems.remove(position);
-                                            notifyDataSetChanged();
+//                                            productItems.remove(position);
+//                                            notifyDataSetChanged();
                                         } else {
                                             task.getException().getStackTrace();
                                             AlertDialog.Builder alert = new AlertDialog.Builder(getContext());

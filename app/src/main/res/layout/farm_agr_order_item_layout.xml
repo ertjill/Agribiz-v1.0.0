@@ -151,20 +151,38 @@
             </LinearLayout>
         </RelativeLayout>
 
-        <Button
-            android:id="@+id/receive_cancel_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginEnd="10dp"
-            android:backgroundTint="@color/yellow_orange"
-            android:fontFamily="@font/montserrat_bold"
-            android:text="Order Received"
-            android:textAllCaps="false"
-            android:textColor="@color/army_green"
-            android:textSize="12sp"
-            android:visibility="visible"
-            app:cornerRadius="24dp"  />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
+            <Button
+                android:id="@+id/cancel_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_marginEnd="10dp"
+                android:backgroundTint="@color/grey_font"
+                android:fontFamily="@font/montserrat_bold"
+                android:text="Cancel"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                android:visibility="visible"
+                app:cornerRadius="24dp" />
+
+            <Button
+                android:id="@+id/prepared_shipped_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:backgroundTint="@color/yellow_orange"
+                android:fontFamily="@font/montserrat_bold"
+                android:text="Prepared"
+                android:textAllCaps="false"
+                android:textColor="@color/army_green"
+                android:textSize="12sp"
+                android:visibility="visible"
+                app:cornerRadius="24dp" />
+        </RelativeLayout>
     </LinearLayout>
 </LinearLayout>

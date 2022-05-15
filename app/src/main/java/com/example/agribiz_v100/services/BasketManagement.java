@@ -12,6 +12,7 @@ import com.example.agribiz_v100.validation.AuthValidation;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -20,7 +21,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Transaction;
 
-import java.util.Map;
+import java.util.Date;
 
 public class BasketManagement {
     Activity activity;
@@ -32,23 +33,29 @@ public class BasketManagement {
         this.activity = activity;
     }
 
-    public void addToBasket(BasketProductModel product) {
+    public Task<Void> addToBasket(String productId, int qty) {
         ProgressDialog progressDialog;
         progressDialog = new ProgressDialog(activity);
         progressDialog.setMessage("Adding product to basket...");
         progressDialog.setCancelable(false);
         progressDialog.show();
-        final DocumentReference prodDocRef = db.collection("products").document(product.getProductId());
-        final DocumentReference basketProdRef = db.collection("basket").document(user.getUid()).collection("products").document(product.getProductId());
-        db.runTransaction(new Transaction.Function<Void>() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        final DocumentReference prodDocRef = db.collection("products").document(productId);
+        final DocumentReference basketProdRef = db.collection("basket").document(user.getUid()).collection("products").document(productId);
+        return db.runTransaction(new Transaction.Function<Void>() {
             @Override
             public Void apply(Transaction transaction) throws FirebaseFirestoreException {
                 DocumentSnapshot snapshot = transaction.get(prodDocRef);
                 // Note: this could be done without a transaction
                 //       by updating the population using FieldValue.increment()
                 long stocks = snapshot.getLong("productStocks");
-                if ((int) product.getProductBasketQuantity() <= stocks) {
-                    transaction.set(basketProdRef, product);
+                BasketProductModel basketProductModel = snapshot.toObject(BasketProductModel.class);
+                basketProductModel.setCustomerId(user.getUid());
+                basketProductModel.setProductBasketQuantity(qty);
+                basketProductModel.setProductDateAdded(new Timestamp(new Date()));
+                if ((int) basketProductModel.getProductBasketQuantity() <= stocks) {
+
+                    transaction.set(basketProdRef, basketProductModel);
 
                 } else {
                     throw new FirebaseFirestoreException("Insufficient Products Stocks ",
@@ -61,23 +68,24 @@ public class BasketManagement {
             public void onSuccess(Void aVoid) {
                 progressDialog.dismiss();
                 Log.d(TAG, "Transaction success!");
-                AuthValidation.successToast(activity,"Product added to basket").show();
+                AuthValidation.successToast(activity, "Product added to basket").show();
 
             }
         }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        progressDialog.dismiss();
-                        Log.w(TAG, "Transaction failure.", e);
-                        AlertDialog.Builder alert = new AlertDialog.Builder(activity);
-                        alert.setTitle("Adding Product to Basket:");
-                        alert.setMessage(e.getMessage());
-                        alert.setPositiveButton("Ok", null);
-                        alert.show();
-                    }
-                });
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                progressDialog.dismiss();
+                Log.w(TAG, "Transaction failure.", e);
+                AlertDialog.Builder alert = new AlertDialog.Builder(activity);
+                alert.setTitle("Adding Product to Basket:");
+                alert.setMessage(e.getMessage());
+                alert.setPositiveButton("Ok", null);
+                alert.show();
+            }
+        });
     }
-    public Task<Void> deleteFromBasket(String id){
+
+    public Task<Void> deleteFromBasket(String id) {
         return db.collection("basket").document(user.getUid()).collection("products").document(id).delete();
     }
 }

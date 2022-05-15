@@ -38,10 +38,14 @@
             android:launchMode="singleInstance" />
         <activity
             android:name=".agrovit.AgrovitMainActivity"
-            android:exported="false" />
+            android:alwaysRetainTaskState="true"
+            android:exported="false"
+            android:launchMode="singleInstance"/>
         <activity
             android:name=".farmer.FarmerMainActivity"
-            android:exported="true" /> <!-- Profiles -->
+            android:alwaysRetainTaskState="true"
+            android:exported="true"
+            android:launchMode="singleInstance"/> <!-- Profiles -->
         <activity
             android:name=".farmer.FarmerEditProfileActivity"
             android:exported="false" />

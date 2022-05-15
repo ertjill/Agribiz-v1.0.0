@@ -1,11 +1,14 @@
 package com.example.agribiz_v100.customer;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -34,6 +37,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,6 +54,7 @@ import com.example.agribiz_v100.entities.OrderProductModel;
 import com.example.agribiz_v100.services.BasketManagement;
 import com.example.agribiz_v100.services.OrderManagement;
 import com.example.agribiz_v100.validation.AuthValidation;
+import com.example.agribiz_v100.validation.ProductValidation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -65,6 +70,7 @@ import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.Transaction;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
@@ -175,51 +181,53 @@ public class Basket extends Fragment {
             }
             AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
             alert.setTitle("Make an Order");
-            if(location==null) {
+            if (location == null) {
                 alert.setMessage("Select or select address!");
-            }else if (items.size() > 0) {
-                alert.setMessage("Are you sure to proceed this order with " + items.size() + " number of Items : \n" + itemNames + "=====================\nTotal = ₱ " + total);
-            }else {
+                alert.setPositiveButton("Ok",null);
+            } else if(items.size()<=0){
                 alert.setMessage("Select a Product to Checkout!");
-            }
-            alert.setCancelable(false);
-            alert.setPositiveButton("Proceed", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    if (items.size() > 0 && location!=null) {
-                        ProgressDialog progressDialog;
-                        progressDialog = new ProgressDialog(getContext());
-                        progressDialog.setMessage("Processing your Order, please wait!");
-                        progressDialog.setCancelable(false);
-                        progressDialog.show();
-                        OrderManagement.createOrder(getActivity(), items, location)
-                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        progressDialog.dismiss();
-                                        Log.d(TAG, "Transaction success!");
-                                        AuthValidation.successToast(getContext(), "Order made Successfully").show();
+                alert.setPositiveButton("Ok",null);
+            }else {
+                alert.setMessage("Are you sure to proceed this order with " + items.size() + " number of Items : \n" + itemNames + "=====================\nTotal = ₱ " + total);
+                alert.setCancelable(false);
+                alert.setPositiveButton("Proceed", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (items.size() > 0 && location != null) {
+                            ProgressDialog progressDialog;
+                            progressDialog = new ProgressDialog(getContext());
+                            progressDialog.setMessage("Processing your Order, please wait!");
+                            progressDialog.setCancelable(false);
+                            progressDialog.show();
+                            OrderManagement.createOrder(getActivity(), items, location)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            progressDialog.dismiss();
+                                            Log.d(TAG, "Transaction success!");
+                                            AuthValidation.successToast(getContext(), "Order made Successfully").show();
+                                            displayBasketItem();
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Log.w(TAG, "Transaction failure.", e);
+                                            progressDialog.dismiss();
+                                            AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+                                            alert.setTitle("Failed to make an Order:");
+                                            alert.setMessage(e.getLocalizedMessage());
+                                            alert.setCancelable(false);
+                                            alert.setPositiveButton("Ok", null);
+                                            alert.show();
 
-                                    }
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Log.w(TAG, "Transaction failure.", e);
-                                        progressDialog.dismiss();
-                                        AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
-                                        alert.setTitle("Failed to make an Order:");
-                                        alert.setMessage(e.getLocalizedMessage());
-                                        alert.setCancelable(false);
-                                        alert.setPositiveButton("Ok", null);
-                                        alert.show();
-
-                                    }
-                                });
+                                        }
+                                    });
+                        }
                     }
-                }
-            });
-            alert.setNegativeButton("Cancel", null);
+                });
+                alert.setNegativeButton("Cancel", null);
+            }
             alert.show();
         });
 
@@ -236,31 +244,21 @@ public class Basket extends Fragment {
             }
         });
         basket_item_list.setAdapter(basketListAdapter);
+        basket_item_list.setEmptyView(empty_basket_ll);
         return view;
-    }
-
-    public void showIfEmpty() {
-        if (basketItems.size() > 0) {
-            empty_basket_ll.setVisibility(View.GONE);
-            mid_ll.setVisibility(View.VISIBLE);
-        } else {
-            empty_basket_ll.setVisibility(View.VISIBLE);
-            mid_ll.setVisibility(View.GONE);
-        }
     }
 
     @Override
     public void onStart() {
         super.onStart();
         Log.d(TAG, "Starting Basket...");
-        Log.d(TAG, basketItems.size() + "");
 
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        registration.remove();
+//        registration.remove();
     }
 
     @Override
@@ -272,110 +270,116 @@ public class Basket extends Fragment {
 
     public void displayBasketItem() {
         Log.d(TAG, "Listen failed.");
-        registration = db.collection("basket").document(user.getUid()).collection("products")
-                .orderBy("productDateAdded", Query.Direction.DESCENDING)
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+//        registration = db.collection("basket").document(user.getUid()).collection("products")
+//                .orderBy("productDateAdded", Query.Direction.DESCENDING)
+//                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
+//                        basketItems.clear();
+//                        basketListAdapter.notifyDataSetChanged();
+////                        if (value.isEmpty()) {
+////                            empty_basket_ll.setVisibility(View.VISIBLE);
+////                            mid_ll.setVisibility(View.GONE);
+////                        } else {
+////                            empty_basket_ll.setVisibility(View.GONE);
+////                            mid_ll.setVisibility(View.VISIBLE);
+////                        }
+//                        if (e != null) {
+//                            Log.d(TAG, "Listen failed.", e);
+//                            return;
+//                        }
+//                        final String[] tempId = {""};
+//
+//                        for (QueryDocumentSnapshot document : value) {
+//                            BasketProductModel item = document.toObject(BasketProductModel.class);
+//                            BasketHeader basketHeader = new BasketHeader();
+//                            //Log.d(TAG, document.getId() + " => " + document.getData().get("productUserId"));
+//                            db.collection("users")
+//                                    .document(document.getData().get("productUserId").toString())
+//                                    .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//                                        @Override
+//                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                                            if (task.isSuccessful()) {
+//                                                DocumentSnapshot doc = task.getResult();
+//                                                if (doc.exists()) {
+//                                                    basketHeader.setFarmId(doc.getId());
+//                                                    basketHeader.setFarmName((doc.getData().get("userDisplayName")).toString());
+//                                                    if (tempId[0].equals("") || !tempId[0].equals(doc.getId())) {
+//                                                        basketItems.add(basketHeader);
+//                                                        tempId[0] = doc.getId();
+//                                                    }
+//                                                    basketItems.add(item);
+//                                                    Log.d(TAG, "DocumentSnapshot data: " + basketItems.size());
+//                                                } else {
+//                                                    Log.d(TAG, "No such document");
+//                                                }
+//                                                basketListAdapter.notifyDataSetChanged();
+//                                            } else {
+//                                                Log.d(TAG, "get failed with ", task.getException());
+//                                            }
+//                                        }
+//                                    });
+//                        }
+//                    }
+//                });
+        db.collection("basket").document(user.getUid()).collection("products")
+                .orderBy("productDateAdded", Query.Direction.DESCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
-                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
-                        basketItems.clear();
-                        if (value.isEmpty()) {
-                            empty_basket_ll.setVisibility(View.VISIBLE);
-                            mid_ll.setVisibility(View.GONE);
-                        } else {
-                            empty_basket_ll.setVisibility(View.GONE);
-                            mid_ll.setVisibility(View.VISIBLE);
-                        }
-                        if (e != null) {
-                            Log.d(TAG, "Listen failed.", e);
-                            return;
-                        }
-                        final String[] tempId = {""};
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()){
+                            basketItems.clear();
+                            basketListAdapter.notifyDataSetChanged();
+//                        if (value.isEmpty()) {
+//                            empty_basket_ll.setVisibility(View.VISIBLE);
+//                            mid_ll.setVisibility(View.GONE);
+//                        } else {
+//                            empty_basket_ll.setVisibility(View.GONE);
+//                            mid_ll.setVisibility(View.VISIBLE);
+//                        }
+                            if (task.getException() != null) {
+                                Log.d(TAG, "Listen failed.", task.getException());
+                                return;
+                            }
+                            final String[] tempId = {""};
 
-                        for (QueryDocumentSnapshot document : value) {
-                            BasketProductModel item = document.toObject(BasketProductModel.class);
-                            BasketHeader basketHeader = new BasketHeader();
-                            //Log.d(TAG, document.getId() + " => " + document.getData().get("productUserId"));
-                            db.collection("users")
-                                    .document(document.getData().get("productUserId").toString())
-                                    .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                            if (task.isSuccessful()) {
-                                                DocumentSnapshot doc = task.getResult();
-                                                if (doc.exists()) {
-                                                    basketHeader.setFarmId(doc.getId());
-                                                    basketHeader.setFarmName((doc.getData().get("userDisplayName")).toString());
-                                                    if (tempId[0].equals("") || !tempId[0].equals(doc.getId())) {
-                                                        basketItems.add(basketHeader);
-                                                        tempId[0] = doc.getId();
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                BasketProductModel item = document.toObject(BasketProductModel.class);
+                                BasketHeader basketHeader = new BasketHeader();
+                                //Log.d(TAG, document.getId() + " => " + document.getData().get("productUserId"));
+                                db.collection("users")
+                                        .document(document.getData().get("productUserId").toString())
+                                        .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                if (task.isSuccessful()) {
+                                                    DocumentSnapshot doc = task.getResult();
+                                                    if (doc.exists()) {
+                                                        basketHeader.setFarmId(doc.getId());
+                                                        basketHeader.setFarmName((doc.getData().get("userDisplayName")).toString());
+                                                        if (tempId[0].equals("") || !tempId[0].equals(doc.getId())) {
+                                                            basketItems.add(basketHeader);
+                                                            tempId[0] = doc.getId();
+                                                        }
+                                                        basketItems.add(item);
+                                                        Log.d(TAG, "DocumentSnapshot data: " + basketItems.size());
+                                                    } else {
+                                                        Log.d(TAG, "No such document");
                                                     }
-                                                    basketItems.add(item);
                                                     basketListAdapter.notifyDataSetChanged();
-                                                    Log.d(TAG, "DocumentSnapshot data: " + basketItems.size());
                                                 } else {
-                                                    Log.d(TAG, "No such document");
-                                                    basketListAdapter.notifyDataSetChanged();
+                                                    Log.d(TAG, "get failed with ", task.getException());
                                                 }
-                                            } else {
-                                                Log.d(TAG, "get failed with ", task.getException());
-                                                basketListAdapter.notifyDataSetChanged();
                                             }
-                                        }
-                                    });
+                                        });
+                            }
                         }
-                        Log.d(TAG, "Current cites in CA: ");
-                        basketListAdapter.notifyDataSetChanged();
+                        else{
+
+                        }
                     }
                 });
 
 
-//        db.collection("users").document(user.getUid()).collection("basket")
-//                .orderBy("productUserId", Query.Direction.ASCENDING)
-//                .orderBy("productDateAdded", Query.Direction.DESCENDING)
-//                .get()
-//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                        if (task.isSuccessful()) {
-//                            final int[] i = {0};
-//                            final String[] tempId = {""};
-//                            for (QueryDocumentSnapshot document : task.getResult()) {
-//                                BasketProductModel item = new BasketProductModel(document);
-//                                BasketHeader basketHeader = new BasketHeader();
-//                                //Log.d(TAG, document.getId() + " => " + document.getData().get("productUserId"));
-//                                db.collection("users")
-//                                        .document(document.getData().get("productUserId").toString())
-//                                        .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//                                    @Override
-//                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                                        if (task.isSuccessful()) {
-//                                            DocumentSnapshot doc = task.getResult();
-//                                            if (doc.exists()) {
-//                                                basketHeader.setFarmId(doc.getId());
-//                                                basketHeader.setFarmName((doc.getData().get("username")).toString());
-//                                                if (tempId[0].equals("") || !tempId[0].equals(doc.getId())) {
-//                                                    basketItems.append(i[0]++, basketHeader);
-//                                                    tempId[0] = doc.getId();
-//                                                }
-//                                                basketItems.append(i[0]++, item);
-//                                                basketListAdapter.notifyDataSetChanged();
-//                                                Log.d(TAG, "DocumentSnapshot data: " + basketItems.size());
-//                                            } else {
-//                                                Log.d(TAG, "No such document");
-//                                            }
-//                                        } else {
-//                                            Log.d(TAG, "get failed with ", task.getException());
-//                                        }
-//                                    }
-//                                });
-//
-//                            }
-//                        } else {
-//                            Log.d(TAG, "Error getting documents: ", task.getException());
-//                            Log.e(TAG, task.getException().getLocalizedMessage());
-//                        }
-//                    }
-//                });
     }
 
     public class BasketListAdapter extends BaseAdapter {
@@ -488,7 +492,7 @@ public class Basket extends Fragment {
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()) {
                                                 AuthValidation.successToast(getContext(), "Item removed").show();
-                                                notifyDataSetChanged();
+                                                displayBasketItem();
                                             } else {
                                                 AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
                                                 alert.setTitle("Error");
@@ -515,41 +519,92 @@ public class Basket extends Fragment {
 //                    });
                     ImageView item_image = convertView.findViewById(R.id.item_image);
                     TextView item_name = convertView.findViewById(R.id.item_name);
-                    EditText productBasketQuantity_et = convertView.findViewById(R.id.productBasketQuantity_et);
-                    productBasketQuantity_et.addTextChangedListener(new TextWatcher() {
-                        @Override
-                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    TextView productBasketQuantity_tv = convertView.findViewById(R.id.productBasketQuantity_tv);
 
-                        }
-
-                        @Override
-                        public void onTextChanged(CharSequence s, int start, int before, int count) {
-                                try{
-                                    Integer.parseInt(s.toString());
-                                }catch (Exception e){
-                                    productBasketQuantity_et.setText(String.valueOf(((BasketProductModel) basketItems.get(position)).getProductBasketQuantity()));
-                                }
-                        }
-
-                        @Override
-                        public void afterTextChanged(Editable s) {
-
-                        }
-                    });
+//
                     TextView item_price = convertView.findViewById(R.id.item_price);
                     TextView item_stocks = convertView.findViewById(R.id.item_stocks);
                     TextView minus_tv = convertView.findViewById(R.id.minus_tv);
                     minus_tv.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            DocumentReference basketDocRef = db.collection("basket").document(user.getUid()).collection("products").document(((BasketProductModel) basketItems.get(position)).getProductId());
+                            DocumentReference prodDocRef = db.collection("products").document(((BasketProductModel) basketItems.get(position)).getProductId());
 
+                            db.runTransaction(new Transaction.Function<Void>() {
+                                        @Override
+                                        public Void apply(Transaction transaction) throws FirebaseFirestoreException {
+                                            DocumentSnapshot basketSnapshot = transaction.get(basketDocRef);
+                                            int count = Integer.parseInt(basketSnapshot.get("productBasketQuantity").toString()) - 1;
+                                            if (count > 0) {
+                                                transaction.update(basketDocRef, "productBasketQuantity", count);
+                                                return null;
+                                            } else {
+                                                throw new FirebaseFirestoreException("Quantity must not less or equal to Zero!",
+                                                        FirebaseFirestoreException.Code.ABORTED);
+                                            }
+                                        }
+                                    }).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void result) {
+                                            Log.d(TAG, "Transaction success: " + result);
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Log.w(TAG, "Transaction failure.", e);
+                                            AlertDialog.Builder alert = new AlertDialog.Builder((getContext()));
+                                            alert.setTitle("Failed!");
+                                            alert.setMessage("Quantity must not less or equal to Zero!");
+                                            alert.setCancelable(false);
+                                            alert.setPositiveButton("Ok", null);
+                                            alert.show();
+                                        }
+                                    });
                         }
                     });
                     TextView add_tv = convertView.findViewById(R.id.add_tv);
                     add_tv.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            DocumentReference basketDocRef = db.collection("basket").document(user.getUid()).collection("products").document(((BasketProductModel) basketItems.get(position)).getProductId());
+                            DocumentReference prodDocRef = db.collection("products").document(((BasketProductModel) basketItems.get(position)).getProductId());
 
+                            db.runTransaction(new Transaction.Function<Void>() {
+                                        @Override
+                                        public Void apply(Transaction transaction) throws FirebaseFirestoreException {
+                                            DocumentSnapshot basketSnapshot = transaction.get(basketDocRef);
+                                            DocumentSnapshot prodSnapshot = transaction.get(prodDocRef);
+                                            int count = Integer.parseInt(basketSnapshot.get("productBasketQuantity").toString()) + 1;
+                                            int stocks = Integer.parseInt(prodSnapshot.get("productStocks").toString());
+                                            if (stocks >= count) {
+                                                transaction.update(basketDocRef, "productBasketQuantity", count);
+                                                return null;
+                                            } else {
+                                                throw new FirebaseFirestoreException("Insufficient Product Stocks.",
+                                                        FirebaseFirestoreException.Code.ABORTED);
+                                            }
+                                        }
+                                    }).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void result) {
+                                            Log.d(TAG, "Transaction success: " + result);
+
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Log.w(TAG, "Transaction failure.", e);
+                                            AlertDialog.Builder alert = new AlertDialog.Builder((getContext()));
+                                            alert.setTitle("Failed!");
+                                            alert.setMessage("Insufficient Product Stocks.");
+                                            alert.setCancelable(false);
+                                            alert.setPositiveButton("Ok", null);
+                                            alert.show();
+                                        }
+                                    });
                         }
                     });
                     item_name.setText(((BasketProductModel) basketItems.get(position)).getProductName());
@@ -558,12 +613,93 @@ public class Basket extends Fragment {
                     CheckBox item_checkbox = convertView.findViewById(R.id.item_checkbox);
                     item_checkbox.setChecked(((BasketProductModel) basketItems.get(position)).isChecked());
                     String sp = ((BasketProductModel) basketItems.get(position)).getProductImage().get(0);
-//                    .split("[\\[\\]]")
+
                     Glide.with(context)
                             .load(sp)
                             .centerCrop()
                             .into(item_image);
-                    productBasketQuantity_et.setText(String.valueOf(((BasketProductModel) basketItems.get(position)).getProductBasketQuantity()));
+
+                    productBasketQuantity_tv.setText(((BasketProductModel) basketItems.get(position)).getProductBasketQuantity() + "");
+                    productBasketQuantity_tv.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Dialog dialog = new Dialog(getContext());
+                            dialog.setContentView(R.layout.quantity_dialog_layout);
+                            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                            dialog.setCancelable(false);
+                            EditText qty_et = dialog.findViewById(R.id.qty_et);
+                            qty_et.setText(((BasketProductModel) basketItems.get(position)).getProductBasketQuantity() + "");
+                            Button cancel_btn = dialog.findViewById(R.id.cancel_btn);
+                            cancel_btn.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    dialog.dismiss();
+                                }
+                            });
+                            Button update_qty_btn = dialog.findViewById(R.id.update_qty_btn);
+                            update_qty_btn.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+
+                                   String quantity = qty_et.getText().toString();
+                                    if(!ProductValidation.validateQuantity(quantity).equals("")){
+                                        AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+                                        alert.setTitle("Failed!");
+                                        alert.setMessage(ProductValidation.validateQuantity(quantity));
+                                        alert.setCancelable(false);
+                                        alert.setPositiveButton("Ok",null);
+                                        alert.show();
+                                    }
+                                    else{
+                                        ProgressDialog progressDialog;
+                                        progressDialog = new ProgressDialog(getContext());
+                                        progressDialog.setMessage("Updating Prduct Qty, please wait!");
+                                        progressDialog.setCancelable(false);
+                                        progressDialog.show();
+                                        DocumentReference prodDocRef = db.collection("products").document(((BasketProductModel) basketItems.get(position)).getProductId());
+                                        DocumentReference basketDocRef = db.collection("basket").document(user.getUid()).collection("products").document(((BasketProductModel) basketItems.get(position)).getProductId());
+                                        db.runTransaction(new Transaction.Function<Void>() {
+                                                    @Override
+                                                    public Void apply(Transaction transaction) throws FirebaseFirestoreException {
+                                                        DocumentSnapshot prodSnapshot = transaction.get(prodDocRef);
+                                                        int stocks = Integer.parseInt(prodSnapshot.get("productStocks").toString());
+                                                        if (stocks >= Integer.parseInt(quantity) && Integer.parseInt(quantity)>0) {
+                                                            transaction.update(basketDocRef, "productBasketQuantity",Integer.parseInt(quantity) );
+                                                            return null;
+                                                        } else {
+                                                            throw new FirebaseFirestoreException("Product Stocks cannot handle Quantity",
+                                                                    FirebaseFirestoreException.Code.ABORTED);
+                                                        }
+                                                    }
+                                                }).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void result) {
+                                                        Log.d(TAG, "Transaction success: " + result);
+                                                        dialog.dismiss();
+                                                        progressDialog.dismiss();
+                                                        AuthValidation.successToast(getContext(),"Successfully Updated Quantity").show();
+                                                        displayBasketItem();
+                                                    }
+                                                })
+                                                .addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        Log.w(TAG, "Transaction failure.", e);
+                                                        progressDialog.dismiss();
+                                                        AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+                                                        alert.setTitle("Failed!");
+                                                        alert.setMessage(e.getLocalizedMessage());
+                                                        alert.setCancelable(false);
+                                                        alert.setPositiveButton("Ok",null);
+                                                        alert.show();
+                                                    }
+                                                });
+                                    }
+                                }
+                            });
+                            dialog.show();
+                        }
+                    });
                     item_checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                         @Override
                         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

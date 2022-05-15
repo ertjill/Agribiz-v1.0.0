@@ -24,6 +24,10 @@
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"/>
 
+<!--    <NumberPicker-->
+<!--        android:layout_width="50dp"-->
+<!--        android:layout_height="50dp"/>-->
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -86,23 +90,24 @@
                 android:fontFamily="@font/montserrat_semibold"
                 android:gravity="center"
                 android:text="-"
+                android:visibility="gone"
                 android:textColor="@color/army_green"
                 android:textFontWeight="700"
                 android:textSize="12sp" />
 
-            <EditText
-                android:id="@+id/productBasketQuantity_et"
-                android:layout_width="31dp"
-                android:layout_height="16dp"
+
+            <TextView
+                android:id="@+id/productBasketQuantity_tv"
+                android:layout_width="30dp"
+                android:layout_height="17dp"
                 android:background="@color/army_green"
                 android:fontFamily="@font/montserrat_semibold"
                 android:gravity="center"
                 android:maxLength="2"
                 android:inputType="number"
-                android:lineHeight="17.07sp"
-                android:text="1"
                 android:textColor="@color/white"
-                android:textSize="10sp" />
+                android:text="1"
+                android:textSize="10sp"/>
 
             <TextView
                 android:id="@+id/add_tv"
@@ -111,6 +116,7 @@
                 android:background="@color/yellow_orange"
                 android:gravity="center"
                 android:text="+"
+                android:visibility="gone"
                 android:textColor="@color/army_green"
                 android:textSize="12sp" />
         </LinearLayout>

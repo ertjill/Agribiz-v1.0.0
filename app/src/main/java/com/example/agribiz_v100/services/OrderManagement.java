@@ -1,12 +1,14 @@
 package com.example.agribiz_v100.services;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 
 import androidx.annotation.NonNull;
 
 import com.example.agribiz_v100.entities.BasketProductModel;
 import com.example.agribiz_v100.entities.OrderProductModel;
+import com.example.agribiz_v100.validation.AuthValidation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
@@ -61,6 +63,10 @@ public class OrderManagement {
                             i++;
                         }
                         int i1=0;
+//                        DocumentReference ordDocRef = db.collection("orders").document(user.getUid());
+//                        Map<String,Object> ord = new HashMap<>();
+//                        ord.put("orderCustomerId",user.getUid());
+//                        transaction.set(ordDocRef, ord);
                         for(OrderProductModel item:opm){
                             Date orderDate = new Date();
                             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("ddMMyyyyHHmmss");
@@ -132,13 +138,13 @@ public class OrderManagement {
                         int stocks = Integer.parseInt( prodSnapshot.get("productStocks").toString())+ order.getProductBasketQuantity();
                         int sold = (Integer.parseInt(prodSnapshot.get("productSold").toString())- order.getProductBasketQuantity());
                         String status = snapshot.get("orderStatus").toString();
-                        if (status.equals("pending")) {
+                        if (status.equals("pending")||user.getDisplayName().charAt(user.getDisplayName().length()-1)=='f') {
                             transaction.update(prodDocRef,"productStocks",stocks);
                             transaction.update(prodDocRef,"productSold",sold);
-                            transaction.delete(userDocRef);
+                            transaction.update(userDocRef,"orderStatus","cancelled");
                             return null;
                         } else {
-                            throw new FirebaseFirestoreException("Population too high",
+                            throw new FirebaseFirestoreException("Cannot cancel order",
                                     FirebaseFirestoreException.Code.ABORTED);
                         }
                     }
@@ -150,9 +156,52 @@ public class OrderManagement {
         });
     }
 
+    public static Task<Void> updateOrderStatus(Activity activity, String customerId, String orderId, String status){
+        ProgressDialog progressDialog;
+        progressDialog = new ProgressDialog(activity);
+        progressDialog.setMessage("Tagging Order as "+ status +", please wait!");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference prodDocRef = db.collection("orders").document(customerId).collection("products").document(orderId);
+        return db.runTransaction(new Transaction.Function<Void>() {
+            @Override
+            public Void apply(Transaction transaction) throws FirebaseFirestoreException {
+
+                if (user.getDisplayName().charAt(user.getDisplayName().length()-1)=='f'&&(status.equals("prepared")||status.equals("shipped"))) {
+                    transaction.update(prodDocRef,"orderStatus",status);
+                    return null;
+                } else {
+                    throw new FirebaseFirestoreException("Cannot Tag Order as "+status,
+                            FirebaseFirestoreException.Code.ABORTED);
+                }
+            }
+        }).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                progressDialog.dismiss();
+                if(task.isSuccessful()){
+                    AuthValidation.successToast(activity,"Successfully Tag as "+status).show();
+                }else{
+                    AlertDialog.Builder alert = new AlertDialog.Builder(activity);
+                    alert.setTitle("Failed!");
+                    alert.setMessage(task.getException().getLocalizedMessage());
+                    alert.setCancelable(false);
+                    alert.setPositiveButton("Ok",null);
+                    alert.show();
+                }
+            }
+        });
+    }
+
     public static Query getOrders(String status){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        return db.collection("orders").document(user.getUid()).collection("products").whereEqualTo("orderStatus",status);
+        if(user.getDisplayName().charAt(user.getDisplayName().length()-1) == 'c')
+            return db.collection("orders").document(user.getUid()).collection("products").whereEqualTo("orderStatus",status);
+        else
+            return db.collection("orders");
     }
+
 }
