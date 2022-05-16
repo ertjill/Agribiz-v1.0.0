@@ -21,8 +21,8 @@ public class PendingViewActivity extends AppCompatActivity {
         my_orders_btn = findViewById(R.id.my_orders_btn);
 
         store_btn.setOnClickListener(v -> {
-            Intent i = new Intent(getApplicationContext(), Store.class);
-            startActivity(i);
+            // Intent i = new Intent(getApplicationContext(), Store.class);
+            //startActivity(i);
         });
 
         my_orders_btn.setOnClickListener(v -> {

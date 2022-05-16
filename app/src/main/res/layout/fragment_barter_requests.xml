@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".customer.BarterBrowserFragment">
+    tools:context=".farmer.BarterRequests">
 
     <ListView
         android:id="@+id/farmer_barter_product_lv"
@@ -20,11 +20,6 @@
         android:gravity="center_horizontal"
         android:orientation="vertical"
         android:visibility="visible">
-
-        <ImageView
-            android:layout_width="181dp"
-            android:layout_height="195dp"
-            android:src="@drawable/no_barter_item"/>
 
         <TextView
             android:layout_width="wrap_content"

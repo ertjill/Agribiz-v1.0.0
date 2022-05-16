@@ -45,10 +45,9 @@
                     android:orientation="vertical">
 
                     <ImageView
-                        android:id="@+id/product_image_iv"
+                        android:id="@+id/barter_image_iv"
                         android:layout_width="150dp"
                         android:layout_height="151dp"
-                        android:layout_marginTop="5dp"
                         android:scaleType="centerCrop"
                         android:src="@drawable/ic_baseline_add_photo_alternate_24" />
 
@@ -305,6 +304,5 @@
             android:textColor="@color/white"
             android:textSize="30sp" />
     </RelativeLayout>
-
 
 </RelativeLayout>

@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/highlight_back"
     android:padding="5dp">
 
@@ -26,14 +27,37 @@
             android:layout_marginStart="12dp"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/barterName_tv"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/montserrat_semibold"
-                android:singleLine="true"
-                android:text="Barter Item Name"
-                android:textColor="@color/brown" />
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/barterName_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:singleLine="true"
+                    android:text="Barter Item Name"
+                    android:textColor="@color/brown" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/assistanceStatus_chip"
+                    style="@style/Widget.MaterialComponents.Chip.Action"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:padding="0dp"
+                    android:textAllCaps="true"
+                    android:text="Status"
+                    android:layout_marginStart="5dp"
+                    android:textColor="@color/white"
+                    app:chipBackgroundColor="@color/army_green"
+                    app:chipCornerRadius="20dp"
+                    app:chipMinHeight="15dp"
+                    app:ensureMinTouchTargetSize="false" />
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/barterCondition_tv"

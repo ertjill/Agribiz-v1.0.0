@@ -31,4 +31,9 @@ public class StorageManagement {
         return filetRef.delete();
     }
 
+    public static UploadTask uploadBarterImages(StorageReference storeRef, String uri) {
+        UploadTask uploadTask = storeRef.putFile(Uri.parse(uri));
+        return uploadTask;
+    }
+
 }

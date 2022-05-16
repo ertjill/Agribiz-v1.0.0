@@ -73,17 +73,20 @@ public class BarterProductActivity extends AppCompatActivity {
         @Override
         public Fragment createFragment(int position) {
             if (position == 0) {
-                return new AddBarterItem();
+                return new BarterAddItem();
             } else if (position == 1){
                 return new BarterRequests();
-            } else {
-                return new AddBarterItem();
+            } else if (position == 2){
+                return new BarterSwap();
+            }
+            else {
+                return new BarterCompleted();
             }
         }
 
         @Override
         public int getItemCount() {
-            return 2;
+            return 4;
         }
     }
 }
