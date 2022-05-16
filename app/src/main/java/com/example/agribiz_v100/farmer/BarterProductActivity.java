@@ -28,7 +28,6 @@ public class BarterProductActivity extends AppCompatActivity {
         references();
 
         BarterProductActivity.BarterProductFragmentAdapter barterProductsPager = new BarterProductFragmentAdapter(this);
-        // barter_product_pager.setUserInputEnabled(false);
         barter_product_pager.setAdapter(barterProductsPager);
 
         barter_product_pager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {

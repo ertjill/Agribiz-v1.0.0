@@ -8,57 +8,40 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.util.SparseArray;
-import android.util.TimeFormatException;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.example.agribiz_v100.FirebaseHelper;
 import com.example.agribiz_v100.R;
-import com.example.agribiz_v100.entities.BasketProductModel;
 import com.example.agribiz_v100.entities.ProductModel;
 import com.example.agribiz_v100.entities.UserModel;
-import com.example.agribiz_v100.farmer.MyProduct;
 import com.example.agribiz_v100.services.BasketManagement;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.badge.BadgeUtils;
-import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.Transaction;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.zip.Inflater;
 
 public class ProductView extends AppCompatActivity {
 
@@ -67,9 +50,9 @@ public class ProductView extends AppCompatActivity {
     ImageView product_image_iv;
     ImageView hub_profile_image;
     LinearLayout rating_ll;
-    TextView productName, productPrice, productSold, hubName, productStocks, productLocation, add_to_basket_tv;
+    TextView productName, productPrice, productSold, hubName, productStocks, productLocation, add_to_basket_tv, buy_now_tv;
     MaterialToolbar topAppBar;
-    Dialog addProductToBasket;
+    Dialog addProductToBasket, buyNow;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     ViewPager2 imageSlider;
@@ -79,6 +62,7 @@ public class ProductView extends AppCompatActivity {
     List<String> images;
     BasketManagement basketManagement;
     UserModel userModel;
+
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,10 +102,12 @@ public class ProductView extends AppCompatActivity {
             }
         });
         userModel =new UserModel();
+
         addProductToBasket = new Dialog(this);
         addProductToBasket.setContentView(R.layout.add_to_basket_dialog);
         addProductToBasket.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         addProductToBasket.setCancelable(false);
+
         add_to_basket_tv = findViewById(R.id.add_to_basket_tv);
         add_to_basket_tv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -218,7 +204,44 @@ public class ProductView extends AppCompatActivity {
             }
         });
 
+        buy_now_tv = findViewById(R.id.buy_now_tv);
 
+        buyNow = new Dialog(this);
+        buyNow.setContentView(R.layout.buy_now_dialog);
+        buyNow.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        buyNow.setCancelable(false);
+
+        buy_now_tv.setOnClickListener(v->{
+            TextView increment = buyNow.findViewById(R.id.add_tv);
+            TextView decrement = buyNow.findViewById(R.id.minus_tv);
+            TextView prodQuantity = buyNow.findViewById(R.id.product_quantity_tv);
+            ImageButton close = buyNow.findViewById(R.id.close_ib);
+            Button buy_now_btn = buyNow.findViewById(R.id.buy_now_btn);
+
+            close.setOnClickListener(v2 -> buyNow.dismiss());
+
+            buy_now_btn.setOnClickListener(v3 -> {
+                Intent i = new Intent(this, BuyNowActivity.class);
+                startActivity(i);
+            });
+
+            increment.setOnClickListener(v3 -> {
+                int i = Integer.parseInt(prodQuantity.getText().toString());
+                if (i < 100) {
+                    prodQuantity.setText(++i + "");
+                }
+            });
+
+            decrement.setOnClickListener(v3 -> {
+                int i = Integer.parseInt(prodQuantity.getText().toString());
+                if (i > 1) {
+                    prodQuantity.setText(--i + "");
+                }
+            });
+
+            // Add some add ons here
+            buyNow.show();
+        });
 
         product_image_iv = findViewById(R.id.product_image_iv);
         hub_profile_image = findViewById(R.id.hub_profile_image);

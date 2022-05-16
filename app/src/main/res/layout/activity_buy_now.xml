@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".customer.BuyNowActivity">
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/topAppBar_cl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/topAppBar"
+                style="@style/Widget.App.Toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/white"
+                app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
+                app:title="Buy Now"
+                app:titleTextColor="@color/brown" />
+        </com.google.android.material.appbar.AppBarLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <LinearLayout
+        android:id="@+id/top_ll"
+        android:layout_below="@+id/topAppBar_cl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="20dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/input_lay_address"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/army_green"
+            android:hint="Address"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            app:boxBackgroundColor="@color/transparent"
+            app:boxBackgroundMode="outline"
+            app:boxCornerRadiusBottomEnd="15dp"
+            app:boxCornerRadiusBottomStart="15dp"
+            app:boxCornerRadiusTopEnd="15dp"
+            app:boxCornerRadiusTopStart="15dp"
+            app:boxStrokeColor="@color/army_green"
+            app:hintTextColor="@color/army_green">
+
+            <AutoCompleteTextView
+                android:id="@+id/address_act"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_medium"
+                android:inputType="none"
+                android:enabled="false"
+                android:singleLine="true"
+                android:textColorHint="@color/color_hint"
+                tools:ignore="TextContrastCheck" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <ListView
+            android:id="@+id/basket_item_list"
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            android:layout_marginTop="20dp"
+            android:dividerHeight=".5dp">
+        </ListView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical"
+        android:layout_below="@+id/top_ll">
+
+        <TextView
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:background="#F3F3F3"/>
+
+        <RelativeLayout
+            android:layout_below="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingStart="20dp">
+
+            <TextView
+                android:id="@+id/pm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="₱ Payment Method"
+                android:fontFamily="@font/montserrat_bold"
+                android:textColor="@color/brown"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Cash on Delivery"
+                android:layout_toEndOf="@+id/pm"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="70dp"
+                android:fontFamily="@font/montserrat_regular"
+                android:textColor="@color/brown"
+                android:textSize="16sp"/>
+        </RelativeLayout>
+    </LinearLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/bottom_ll"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_toStartOf="@+id/purchase_tv"
+            android:background="@color/army_green">
+
+            <TextView
+                android:id="@+id/chat_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:background="@color/army_green"
+                android:fontFamily="@font/montserrat_bold"
+                android:gravity="center"
+                android:padding="15dp"
+                android:text="Total Payment"
+                android:textColor="@color/white"
+                android:textFontWeight="600"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/add_to_basket_tv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:layout_toStartOf="@+id/purchase_tv_tv"
+                android:layout_toEndOf="@+id/chat_tv"
+                android:background="@color/army_green"
+                android:fontFamily="@font/montserrat_bold"
+                android:gravity="center"
+                android:paddingStart="85dp"
+                android:text="₱0.00"
+                android:textColor="@color/yellow_orange"
+                android:textFontWeight="600"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/purchase_tv"
+            android:layout_width="120dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:fontFamily="@font/montserrat_semibold"
+            android:gravity="center"
+            android:padding="20dp"
+            android:text="Purchase"
+            android:textColor="@color/army_green"
+            android:textFontWeight="600"
+            android:textSize="14sp"
+            app:background="@color/white" />
+    </RelativeLayout>
+</RelativeLayout>
