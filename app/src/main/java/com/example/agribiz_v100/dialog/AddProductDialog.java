@@ -23,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -48,6 +49,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
@@ -57,6 +59,7 @@ import com.google.firebase.storage.UploadTask;
 import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -75,7 +78,7 @@ public class AddProductDialog {
     AddProductImageCallBack addProductImageCallBack;
     private boolean[] flag = {false, false, false, false, false, false, false, false};
     boolean productNameFlag = false;
-
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
     Dialog dialog;
     AddProductDialogCallback addProductDialogCallback = null;
     TextInputLayout productDescription_til;
@@ -90,7 +93,7 @@ public class AddProductDialog {
     Button add_product_btn;
     Button cancel_btn;
     TextView count_done_tv;
-
+    List<String> categories;
     static String[] category = {"Fruits", "Vegetables", "Livestock", "Poultry", "Fertilizer"};
     static String[] unit = {"kg", "g", "ml", "pcs", "L"};
 
@@ -103,6 +106,22 @@ public class AddProductDialog {
         this.dialog = new Dialog(activity);
         this.fragment = fragment;
         arrayOfImages = new ArrayList<>();
+        categories = new ArrayList<>();
+        ProductManagement.getProductCategories()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if(task.isSuccessful()){
+                             List<Object> list= Arrays.asList(task.getResult().get("productCategory"));
+                             for(Object object:(List<Object>) (task.getResult().get("productCategory"))){
+                                 categories.add(object.toString());
+                             }
+                        }else{
+                            Toast.makeText(activity, "Check Your Internet Connection", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
     }
     public void createImageSizeListener(AddProductImageCallBack addProductImageCallBack){
         this.addProductImageCallBack = addProductImageCallBack;
@@ -144,7 +163,7 @@ public class AddProductDialog {
 
         imageViewPagerAdapter = new AddProductDialog.ImageViewPagerAdapter();
         imageSlider.setAdapter(imageViewPagerAdapter);
-        ArrayAdapter<String> productCategoryAdapter = new ArrayAdapter<>(activity.getBaseContext(), R.layout.dropdown_item, category);
+        ArrayAdapter<String> productCategoryAdapter = new ArrayAdapter<>(activity.getBaseContext(), R.layout.dropdown_item, categories);
         ArrayAdapter<String> productUnitAdapter = new ArrayAdapter<>(activity.getBaseContext(), R.layout.dropdown_item, unit);
         productCategory_at.setAdapter(productCategoryAdapter);
         productUnit_at.setAdapter(productUnitAdapter);
@@ -195,7 +214,6 @@ public class AddProductDialog {
             public void afterTextChanged(Editable s) {
                 if(!ProductValidation.validateDesc(s.toString()).isEmpty()){
                     productDescription_til.setError(ProductValidation.validateDesc(s.toString()));
-
                     flag[2]=false;
                 }
                 else{
@@ -646,6 +664,10 @@ public class AddProductDialog {
     public interface AddProductDialogCallback {
         void addOnDocumentAddedListener(boolean isAdded);
     }
+
+//    public interface AddUploadProgressListener{
+//        void
+//    }
 
     public interface AddProductImageCallBack{
         void addOnImageSizeListener(int imagesSize);

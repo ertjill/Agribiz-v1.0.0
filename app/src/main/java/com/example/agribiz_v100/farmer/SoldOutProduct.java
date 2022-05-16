@@ -77,6 +77,7 @@ public class SoldOutProduct extends Fragment {
                 Log.d("tag", "hereee");
                 displayMyProducts();
             }
+
         });
         return view;
     }

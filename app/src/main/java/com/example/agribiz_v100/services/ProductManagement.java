@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.net.Uri;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -118,6 +119,12 @@ public class ProductManagement {
         return db.collection("products")
                 .whereEqualTo("productUserId", userId)
                 .whereLessThanOrEqualTo("productStocks", 0);
+    }
+    public static Task<DocumentSnapshot> getProductCategories(){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        return db.collection("appSettings").document("8AXp5CgroNAxyBpr1Rg6")
+                .get();
+
     }
 
     public static Query getProducts(DocumentSnapshot last, String userId) {

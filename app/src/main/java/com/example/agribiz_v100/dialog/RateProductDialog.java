@@ -26,7 +26,7 @@ public class RateProductDialog {
     OrderProductModel orderProductModel;
     int rate = 0;
     public RateProductDialog(Activity activity, OrderProductModel orderProductModel) {
-        this.orderProductModel=orderProductModel;
+        this.orderProductModel = orderProductModel;
         this.dialog = new Dialog(activity);
         this.dialog.setContentView(R.layout.rate_layout);
         this.dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
