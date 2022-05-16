@@ -37,6 +37,7 @@
         android:orientation="vertical"
         android:paddingLeft="5dp"
         android:paddingRight="5dp">
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/input_lay_address"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
@@ -44,6 +45,8 @@
             android:layout_height="wrap_content"
             android:backgroundTint="@color/army_green"
             android:hint="Address"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
             app:boxBackgroundColor="@color/transparent"
             app:boxBackgroundMode="outline"
             app:boxCornerRadiusBottomEnd="15dp"
@@ -157,7 +160,7 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="28dp"
             android:backgroundTint="@color/yellow_orange"
-            android:fontFamily="@font/montserrat_semibold"
+            android:fontFamily="@font/montserrat_bold"
             android:text="Checkout"
             android:textAlignment="center"
             android:textAllCaps="false"

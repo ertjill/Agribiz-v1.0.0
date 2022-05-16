@@ -15,6 +15,8 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -72,27 +74,30 @@ public class BarterManagement {
         });
     }
 
-    public static Task<QuerySnapshot> getBarterItems(DocumentSnapshot last, String userID) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        if (last == null) {
-            return db.collection("barters")
-                    .whereEqualTo("barterUserID", userID)
-                    .orderBy("barterDateUploaded", Query.Direction.ASCENDING)
-                    .get();
-        } else {
-            return db.collection("barters")
-                    .whereEqualTo("barterUserID", userID)
-                    .orderBy("barterDateUploaded", Query.Direction.ASCENDING)
-                    .startAfter(last)
-                    .get();
-        }
-    }
+//    public static Task<QuerySnapshot> getBarterItems(DocumentSnapshot last, String userID) {
+//        FirebaseFirestore db = FirebaseFirestore.getInstance();
+//        if (last == null) {
+//            return db.collection("barters")
+//                    .whereEqualTo("barterUserID", userID)
+//                    .orderBy("barterDateUploaded", Query.Direction.ASCENDING)
+//                    .get();
+//        } else {
+//            return db.collection("barters")
+//                    .whereEqualTo("barterUserID", userID)
+//                    .orderBy("barterDateUploaded", Query.Direction.ASCENDING)
+//                    .startAfter(last)
+//                    .get();
+//        }
+//    }
 
-    public static Query getBarter(String userId) {
+    public static Query getBarter(String status) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+
         return db.collection("barters")
-                .whereEqualTo("barterUserID", userId)
-                .orderBy("barterDateRequested", Query.Direction.DESCENDING);
+                .whereEqualTo("barterUserID", user.getUid())
+                .whereEqualTo("barterStatus", status)
+                .orderBy("barterDateUploaded", Query.Direction.DESCENDING);
     }
 
 }

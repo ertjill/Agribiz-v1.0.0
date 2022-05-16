@@ -19,11 +19,16 @@
         android:theme="@style/Theme.Agribizv100"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".OrdersActivity"
+            android:name=".PendingViewActivity"
             android:exported="false" />
-        <!-- Account Creation -->
+        <activity
+            android:name=".OrdersActivity"
+            android:exported="false" /> <!-- Account Creation -->
         <activity
             android:name=".SignupActivity"
+            android:exported="false" />
+        <activity
+            android:name=".customer.BuyNowActivity"
             android:exported="false" />
         <activity
             android:name=".LoginActivity"
@@ -40,12 +45,12 @@
             android:name=".agrovit.AgrovitMainActivity"
             android:alwaysRetainTaskState="true"
             android:exported="false"
-            android:launchMode="singleInstance"/>
+            android:launchMode="singleInstance" />
         <activity
             android:name=".farmer.FarmerMainActivity"
             android:alwaysRetainTaskState="true"
             android:exported="true"
-            android:launchMode="singleInstance"/> <!-- Profiles -->
+            android:launchMode="singleInstance" /> <!-- Profiles -->
         <activity
             android:name=".farmer.FarmerEditProfileActivity"
             android:exported="false" />

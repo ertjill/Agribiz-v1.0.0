@@ -32,7 +32,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AddBarterItem extends Fragment {
+public class BarterAddItem extends Fragment {
 
     ImageButton add_barter_ib;
     AddBarterDialog addBarterDialog;
@@ -44,7 +44,6 @@ public class AddBarterItem extends Fragment {
     BarterAdapter barterAdapter;
 
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-    DocumentSnapshot last = null;
     ListenerRegistration registration;
 
     @Override
@@ -74,7 +73,7 @@ public class AddBarterItem extends Fragment {
     public void onPause() {
         super.onPause();
         // Removes listener being tracked
-        registration.remove();
+        //registration.remove();
     }
 
     @Override
@@ -87,10 +86,11 @@ public class AddBarterItem extends Fragment {
     //int i = 0;
     public void displayBarterItems() {
         Log.d("BarterManagement", "Displaying barter items...");
-        registration = BarterManagement.getBarter(user.getUid()).addSnapshotListener(new EventListener<QuerySnapshot>() {
+        BarterManagement.getBarter("Open").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                 barterItems.clear();
+                Log.d("BarterManagement", value.size() + " inside for each");
                 for (QueryDocumentSnapshot doc : value) {
                     Log.d("BarterManagement", user.getUid() + " inside for each");
                     BarterModel bm = doc.toObject(BarterModel.class);
