@@ -21,19 +21,14 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/farmer_tv"
+                android:id="@+id/product_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
-                android:drawableStart="@drawable/ic_baseline_store_24"
-                android:drawablePadding="5dp"
                 android:fontFamily="@font/montserrat_bold"
-                android:gravity="center"
-                android:padding="10dp"
-                android:text="Farmer"
+                android:text="Fresh Tomato"
                 android:textColor="@color/brown"
-                android:textSize="14sp" />
+                android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/status_tv"
@@ -71,16 +66,15 @@
                 android:layout_margin="10dp"
                 android:layout_toEndOf="@+id/product_image_iv"
                 android:orientation="vertical">
-
                 <TextView
-                    android:id="@+id/product_tv"
+                    android:id="@+id/description_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/montserrat_bold"
-                    android:text="Fresh Tomato"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:text="Description: "
                     android:textColor="@color/brown"
-                    android:textSize="15sp" />
-
+                    android:textSize="12sp" />
                 <TextView
                     android:id="@+id/price_tv"
                     android:layout_width="wrap_content"

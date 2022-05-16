@@ -96,6 +96,7 @@ public class OrdersFragment extends Fragment {
         return view;
     }
 
+
     @Override
     public void onResume() {
         super.onResume();
@@ -134,7 +135,6 @@ public class OrdersFragment extends Fragment {
                     }
                     ordersList = orders;
                     ordersProductAdaper.notifyDataSetChanged();
-                    Log.d(TAG, "Current cites in CA: " + orders);
                 }
             });
         else {
@@ -148,7 +148,9 @@ public class OrdersFragment extends Fragment {
                         Log.w(TAG, "Listen failed.", e);
                         return;
                     }
+
                     ordersList.clear();
+
                     final int[] i = {0};
                     List<OrderProductModel> orders = new ArrayList<>();
                     for (QueryDocumentSnapshot doc : value) {
@@ -159,9 +161,12 @@ public class OrdersFragment extends Fragment {
                                         if (task.isSuccessful()) {
 
                                             for (QueryDocumentSnapshot ss : task.getResult()) {
-                                                orders.add(ss.toObject(OrderProductModel.class));
-                                                i[0] = 1;
+                                                ordersList.add(ss.toObject(OrderProductModel.class));
+                                                ordersProductAdaper2.notifyDataSetChanged();
+                                                i[0] += 1;
                                             }
+//                                            ordersList = orders;
+
                                             if (i[0] <= 0) {
                                                 no_product_ll.setVisibility(View.VISIBLE);
                                                 orders_lv.setVisibility(View.GONE);
@@ -169,17 +174,12 @@ public class OrdersFragment extends Fragment {
                                                 no_product_ll.setVisibility(View.GONE);
                                                 orders_lv.setVisibility(View.VISIBLE);
                                             }
-                                            ordersList = orders;
-                                            ordersProductAdaper2.notifyDataSetChanged();
-
                                         }
                                     }
                                 });
-
 //                    orders.add(doc.toObject(OrderProductModel.class));
                     }
-
-                    Log.d(TAG, "Current cites in CA: " + orders);
+                    ordersProductAdaper2.notifyDataSetChanged();
                 }
             });
         }
@@ -344,11 +344,11 @@ public class OrdersFragment extends Fragment {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             convertView = inflater.inflate(R.layout.farm_agr_order_item_layout, null);
-            TextView farmer_tv, status_tv, product_tv, price_tv, quantity_tv, order_tv, total_tv;
+            TextView description_tv, status_tv, product_tv, price_tv, quantity_tv, order_tv, total_tv;
             ImageView product_image_iv;
             Button cancel_btn, prepared_shipped_btn;
             product_image_iv = convertView.findViewById(R.id.product_image_iv);
-            farmer_tv = convertView.findViewById(R.id.farmer_tv);
+            description_tv = convertView.findViewById(R.id.description_tv);
             status_tv = convertView.findViewById(R.id.status_tv);
             product_tv = convertView.findViewById(R.id.product_tv);
             price_tv = convertView.findViewById(R.id.price_tv);
@@ -357,6 +357,7 @@ public class OrdersFragment extends Fragment {
             total_tv = convertView.findViewById(R.id.total_tv);
             cancel_btn = convertView.findViewById(R.id.cancel_btn);
             prepared_shipped_btn = convertView.findViewById(R.id.prepared_shipped_btn);
+            description_tv.setText(ordersList.get(position).getProductDescription());
             status_tv.setText(ordersList.get(position).getOrderStatus().toUpperCase(Locale.ROOT));
             Glide.with(getContext())
                     .load(ordersList.get(position).getProductImage().get(0))
@@ -368,22 +369,10 @@ public class OrdersFragment extends Fragment {
             total_tv.setText("₱" + String.format("%.2f", (ordersList.get(position).getProductBasketQuantity() * ordersList.get(position).getProductPrice())));
 
             if (status.equals("pending")) {
-//                receive_cancel_btn.setVisibility(View.VISIBLE);
-//                receive_cancel_btn.setBackgroundColor(R.color.grey_font);
-//                receive_cancel_btn.setTextColor(R.color.white);
-//                receive_cancel_btn.setText("Cancel");
                 prepared_shipped_btn.setText("Prepared");
             } else if (status.equals("prepared")) {
-//                receive_cancel_btn.setVisibility(View.VISIBLE);
-//                receive_cancel_btn.setBackgroundColor(R.color.yellow_orange);
-//                receive_cancel_btn.setTextColor(R.color.army_green);
-//                receive_cancel_btn.setText("Order Received");
                 prepared_shipped_btn.setText("Shipped");
             } else if (status.equals("shipped")) {
-//                receive_cancel_btn.setVisibility(View.VISIBLE);
-//                receive_cancel_btn.setBackgroundColor(R.color.yellow_orange);
-//                receive_cancel_btn.setTextColor(R.color.army_green);
-//                receive_cancel_btn.setText("Order Received");
                 prepared_shipped_btn.setVisibility(View.GONE);
             } else {
                 cancel_btn.setVisibility(View.GONE);
@@ -400,7 +389,13 @@ public class OrdersFragment extends Fragment {
                         alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                OrderManagement.updateOrderStatus(getActivity(), ordersList.get(position).getCustomerId(), ordersList.get(position).getOrderID(), "prepared");
+                                OrderManagement.updateOrderStatus(getActivity(), ordersList.get(position).getCustomerId(), ordersList.get(position).getOrderID(), "prepared")
+                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                getOrders();
+                                            }
+                                        });
 
                             }
                         });
@@ -414,7 +409,13 @@ public class OrdersFragment extends Fragment {
                         alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                OrderManagement.updateOrderStatus(getActivity(), ordersList.get(position).getCustomerId(), ordersList.get(position).getOrderID(), "shipped");
+                                OrderManagement.updateOrderStatus(getActivity(), ordersList.get(position).getCustomerId(), ordersList.get(position).getOrderID(), "shipped")
+                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                getOrders();
+                                            }
+                                        });
 
                             }
                         });
@@ -440,13 +441,20 @@ public class OrdersFragment extends Fragment {
                                         public void onSuccess(Void result) {
                                             Log.d(TAG, "Transaction success: ");
                                             AuthValidation.successToast(getContext(), "Order Cancelled").show();
+                                            getOrders();
                                         }
                                     })
                                     .addOnFailureListener(new OnFailureListener() {
                                         @Override
                                         public void onFailure(@NonNull Exception e) {
                                             Log.w(TAG, "Transaction failure.", e);
-                                            AuthValidation.failedToast(getContext(), "Failed Cancel Order").show();
+                                            AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+                                            alert.setTitle("Failed!");
+                                            alert.setMessage(e.getLocalizedMessage());
+                                            alert.setCancelable(false);
+                                            alert.setPositiveButton("Ok",null);
+                                            alert.show();
+//                                            AuthValidation.failedToast(getContext(), "Failed to Cancel Order, " + e.getMessage()).show();
                                         }
                                     });
                         }

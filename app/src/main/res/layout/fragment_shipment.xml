@@ -14,43 +14,84 @@
         android:layout_marginTop="15dp"
         android:src="@drawable/agribiz_logo_green" />
 
+<!--    <com.google.android.material.tabs.TabLayout-->
+<!--        android:id="@+id/farmer_product_tab"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="40dp"-->
+<!--        android:layout_below="@+id/logo"-->
+<!--        android:layout_marginTop="20dp"-->
+<!--        android:outlineAmbientShadowColor="@color/black"-->
+<!--        android:outlineSpotShadowColor="@color/black"-->
+<!--        app:tabIconTint="@color/army_green"-->
+<!--        app:tabIndicatorColor="@color/army_green"-->
+<!--        app:tabMode="auto"-->
+<!--        app:tabSelectedTextColor="@color/army_green"-->
+<!--        app:tabTextAppearance="@style/CustomFarmerProductTabText"-->
+<!--        app:tabTextColor="@color/brown">-->
+
+<!--        <com.google.android.material.tabs.TabItem-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="To Prepare" />-->
+
+<!--        <com.google.android.material.tabs.TabItem-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="To Ship" />-->
+
+<!--        <com.google.android.material.tabs.TabItem-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="Shipping" />-->
+
+<!--        <com.google.android.material.tabs.TabItem-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="Completed" />-->
+
+<!--    </com.google.android.material.tabs.TabLayout>-->
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/farmer_product_tab"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_below="@+id/logo"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:outlineAmbientShadowColor="@color/black"
         android:outlineSpotShadowColor="@color/black"
         app:tabIconTint="@color/army_green"
         app:tabIndicatorColor="@color/army_green"
-        app:tabMode="auto"
+        app:tabMode="scrollable"
         app:tabSelectedTextColor="@color/army_green"
-        app:tabTextAppearance="@style/CustomFarmerProductTabText"
+        app:tabTextAppearance="@style/CustomOrdersTabText"
         app:tabTextColor="@color/brown">
 
         <com.google.android.material.tabs.TabItem
+            android:id="@+id/to_prepare"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="To Prepare" />
+            android:text="Pending" />
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="To Ship" />
+            android:text="Prepared" />
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Shipping" />
+            android:text="Shipped" />
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Completed" />
 
-    </com.google.android.material.tabs.TabLayout>
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cancelled" />
 
+    </com.google.android.material.tabs.TabLayout>
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/farmer_product_vp"
         android:layout_width="match_parent"

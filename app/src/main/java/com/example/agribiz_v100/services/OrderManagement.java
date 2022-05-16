@@ -126,8 +126,14 @@ public class OrderManagement {
         progressDialog.show();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference userDocRef = db.collection("orders").document(user.getUid())
+        DocumentReference userDocRef;
+        if(user.getDisplayName().charAt(user.getDisplayName().length()-1)=='c')
+            userDocRef = db.collection("orders").document(user.getUid())
                 .collection("products").document(order.getOrderID());
+        else
+            userDocRef = db.collection("orders").document(order.getCustomerId())
+                    .collection("products").document(order.getOrderID());
+
         DocumentReference prodDocRef = db.collection("products").document(order.getProductId());
 
         return db.runTransaction(new Transaction.Function<Void>() {
@@ -138,7 +144,7 @@ public class OrderManagement {
                         int stocks = Integer.parseInt( prodSnapshot.get("productStocks").toString())+ order.getProductBasketQuantity();
                         int sold = (Integer.parseInt(prodSnapshot.get("productSold").toString())- order.getProductBasketQuantity());
                         String status = snapshot.get("orderStatus").toString();
-                        if (status.equals("pending")||user.getDisplayName().charAt(user.getDisplayName().length()-1)=='f') {
+                        if (status.equals("pending")||!(user.getDisplayName().charAt(user.getDisplayName().length()-1)=='c')) {
                             transaction.update(prodDocRef,"productStocks",stocks);
                             transaction.update(prodDocRef,"productSold",sold);
                             transaction.update(userDocRef,"orderStatus","cancelled");

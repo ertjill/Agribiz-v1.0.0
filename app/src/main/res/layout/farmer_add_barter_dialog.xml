@@ -169,7 +169,7 @@
                         android:hint="Quantity"
                         android:importantForAutofill="no"
                         android:inputType="number"
-                        android:maxLength="50"
+                        android:maxLength="2"
                         android:paddingTop="20dp"
                         android:textColorHint="@color/color_hint"
                         android:textCursorDrawable="@null"

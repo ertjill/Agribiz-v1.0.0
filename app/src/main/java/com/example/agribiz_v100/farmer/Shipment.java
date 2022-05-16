@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.agribiz_v100.R;
+import com.example.agribiz_v100.customer.OrdersFragment;
 import com.example.agribiz_v100.customer.Search;
 import com.example.agribiz_v100.customer.Store;
 import com.google.android.material.tabs.TabLayout;
@@ -73,21 +74,35 @@ public class Shipment extends Fragment {
         @Override
         public Fragment createFragment(int position) {
 
-            if (position == 0) {
-                return new ToPrepare();
-            } else if (position == 1) {
-                return new ToShip();
-            } else if (position == 2) {
-                return new Shipping();
-            } else {
-                return new CompletedOrder();
+//            if (position == 0) {
+//                return new ToPrepare();
+//            } else if (position == 1) {
+//                return new ToShip();
+//            } else if (position == 2) {
+//                return new Shipping();
+//            } else {
+//                return new CompletedOrder();
+//            }
+            switch (position) {
+                case 0:
+                    return new OrdersFragment("To Prepare", "pending");
+                case 1:
+                    return new OrdersFragment("To Ship", "prepared");
+                case 2:
+                    return new OrdersFragment("To Receive", "shipped");
+                case 3:
+                    return new OrdersFragment("Completed", "completed");
+                case 4:
+                    return new OrdersFragment("Cancelled", "cancelled");
+                default:
+                    return null;
             }
 
         }
 
         @Override
         public int getItemCount() {
-            return 4;
+            return 5;
         }
     }
 }

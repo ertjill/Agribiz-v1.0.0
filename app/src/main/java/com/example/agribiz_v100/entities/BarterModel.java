@@ -8,6 +8,7 @@ import java.util.List;
 public class BarterModel implements Serializable {
 
     private String barterUserId;
+    private String barterCustomerId;
     private String barterId;
     private List<String> barterImage;
     private String barterName;
@@ -16,12 +17,21 @@ public class BarterModel implements Serializable {
     private String barterDescription;
     private Timestamp barterDateUploaded;
 
+    public String getBarterCustomerId() {
+        return barterCustomerId;
+    }
+
+    public void setBarterCustomerId(String barterCustomerId) {
+        this.barterCustomerId = barterCustomerId;
+    }
+
     public BarterModel() {
 
     }
 
-    public BarterModel(String barterUserId, String barterId, List<String> barterImage, String barterName, String barterCondition, int barterQuantity, String barterDescription, Timestamp barterDateUploaded) {
+    public BarterModel(String barterUserId, String barterCustomerId, String barterId, List<String> barterImage, String barterName, String barterCondition, int barterQuantity, String barterDescription, Timestamp barterDateUploaded) {
         this.barterUserId = barterUserId;
+        this.barterCustomerId = barterCustomerId;
         this.barterId = barterId;
         this.barterImage = barterImage;
         this.barterName = barterName;

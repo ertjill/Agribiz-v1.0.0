@@ -55,7 +55,7 @@
     </style>
     <!--    CustomOrdersProductTabText-->
     <style name="CustomOrdersTabText" parent="TextAppearance.Design.Tab">
-        <item name="android:textSize">13sp</item>
+        <item name="android:textSize">15sp</item>
         <item name="android:fontFamily">@font/montserrat_regular</item>
         <item name="android:textAllCaps">false</item>
         <item name="textAllCaps">false</item>
