@@ -3,9 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="10dp"
     android:orientation="vertical"
-    >
+    android:paddingTop="10dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,20 +19,35 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+            <androidx.cardview.widget.CardView
+                android:id="@+id/image_card_cv"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                app:cardCornerRadius="20dp">
+
+                <ImageView
+                    android:id="@+id/farmer_image_iv"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@mipmap/agribiz_icon_logo" />
+
+            </androidx.cardview.widget.CardView>
+
+
             <TextView
-                android:id="@+id/farmer_tv"
-                android:layout_width="wrap_content"
+                android:id="@+id/farmer_name_tv"
+                android:layout_width="120dp"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
-                android:drawableStart="@drawable/ic_baseline_store_24"
-                android:drawablePadding="5dp"
+                android:layout_marginLeft="10dp"
+                android:layout_toEndOf="@+id/image_card_cv"
                 android:fontFamily="@font/montserrat_bold"
-                android:gravity="center"
-                android:padding="10dp"
-                android:text="Farmer"
+                android:lines="1"
+                android:singleLine="true"
+                android:text="Farmer Name"
                 android:textColor="@color/brown"
-                android:textSize="14sp" />
+                android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/status_tv"
@@ -57,8 +71,8 @@
 
             <ImageView
                 android:id="@+id/product_image_iv"
-                android:layout_width="72dp"
-                android:layout_height="72dp"
+                android:layout_width="95dp"
+                android:layout_height="95dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="10dp"
@@ -68,7 +82,11 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_toStartOf="@+id/chat_rl"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
                 android:layout_toEndOf="@+id/product_image_iv"
                 android:orientation="vertical">
 
@@ -80,6 +98,16 @@
                     android:text="Fresh Tomato"
                     android:textColor="@color/brown"
                     android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/desc_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:text="Description:"
+                    android:textColor="@color/brown"
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/price_tv"
@@ -100,8 +128,93 @@
                     android:text="Qty: 1 kg"
                     android:textColor="@color/brown"
                     android:textSize="12sp" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/montserrat_regular"
+                        android:text="Your Rating: "
+                        android:textColor="@color/brown"
+                        android:textSize="12sp" />
+
+                    <LinearLayout
+                        android:id="@+id/rating_ll"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"></LinearLayout>
+                </LinearLayout>
             </LinearLayout>
+            <RelativeLayout
+                android:id="@+id/chat_rl"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_bi_chat_fill" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:text="Chat"
+                    android:textColor="@color/army_green"
+                    android:textSize="10sp" />
+            </RelativeLayout>
         </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/location_image_iv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_baseline_location_on_24"
+                    app:tint="@color/army_green" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toEndOf="@+id/location_image_iv"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:text="Delivery Address"
+                    android:textColor="@color/brown"
+                    android:textSize="14sp" />
+
+            </RelativeLayout>
+            <TextView
+                android:id="@+id/address_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="24dp"
+                android:fontFamily="@font/montserrat_regular"
+                android:textFontWeight="500"
+                android:text="Order From: Address "
+                android:textColor="@color/brown"
+                android:textSize="10sp" />
+        </LinearLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -164,7 +277,7 @@
             android:textColor="@color/army_green"
             android:textSize="12sp"
             android:visibility="visible"
-            app:cornerRadius="24dp"  />
+            app:cornerRadius="24dp" />
 
     </LinearLayout>
 </LinearLayout>

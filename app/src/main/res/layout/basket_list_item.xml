@@ -133,7 +133,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:padding="10dp"
-                android:background="#dda15e"
+                android:background="@color/lightOrange"
                 android:src="@drawable/ic_baseline_cancel_27"
                 app:tint="@color/red" />
             <ImageButton

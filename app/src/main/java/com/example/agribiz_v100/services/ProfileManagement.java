@@ -3,7 +3,6 @@ package com.example.agribiz_v100.services;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
 
@@ -159,5 +158,10 @@ public class ProfileManagement {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference locationRef = db.collection("users").document(userID);
         return locationRef;
+    }
+
+    public static Task<DocumentSnapshot> getUserProfile(String userId){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        return db.collection("users").document(userId).get();
     }
 }

@@ -62,6 +62,7 @@ public class MyProduct extends Fragment {
     DocumentSnapshot last = null;
     AddProductDialog addProductDialog;
     ListenerRegistration registration;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -108,27 +109,26 @@ public class MyProduct extends Fragment {
 
     public void displayMyProducts() {
         Log.d("tag", "hereee displayMyProducts");
-        registration=ProductManagement.getProducts(last, user.getUid())
+        registration = ProductManagement.getProducts(last, user.getUid())
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot value,
-                                @Nullable FirebaseFirestoreException e) {
-                productItems.clear();
-                if (e != null) {
-                    Log.w(TAG, "Listen failed.", e);
-                    return;
-                }
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value,
+                                        @Nullable FirebaseFirestoreException e) {
+                        productItems.clear();
+                        if (e != null) {
+                            Log.w(TAG, "Listen failed.", e);
+                            return;
+                        }
 
-//                List<ProductModel> prod = new ArrayList<>();
-                for (QueryDocumentSnapshot doc : value) {
-                    productItems.add(doc.toObject(ProductModel.class));
-                }
+                        for (QueryDocumentSnapshot doc : value) {
+                            productItems.add(doc.toObject(ProductModel.class));
+                        }
 
-                farmerProductAdapter.notifyDataSetChanged();
-                last = value.getDocuments().get(value.size()-1);
-//                Log.d(TAG, "Current cites in CA: " + cities);
-            }
-        });
+                        farmerProductAdapter.notifyDataSetChanged();
+                        if (!value.isEmpty())
+                            last = value.getDocuments().get(value.size() - 1);
+                    }
+                });
 //                addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
 //                    @Override
 //                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -222,7 +222,7 @@ public class MyProduct extends Fragment {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
                                         if (task.isSuccessful()) {
-                                            AuthValidation.successToast(getContext(),"Successfully deleted a product").show();
+                                            AuthValidation.successToast(getContext(), "Successfully deleted a product").show();
 //                                            productItems.remove(position);
 //                                            notifyDataSetChanged();
                                         } else {

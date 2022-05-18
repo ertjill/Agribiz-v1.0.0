@@ -109,7 +109,8 @@ public class SoldOutProduct extends Fragment {
                         }
 
                         farmerProductAdapter.notifyDataSetChanged();
-                        last = value.getDocuments().get(value.size() - 1);
+                        if(!value.isEmpty())
+                            last = value.getDocuments().get(value.size() - 1);
 
                     }
                 });

@@ -21,14 +21,18 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.agribiz_v100.R;
 import com.example.agribiz_v100.dialog.RateProductDialog;
+import com.example.agribiz_v100.entities.LocationModel;
 import com.example.agribiz_v100.entities.OrderProductModel;
 import com.example.agribiz_v100.services.OrderManagement;
+import com.example.agribiz_v100.services.ProductManagement;
+import com.example.agribiz_v100.services.ProfileManagement;
 import com.example.agribiz_v100.validation.AuthValidation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -46,8 +50,10 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class OrdersFragment extends Fragment {
     String title;
@@ -90,8 +96,9 @@ public class OrdersFragment extends Fragment {
         } else {
             ordersProductAdaper2 = new OrdersProductAdaper2();
             orders_lv.setAdapter(ordersProductAdaper2);
-        }
 
+        }
+        orders_lv.setEmptyView(no_product_ll);
 
         return view;
     }
@@ -100,89 +107,38 @@ public class OrdersFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        Log.d(TAG, "Resuming" + title);
         getOrders();
     }
 
     @Override
     public void onPause() {
         super.onPause();
+        Log.d(TAG, "Pausing " + title);
         registration.remove();
     }
 
     public void getOrders() {
-        if (user.getDisplayName().charAt(user.getDisplayName().length() - 1) == 'c')
-            registration = OrderManagement.getOrders(status).addSnapshotListener(new EventListener<QuerySnapshot>() {
-                @Override
-                public void onEvent(@Nullable QuerySnapshot value,
-                                    @Nullable FirebaseFirestoreException e) {
-                    ordersList.clear();
-                    if (value.isEmpty()) {
-                        no_product_ll.setVisibility(View.VISIBLE);
-                        orders_lv.setVisibility(View.GONE);
-                    } else {
-                        no_product_ll.setVisibility(View.GONE);
-                        orders_lv.setVisibility(View.VISIBLE);
-                    }
+        registration = OrderManagement.getOrders(status).addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value,
+                                @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.w(TAG, "Listen failed.", e);
+                    return;
+                }
 
-                    if (e != null) {
-                        Log.w(TAG, "Listen failed.", e);
-                        return;
-                    }
-
-                    List<OrderProductModel> orders = new ArrayList<>();
-                    for (QueryDocumentSnapshot doc : value) {
-                        orders.add(doc.toObject(OrderProductModel.class));
-                    }
-                    ordersList = orders;
+                List<OrderProductModel> orders = new ArrayList<>();
+                for (QueryDocumentSnapshot doc : value) {
+                    orders.add(doc.toObject(OrderProductModel.class));
+                }
+                ordersList = orders;
+                if (user.getDisplayName().charAt(user.getDisplayName().length() - 1) == 'c')
                     ordersProductAdaper.notifyDataSetChanged();
-                }
-            });
-        else {
-
-            registration = OrderManagement.getOrders(status).addSnapshotListener(new EventListener<QuerySnapshot>() {
-                @Override
-                public void onEvent(@Nullable QuerySnapshot value,
-                                    @Nullable FirebaseFirestoreException e) {
-
-                    if (e != null) {
-                        Log.w(TAG, "Listen failed.", e);
-                        return;
-                    }
-
-                    ordersList.clear();
-
-                    final int[] i = {0};
-                    List<OrderProductModel> orders = new ArrayList<>();
-                    for (QueryDocumentSnapshot doc : value) {
-                        doc.getReference().collection("products").whereEqualTo("productUserId", user.getUid()).whereEqualTo("orderStatus", status).orderBy("orderDate", Query.Direction.DESCENDING)
-                                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                        if (task.isSuccessful()) {
-
-                                            for (QueryDocumentSnapshot ss : task.getResult()) {
-                                                ordersList.add(ss.toObject(OrderProductModel.class));
-                                                ordersProductAdaper2.notifyDataSetChanged();
-                                                i[0] += 1;
-                                            }
-//                                            ordersList = orders;
-
-                                            if (i[0] <= 0) {
-                                                no_product_ll.setVisibility(View.VISIBLE);
-                                                orders_lv.setVisibility(View.GONE);
-                                            } else {
-                                                no_product_ll.setVisibility(View.GONE);
-                                                orders_lv.setVisibility(View.VISIBLE);
-                                            }
-                                        }
-                                    }
-                                });
-//                    orders.add(doc.toObject(OrderProductModel.class));
-                    }
+                else
                     ordersProductAdaper2.notifyDataSetChanged();
-                }
-            });
-        }
+            }
+        });
     }
 
     public class OrdersProductAdaper extends BaseAdapter {
@@ -198,6 +154,12 @@ public class OrdersFragment extends Fragment {
         }
 
         @Override
+        public void notifyDataSetChanged() {
+            super.notifyDataSetChanged();
+
+        }
+
+        @Override
         public OrderProductModel getItem(int position) {
             return ordersList.get(position);
         }
@@ -210,11 +172,44 @@ public class OrdersFragment extends Fragment {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             convertView = inflater.inflate(R.layout.orders_layout_item, null);
-            TextView farmer_tv, status_tv, product_tv, price_tv, quantity_tv, order_tv, total_tv;
-            ImageView product_image_iv;
+            TextView farmer_name_tv, status_tv, product_tv, price_tv, quantity_tv, order_tv, total_tv,desc_tv,address_tv;
+            ImageView product_image_iv,farmer_image_iv;
+
+            LinearLayout rating_ll = convertView.findViewById(R.id.rating_ll);
             Button receive_cancel_btn;
+            desc_tv = convertView.findViewById(R.id.desc_tv);
+            desc_tv.setText(ordersList.get(position).getProductDescription());
+            address_tv = convertView.findViewById(R.id.address_tv);
+            RelativeLayout chat_rl = convertView.findViewById(R.id.chat_rl);
+
+            address_tv.setText(((Map<String,String>)ordersList.get(position).getLocation()).get("userFullName")+" | "+
+                    ((Map<String,String>)ordersList.get(position).getLocation()).get("userPhoneNumber")+"\n"+
+                    ((Map<String,String>)ordersList.get(position).getLocation()).get("userSpecificAddress")+"\n"+
+                    ((Map<String,String>)ordersList.get(position).getLocation()).get("userBarangay")+", "+
+                    ((Map<String,String>)ordersList.get(position).getLocation()).get("userMunicipality")+", "+
+                    ((Map<String,String>)ordersList.get(position).getLocation()).get("userProvince")+", "+
+                    ((Map<String,String>)ordersList.get(position).getLocation()).get("userRegion")+", "+
+                    ((Map<String,String>)ordersList.get(position).getLocation()).get("userZipCode"));
+
             product_image_iv = convertView.findViewById(R.id.product_image_iv);
-            farmer_tv = convertView.findViewById(R.id.farmer_tv);
+            product_image_iv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
+            farmer_image_iv=convertView.findViewById(R.id.farmer_image_iv);
+            farmer_name_tv = convertView.findViewById(R.id.farmer_name_tv);
+            ProfileManagement.getUserProfile(ordersList.get(position).getProductUserId()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+                    Glide.with(getContext())
+                            .load(documentSnapshot.getString("userImage"))
+                            .into(farmer_image_iv);
+                    farmer_name_tv.setText(documentSnapshot.getString("userDisplayName").substring(0,documentSnapshot.getString("userDisplayName").length()-2));
+                }
+            });
             status_tv = convertView.findViewById(R.id.status_tv);
             product_tv = convertView.findViewById(R.id.product_tv);
             price_tv = convertView.findViewById(R.id.price_tv);
@@ -223,6 +218,21 @@ public class OrdersFragment extends Fragment {
             total_tv = convertView.findViewById(R.id.total_tv);
             receive_cancel_btn = convertView.findViewById(R.id.receive_cancel_btn);
             status_tv.setText(ordersList.get(position).getOrderStatus().toUpperCase(Locale.ROOT));
+
+
+
+            for (int i = 0; i < 5; i++) {
+                ImageView star = new ImageView(getContext());
+                if (i < ordersList.get(position).getProductRating()) {
+                    star.setImageResource(R.drawable.ic_baseline_star);
+                    rating_ll.addView(star);
+                } else {
+                    star.setImageResource(R.drawable.ic_baseline_star_outline_24);
+                    rating_ll.addView(star);
+                }
+            }
+
+
             Glide.with(getContext())
                     .load(ordersList.get(position).getProductImage().get(0))
                     .into(product_image_iv);
@@ -247,10 +257,10 @@ public class OrdersFragment extends Fragment {
                 receive_cancel_btn.setBackgroundColor(getResources().getColor(R.color.yellow_orange));
                 receive_cancel_btn.setTextColor(getResources().getColor(R.color.army_green));
                 receive_cancel_btn.setText("Rate");
-                if (ordersList.get(position).getProductNoCustomerRate() > 0)
-                    receive_cancel_btn.setEnabled(false);
+                if (ordersList.get(position).isRated())
+                    receive_cancel_btn.setVisibility(View.GONE);
                 else
-                    receive_cancel_btn.setEnabled(true);
+                    receive_cancel_btn.setVisibility(View.VISIBLE);
             } else
                 receive_cancel_btn.setVisibility(View.GONE);
             receive_cancel_btn.setOnClickListener(new View.OnClickListener() {
@@ -291,17 +301,7 @@ public class OrdersFragment extends Fragment {
                         alert.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                OrderManagement.receivedOrder(getActivity(), ordersList.get(position).getOrderID())
-                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<Void> task) {
-                                                if (task.isSuccessful()) {
-                                                    AuthValidation.successToast(getContext(), "Order Received").show();
-                                                } else {
-                                                    AuthValidation.failedToast(getContext(), "Failed To Receive Order").show();
-                                                }
-                                            }
-                                        });
+                                OrderManagement.receivedOrder(getActivity(), ordersList.get(position));
                             }
                         });
                         alert.setNegativeButton("No", null);
@@ -344,8 +344,50 @@ public class OrdersFragment extends Fragment {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             convertView = inflater.inflate(R.layout.farm_agr_order_item_layout, null);
-            TextView description_tv, status_tv, product_tv, price_tv, quantity_tv, order_tv, total_tv;
+            TextView description_tv, status_tv, product_tv, price_tv, quantity_tv, order_tv, total_tv, address_tv;
             ImageView product_image_iv;
+            LinearLayout rating_ll = convertView.findViewById(R.id.rating_ll);
+            TextView not_rated_tv =convertView.findViewById(R.id.not_rated_tv);
+            ImageView cutomer_image_iv = convertView.findViewById(R.id.cutomer_image_iv);
+            TextView customer_name_tv=convertView.findViewById(R.id.customer_name_tv);
+            address_tv=convertView.findViewById(R.id.address_tv);
+            RelativeLayout chat_rl = convertView.findViewById(R.id.chat_rl);
+            address_tv.setText(((Map<String,String>)ordersList.get(position).getLocation()).get("userFullName")+" | "+
+                    ((Map<String,String>)ordersList.get(position).getLocation()).get("userPhoneNumber")+"\n"+
+                    ((Map<String,String>)ordersList.get(position).getLocation()).get("userSpecificAddress")+"\n"+
+                    ((Map<String,String>)ordersList.get(position).getLocation()).get("userBarangay")+", "+
+                    ((Map<String,String>)ordersList.get(position).getLocation()).get("userMunicipality")+", "+
+                    ((Map<String,String>)ordersList.get(position).getLocation()).get("userProvince")+", "+
+                    ((Map<String,String>)ordersList.get(position).getLocation()).get("userRegion")+", "+
+                    ((Map<String,String>)ordersList.get(position).getLocation()).get("userZipCode"));
+
+            ProfileManagement.getUserProfile(ordersList.get(position).getCustomerId())
+                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            Glide.with(getContext())
+                                    .load(documentSnapshot.get("userImage").toString())
+                                    .into(cutomer_image_iv);
+
+                        }
+                    });
+            customer_name_tv.setText(((Map<String,Object>)ordersList.get(position).getLocation()).get("userFullName").toString());
+            if (ordersList.get(position).isRated()) {
+                not_rated_tv.setVisibility(View.GONE);
+                for (int i = 0; i < 5; i++) {
+                    ImageView star = new ImageView(getContext());
+
+                    if (i < ordersList.get(position).getProductRating()) {
+                        star.setImageResource(R.drawable.ic_baseline_star);
+                        rating_ll.addView(star);
+                    } else {
+                        star.setImageResource(R.drawable.ic_baseline_star_outline_24);
+                        rating_ll.addView(star);
+                    }
+                }
+            }
+            else
+                not_rated_tv.setVisibility(View.VISIBLE);
             Button cancel_btn, prepared_shipped_btn;
             product_image_iv = convertView.findViewById(R.id.product_image_iv);
             description_tv = convertView.findViewById(R.id.description_tv);
@@ -393,7 +435,7 @@ public class OrdersFragment extends Fragment {
                                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                                             @Override
                                             public void onComplete(@NonNull Task<Void> task) {
-                                                getOrders();
+//                                                getOrders();
                                             }
                                         });
 
@@ -427,7 +469,6 @@ public class OrdersFragment extends Fragment {
             cancel_btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     //CANCEL
                     AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
                     alert.setTitle("Cancel Order:");
@@ -452,9 +493,8 @@ public class OrdersFragment extends Fragment {
                                             alert.setTitle("Failed!");
                                             alert.setMessage(e.getLocalizedMessage());
                                             alert.setCancelable(false);
-                                            alert.setPositiveButton("Ok",null);
+                                            alert.setPositiveButton("Ok", null);
                                             alert.show();
-//                                            AuthValidation.failedToast(getContext(), "Failed to Cancel Order, " + e.getMessage()).show();
                                         }
                                     });
                         }
@@ -462,34 +502,6 @@ public class OrdersFragment extends Fragment {
                     alert.setNegativeButton("No", null);
                     alert.show();
 
-//                    } else if (status.equals("shipped")) {
-//                        //RECEIVED
-//                        AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
-//                        alert.setTitle("Order Received:");
-//                        alert.setMessage("Click confirm to Received. \nOnce you confirmed it cannot be undone.");
-//                        alert.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                OrderManagement.receivedOrder(getActivity(), ordersList.get(position).getOrderID())
-//                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-//                                            @Override
-//                                            public void onComplete(@NonNull Task<Void> task) {
-//                                                if (task.isSuccessful()) {
-//                                                    AuthValidation.successToast(getContext(), "Order Received").show();
-//                                                } else {
-//                                                    AuthValidation.failedToast(getContext(), "Failed To Receive Order").show();
-//                                                }
-//                                            }
-//                                        });
-//                            }
-//                        });
-//                        alert.setNegativeButton("No", null);
-//                        alert.show();
-//                    } else if (status.equals("completed")) {
-//                        //RECEIVED
-//                        RateProductDialog dialog = new RateProductDialog(getActivity(), ordersList.get(position));
-//                        dialog.showDialog();
-//                    }
                 }
             });
 

@@ -16,7 +16,6 @@ import com.google.android.material.tabs.TabLayout;
 public class BarterProductActivity extends AppCompatActivity {
 
     MaterialToolbar topAppBar;
-
     TabLayout barter_tab;
     ViewPager2 barter_product_pager;
 

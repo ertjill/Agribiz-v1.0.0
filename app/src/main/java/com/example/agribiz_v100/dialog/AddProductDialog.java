@@ -37,6 +37,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.bumptech.glide.Glide;
 import com.example.agribiz_v100.R;
 import com.example.agribiz_v100.entities.ProductModel;
+import com.example.agribiz_v100.services.AppManagement;
 import com.example.agribiz_v100.services.ProductManagement;
 import com.example.agribiz_v100.services.StorageManagement;
 import com.example.agribiz_v100.validation.AuthValidation;
@@ -94,8 +95,9 @@ public class AddProductDialog {
     Button cancel_btn;
     TextView count_done_tv;
     List<String> categories;
-    static String[] category = {"Fruits", "Vegetables", "Livestock", "Poultry", "Fertilizer"};
-    static String[] unit = {"kg", "g", "ml", "pcs", "L"};
+    List<String> unit;
+//    static String[] category = {"Fruits", "Vegetables", "Livestock", "Poultry", "Fertilizer"};
+//    static String[] unit = {"kg", "g", "ml", "pcs", "L"};
 
     public void createListener(AddProductDialogCallback addProductDialogCallback) {
         this.addProductDialogCallback = addProductDialogCallback;
@@ -107,15 +109,19 @@ public class AddProductDialog {
         this.fragment = fragment;
         arrayOfImages = new ArrayList<>();
         categories = new ArrayList<>();
-        ProductManagement.getProductCategories()
+        unit=new ArrayList<>();
+
+        AppManagement.getSettings()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         if(task.isSuccessful()){
-                             List<Object> list= Arrays.asList(task.getResult().get("productCategory"));
                              for(Object object:(List<Object>) (task.getResult().get("productCategory"))){
                                  categories.add(object.toString());
                              }
+                            for(Object object:(List<Object>) (task.getResult().get("units"))){
+                                unit.add(object.toString());
+                            }
                         }else{
                             Toast.makeText(activity, "Check Your Internet Connection", Toast.LENGTH_SHORT).show();
                         }
@@ -426,16 +432,13 @@ public class AddProductDialog {
                                                 Log.d("images", "uploaded : " + downloadUri);
                                                 product.getProductImage().add(downloadUri);
                                                 if (finalI == arrayOfImages.size()-1) {
-
                                                     AuthValidation.successToast(activity.getBaseContext(), "Successfully added product").show();
                                                     FirebaseFirestore db =FirebaseFirestore.getInstance();
-                                                    db.collection("products").document(product.getProductId())
-                                                            .update("productImage", product.getProductImage());
+                                                    db.collection("products").document(product.getProductId()).update("productImage", product.getProductImage());
                                                     loder_rl.setVisibility(View.GONE);
                                                     reset();
                                                     dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                                     addProductDialogCallback.addOnDocumentAddedListener(true);
-
                                                     dismissDialog();
                                                 }
                                             } else {

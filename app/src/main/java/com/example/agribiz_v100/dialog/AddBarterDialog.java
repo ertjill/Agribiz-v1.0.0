@@ -1,6 +1,7 @@
 package com.example.agribiz_v100.dialog;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -22,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -35,6 +37,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.bumptech.glide.Glide;
 import com.example.agribiz_v100.R;
 import com.example.agribiz_v100.entities.BarterModel;
+import com.example.agribiz_v100.services.AppManagement;
 import com.example.agribiz_v100.services.BarterManagement;
 import com.example.agribiz_v100.services.StorageManagement;
 import com.example.agribiz_v100.validation.AuthValidation;
@@ -47,6 +50,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
@@ -74,11 +78,13 @@ public class AddBarterDialog {
 
     List<String> arrayOfImages;
     List<Integer> imagesProgress;
+    List<String> units;
 
     ViewPager2 imageSlider;
     TextView count_done_tv;
     ImageView barter_image_iv;
     AutoCompleteTextView itemCondition_at;
+    AutoCompleteTextView itemUnit_at;
     Button cancel_btn, addItem_btn, add_image_btn;
 
     LinearLayout blank_photo_ll;
@@ -93,7 +99,21 @@ public class AddBarterDialog {
         this.dialog = new Dialog(activity);
         this.fragment = fragment;
         this.arrayOfImages = new ArrayList<>();
+        this.units = new ArrayList<>();
         this.imageViewPagerAdapter = new ImageViewPagerAdapter();
+        AppManagement.getSettings()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if(task.isSuccessful()){
+                            for(Object object:(List<Object>) (task.getResult().get("units"))){
+                                units.add(object.toString());
+                            }
+                        }else{
+                            Toast.makeText(activity, "Check Your Internet Connection", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
     }
 
     public AddBarterDialog(Activity activity, Fragment fragment, String proposeBarterID) {
@@ -101,8 +121,24 @@ public class AddBarterDialog {
         this.dialog = new Dialog(activity);
         this.fragment = fragment;
         this.arrayOfImages = new ArrayList<>();
+        this.units = new ArrayList<>();
         this.proposeBarterID = proposeBarterID;
         this.imageViewPagerAdapter = new ImageViewPagerAdapter();
+
+        AppManagement.getSettings()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if(task.isSuccessful()){
+                            for(Object object:(List<Object>) (task.getResult().get("units"))){
+                                units.add(object.toString());
+                            }
+                        }else{
+                            Toast.makeText(activity, "Check Your Internet Connection", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
     }
 
     public interface AddBarterDialogCallback {
@@ -134,6 +170,7 @@ public class AddBarterDialog {
         barter_image_iv = dialog.findViewById(R.id.barter_image_iv);
         // AutoCompleteView references
         itemCondition_at = dialog.findViewById(R.id.itemCondition_at);
+        itemUnit_at = dialog.findViewById(R.id.itemUnit_at);
         // TextInputLayouts references
         itemName_til = dialog.findViewById(R.id.itemName_til);
         itemCondition_til = dialog.findViewById(R.id.itemCondition_til);
@@ -149,8 +186,10 @@ public class AddBarterDialog {
         imageSlider = dialog.findViewById(R.id.imageSlider);
         imageSlider.setAdapter(imageViewPagerAdapter);
         // DropDown adapter
+        ArrayAdapter<String> itemUnitAdapter = new ArrayAdapter<>(activity.getBaseContext(), R.layout.dropdown_item, units);
         ArrayAdapter<String> itemConditionAdapter = new ArrayAdapter<>(activity.getBaseContext(), R.layout.dropdown_item, itemCondition);
         itemCondition_at.setAdapter(itemConditionAdapter);
+        itemUnit_at.setAdapter(itemUnitAdapter);
 
         // Progress
         CircularProgressIndicator add_product_progress = dialog.findViewById(R.id.add_product_progress);
@@ -268,7 +307,6 @@ public class AddBarterDialog {
                         WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
                 barterModel = new BarterModel();
-
                 Date dateNow = new Date();
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("ddMMyyyyHHmmss");
                 Timestamp timestamp = new Timestamp(dateNow);
@@ -282,10 +320,10 @@ public class AddBarterDialog {
                 }
 
                 barterModel.setBarterUserId(user.getUid());
-
                 barterModel.setBarterName(itemName_til.getEditText().getText().toString());
                 barterModel.setBarterCondition(itemCondition_til.getEditText().getText().toString());
                 barterModel.setBarterQuantity(Integer.parseInt(itemQuantity_til.getEditText().getText().toString()));
+                barterModel.setBarterUnit(itemUnit_at.getText().toString());
                 barterModel.setBarterDescription(description_til.getEditText().getText().toString());
                 barterModel.setBarterStatus("Open");
                 barterModel.setBarterType(userType);
@@ -294,6 +332,7 @@ public class AddBarterDialog {
                 FirebaseStorage storage = FirebaseStorage.getInstance();
                 imagesProgress = new ArrayList<>();
                 List<String> uploadedImages = new ArrayList<>();
+
 
                 for (int k = 0 ; k < arrayOfImages.size(); k++) {
                     int finalI = k;
@@ -330,23 +369,31 @@ public class AddBarterDialog {
                                     BarterManagement.addBarterItem(barterModel, activity).addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
+                                            loder_rl.setVisibility(View.GONE);
+                                            dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                             if (task.isSuccessful()) {
                                                 AuthValidation.successToast(activity, "Successfully added barter item").show();
-                                                loder_rl.setVisibility(View.GONE);
-                                                dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                                 reset();
                                                 dismissDialog();
                                             } else {
-                                                AuthValidation.failedToast(activity, task.getException().getLocalizedMessage()).show();
+                                                AlertDialog.Builder alert = new AlertDialog.Builder(activity);
+                                                alert.setTitle("Failed Adding Barter Item");
+                                                alert.setMessage(task.getException().getLocalizedMessage());
+                                                alert.setCancelable(false);
+                                                alert.setPositiveButton("Ok",null);
+                                                alert.show();
                                                 Log.d("BarterManagement", task.getException().getLocalizedMessage());
-                                                task.getException().printStackTrace();
                                             }
                                         }
                                     });
-                                    dismissDialog();
                                 }
                             } else {
-                                AuthValidation.failedToast(activity.getBaseContext(),task1.getException().getMessage()).show();
+                                AlertDialog.Builder alert = new AlertDialog.Builder(activity);
+                                alert.setTitle("Failed to upload images");
+                                alert.setMessage(task1.getException().getMessage());
+                                alert.setCancelable(false);
+                                alert.setPositiveButton("Ok",null);
+                                alert.show();
                             }
                         }
                     });
@@ -426,7 +473,6 @@ public class AddBarterDialog {
         description_til.getEditText().setText("");
         description_til.setError(null);
         description_til.clearFocus();
-
         arrayOfImages = new ArrayList<>();
         imageViewPagerAdapter.notifyDataSetChanged();
         add_image_btn.setVisibility(View.GONE);
@@ -444,7 +490,12 @@ public class AddBarterDialog {
         } else if (TextUtils.isEmpty(itemQuantity_til.getEditText().getText())) {
             AuthValidation.failedToast(dialog.getContext(), "Please specify item quantity").show();
             return false;
-        } else if (TextUtils.isEmpty(description_til.getEditText().getText())) {
+        }
+        else if (TextUtils.isEmpty(itemUnit_at.getText())) {
+            AuthValidation.failedToast(dialog.getContext(), "Please specify item unit").show();
+            return false;
+        }
+        else if (TextUtils.isEmpty(description_til.getEditText().getText())) {
             AuthValidation.failedToast(dialog.getContext(), "Please enter item description").show();
             return false;
         } else if (arrayOfImages.size() < 1) {

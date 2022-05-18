@@ -17,6 +17,7 @@ import android.util.SparseArray;
 
 import android.util.Log;
 import android.util.SparseArray;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -132,7 +133,7 @@ public class Store extends Fragment {
             viewAll_tv = view.findViewById(R.id.viewAll_tv);
             productGridAdapter = new ProductGridAdapter(getContext(), topProducts);
             topProduce_gv.setAdapter(productGridAdapter);
-
+            topProduce_gv.setEmptyView(no_product_ll);
             topProduce_gv.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
@@ -159,8 +160,6 @@ public class Store extends Fragment {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Intent intent = new Intent(getContext(), ProductView.class);
-//                    Bundle bundle =new Bundle();
-//                    bundle.putSerializable("item",topProducts.get(position));
                     intent.putExtra("item", (Parcelable) topProducts.get(position));
                     intent.putExtras(bundle);
                     startActivity(intent);
@@ -289,14 +288,25 @@ public class Store extends Fragment {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             final int[] i = {0};
-                            if(task.getResult().size()>0){
-                                no_product_ll.setVisibility(View.GONE);
-                                top_products_ll.setVisibility(View.VISIBLE);
+                            if(task.getResult().size()<3){
+                                ViewGroup.LayoutParams layoutParams = topProduce_gv.getLayoutParams();
+                                int newWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,285,getResources().getDisplayMetrics());
+                                layoutParams.height = newWidth;
+                                topProduce_gv.getLayoutParams().height=newWidth;
                             }
-                            else {
-                                no_product_ll.setVisibility(View.VISIBLE);
-                                top_products_ll.setVisibility(View.GONE);
+                            else if(task.getResult().size()<5){
+                                ViewGroup.LayoutParams layoutParams = topProduce_gv.getLayoutParams();
+                                int newWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,570,getResources().getDisplayMetrics());
+                                layoutParams.height = newWidth;
+                                topProduce_gv.getLayoutParams().height=newWidth;
+                            }else
+                            {
+                                ViewGroup.LayoutParams layoutParams = topProduce_gv.getLayoutParams();
+                                int newWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,855,getResources().getDisplayMetrics());
+                                layoutParams.height = newWidth;
+                                topProduce_gv.setLayoutParams(layoutParams);
                             }
+
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 int size = task.getResult().size();
                                 Log.d(TAG, "TASK SIZE: " + size);

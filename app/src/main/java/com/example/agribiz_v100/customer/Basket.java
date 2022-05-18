@@ -148,10 +148,14 @@ public class Basket extends Fragment {
                         for (Object l : loc) {
                             Log.d(TAG, l.toString());
                             Map<String, Object> adds = (Map<String, Object>) l;
-                            listAdd.add(adds.get("userBarangay").toString());
+                            listAdd.add("Name: "+adds.get("userFullName").toString()+
+                                    "\nPhone Number: "+adds.get("userPhoneNumber").toString()+
+                                    "\nAddress: "+adds.get("userBarangay").toString()+", "+adds.get("userMunicipality").toString()+", "+adds.get("userProvince").toString()+
+                                    "\nSpecific Address: "+adds.get("userSpecificAddress").toString());
+
                             listLocation.add(adds);
                         }
-                        ArrayAdapter<String> addAdapter = new ArrayAdapter<String>(getContext(), R.layout.dropdown_item, listAdd);
+                        ArrayAdapter<String> addAdapter = new ArrayAdapter<String>(getContext(), R.layout.address_dropdown_item_layout, listAdd);
                         address_act.setAdapter(addAdapter);
                     } else {
                         Log.d(TAG, "No such document");
@@ -165,7 +169,6 @@ public class Basket extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 location = listLocation.get(position);
-                Toast.makeText(getContext(), "hahahha", Toast.LENGTH_SHORT).show();
             }
         });
         checkout_btn.setOnClickListener(v -> {

@@ -43,10 +43,9 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/army_green"
             android:hint="Address"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
             app:boxBackgroundColor="@color/transparent"
             app:boxBackgroundMode="outline"
             app:boxCornerRadiusBottomEnd="15dp"
@@ -54,18 +53,18 @@
             app:boxCornerRadiusTopEnd="15dp"
             app:boxCornerRadiusTopStart="15dp"
             app:boxStrokeColor="@color/army_green"
+            app:endIconTint="@color/army_green"
+            app:errorEnabled="true"
             app:hintTextColor="@color/army_green">
 
             <AutoCompleteTextView
                 android:id="@+id/address_act"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/montserrat_medium"
-                android:inputType="none"
-                android:enabled="false"
-                android:singleLine="true"
-                android:textColorHint="@color/color_hint"
-                tools:ignore="TextContrastCheck" />
+                android:fontFamily="@font/montserrat_regular"
+                android:textSize="12sp"
+                android:textColor="@color/brown"
+                android:textColorHint="@color/color_hint" />
         </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
     <LinearLayout

@@ -23,10 +23,8 @@ public class RateProductDialog {
     ImageView star1_iv,star2_iv,star3_iv,star4_iv,star5_iv;
     Button cancel_btn,submit_btn;
     EditText textArea_information;
-    OrderProductModel orderProductModel;
     int rate = 0;
     public RateProductDialog(Activity activity, OrderProductModel orderProductModel) {
-        this.orderProductModel = orderProductModel;
         this.dialog = new Dialog(activity);
         this.dialog.setContentView(R.layout.rate_layout);
         this.dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -104,7 +102,7 @@ public class RateProductDialog {
             public void onClick(View v) {
                 //submit rating
                 String feedback = textArea_information.getText().toString();
-                orderProductModel.setProductNoCustomerRate(1);
+                orderProductModel.setRated(true);
                 orderProductModel.setProductRating(rate);
                 ProductManagement.rateProduct(activity,orderProductModel,feedback)
                         .addOnSuccessListener(new OnSuccessListener<Void>() {

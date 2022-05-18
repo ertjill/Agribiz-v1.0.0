@@ -3,10 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".customer.OrdersFragment">
+    tools:context=".customer.BarterFragment">
 
     <ListView
-        android:id="@+id/orders_lv"
+        android:id="@+id/barters_lv"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

@@ -97,7 +97,7 @@
                 <LinearLayout
                     android:id="@+id/top_products_ll"
                     android:layout_width="match_parent"
-                    android:layout_height="795dp"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical">
 
                     <GridView

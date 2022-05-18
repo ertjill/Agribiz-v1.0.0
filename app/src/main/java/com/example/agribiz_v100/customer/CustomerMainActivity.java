@@ -29,6 +29,7 @@ import com.example.agribiz_v100.OnBoard;
 import com.example.agribiz_v100.OnBoardSlide;
 import com.example.agribiz_v100.ProductItem;
 import com.example.agribiz_v100.R;
+import com.example.agribiz_v100.services.AuthManagement;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationItemView;
@@ -37,6 +38,7 @@ import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -49,7 +51,7 @@ import java.util.ArrayList;
 public class CustomerMainActivity extends AppCompatActivity implements Serializable, Firebase.GetProductCallback,FirebaseHelper.FirebaseHelperCallback {
     private static final String TAG = "CustomerMainActivity";
     ViewPager2 customerMain_vp;
-    FirebaseUser user;
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     SparseArray<ProductItem>  topProducts;
     SparseArray<Object> basketProductItems;
@@ -68,6 +70,7 @@ public class CustomerMainActivity extends AppCompatActivity implements Serializa
     @Override
     protected void onResume() {
         super.onResume();
+        AuthManagement.setUserStatus(user.getUid(),"active");
         Log.d(TAG,"onResume..."+basketProductItems.size());
 
     }
@@ -113,6 +116,7 @@ public class CustomerMainActivity extends AppCompatActivity implements Serializa
     @Override
     protected void onPause() {
         super.onPause();
+        AuthManagement.setUserStatus(user.getUid(),"inactive");
         Log.d(TAG,"onPause...");
     }
 
@@ -129,7 +133,7 @@ public class CustomerMainActivity extends AppCompatActivity implements Serializa
         bottom_navigation.setOnItemSelectedListener(navigationListener);
         basketProductItems = new SparseArray<>();
 //        topProducts = getIntent().getExtras().getSparseParcelableArray("topProducts");
-        user = getIntent().getParcelableExtra("user");
+//        user = getIntent().getParcelableExtra("user");
             customerMain_vp = findViewById(R.id.customerMain_vp);
             customerMain_vp.setUserInputEnabled(false);
             Log.d(TAG, "0");

@@ -22,5 +22,6 @@
     <color name="logo_green">#258000</color>
     <color name="highlight_back">#F3F3F3</color>
     <color name="cancel">#C4C4C4</color>
+    <color name="lightOrange">#dda15e</color>
 
 </resources>

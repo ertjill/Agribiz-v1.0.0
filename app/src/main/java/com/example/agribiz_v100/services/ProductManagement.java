@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.net.Uri;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -43,33 +42,32 @@ public class ProductManagement {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        DocumentReference ordDocRef = db.collection("orders").document(user.getUid())
-                .collection("products").document(order.getOrderID());
+        DocumentReference ordDocRef = db.collection("orders").document(order.getOrderID());
         DocumentReference pocRef = db.collection("products").document(order.getProductId());
         DocumentReference rating = db.collection("rating").document(user.getUid())
-                .collection("products").document(order.getProductId());
+                .collection("products").document(order.getOrderID());
 
         return db.runTransaction(new Transaction.Function<Void>() {
             @Override
             public Void apply(Transaction transaction) throws FirebaseFirestoreException {
                 DocumentSnapshot ratingSnapshot = transaction.get(rating);
-                DocumentSnapshot prodDocRef = transaction.get(pocRef);
+                if (!ratingSnapshot.exists()) {
+                    DocumentSnapshot prodDocRef = transaction.get(pocRef);
 
 //                        int rate = Integer.parseInt(ratingSnapshot.get("productNoCustomerRate").toString());
-                long noUserRated = prodDocRef.getLong("productNoCustomerRate") + 1;
+                    long noUserRated = prodDocRef.getLong("productNoCustomerRate") + 1;
 
-                int rate = Integer.parseInt(prodDocRef.get("productRating").toString());
-                if (rate > 0) {
-                    rate += order.getProductRating();
-                    rate /= 2;
-                } else {
-                    rate = order.getProductRating();
-                }
+                    int rate = Integer.parseInt(prodDocRef.get("productRating").toString());
+                    if (rate > 0) {
+                        rate += order.getProductRating();
+                        rate /= 2;
+                    } else {
+                        rate = order.getProductRating();
+                    }
 
-                if (!ratingSnapshot.exists()) {
                     Map<String, Object> rat = new HashMap<>();
-                    transaction.update(ordDocRef, "productNoCustomerRate", 1);
                     transaction.update(ordDocRef, "productRating", order.getProductRating());
+                    transaction.update(ordDocRef,"rated",order.isRated());
 
                     transaction.update(pocRef, "productNoCustomerRate", noUserRated);
                     transaction.update(pocRef, "productRating", rate);
@@ -119,12 +117,6 @@ public class ProductManagement {
         return db.collection("products")
                 .whereEqualTo("productUserId", userId)
                 .whereLessThanOrEqualTo("productStocks", 0);
-    }
-    public static Task<DocumentSnapshot> getProductCategories(){
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        return db.collection("appSettings").document("8AXp5CgroNAxyBpr1Rg6")
-                .get();
-
     }
 
     public static Query getProducts(DocumentSnapshot last, String userId) {
@@ -245,6 +237,11 @@ public class ProductManagement {
                     .endAt(search + "\uf8ff").limit(8);
         }
 
+    }
+
+    public static Task<DocumentSnapshot> getProduct(String productId){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        return db.collection("products").document(productId).get();
     }
 
     public static Query getTopSellingProduct() {

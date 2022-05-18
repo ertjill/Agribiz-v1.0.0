@@ -3,18 +3,18 @@ package com.example.agribiz_v100.services;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import com.example.agribiz_v100.LoginActivity;
 import com.example.agribiz_v100.controller.AuthController;
 import com.example.agribiz_v100.entities.UserModel;
 import com.example.agribiz_v100.validation.AuthValidation;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.AuthCredential;
@@ -181,7 +181,7 @@ public class AuthManagement {
                                     });
                                 }
                             } else {
-                                logoutAccount();
+                                logoutAccount(activity);
                                 Log.d(TAG, task2.getException().getMessage());
                                 AlertDialog.Builder alert = new AlertDialog.Builder(activity);
                                 alert.setTitle("Invalid Credential");
@@ -347,13 +347,29 @@ public class AuthManagement {
                 });
 
     }
-    public static void setUserStatus(String id,String status ){
+    public static Task<Void> setUserStatus(String id, String status ){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("users").document(id)
+        return db.collection("users").document(id)
                 .update("userStatus", status);
     }
-    public static void logoutAccount() {
-        FirebaseAuth.getInstance().signOut();
+    public static Task<Void> logoutAccount(Activity activity) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        return AuthManagement.setUserStatus(user.getUid(),"inactive").addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                FirebaseAuth.getInstance().signOut();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                AlertDialog.Builder alert = new AlertDialog.Builder(activity);
+                alert.setTitle("Logging Out:");
+                alert.setMessage(e.getLocalizedMessage());
+                alert.setPositiveButton("Ok", null);
+                alert.show();
+            }
+        });
+
     }
 
 }

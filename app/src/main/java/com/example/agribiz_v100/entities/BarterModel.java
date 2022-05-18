@@ -9,7 +9,6 @@ public class BarterModel implements Serializable {
 
     private String barterUserId;
     private String barterType;
-    private String barterCustomerId;
     private String barterId;
     private List<String> barterImage;
     private String barterName;
@@ -18,16 +17,16 @@ public class BarterModel implements Serializable {
     private String barterDescription;
     private String barterStatus;
     private Timestamp barterDateUploaded;
+    private String barterUnit;
 
 
     public BarterModel() {
 
     }
 
-    public BarterModel(String barterUserId, String barterType, String barterCustomerId, String barterId, List<String> barterImage, String barterName, String barterCondition, int barterQuantity, String barterDescription, String barterStatus, Timestamp barterDateUploaded) {
+    public BarterModel(String barterUserId, String barterType, String barterCustomerId, String barterId, List<String> barterImage, String barterName, String barterCondition, int barterQuantity, String barterDescription, String barterStatus, Timestamp barterDateUploaded, String barterUnit) {
         this.barterUserId = barterUserId;
         this.barterType = barterType;
-        this.barterCustomerId = barterCustomerId;
         this.barterId = barterId;
         this.barterImage = barterImage;
         this.barterName = barterName;
@@ -36,6 +35,7 @@ public class BarterModel implements Serializable {
         this.barterDescription = barterDescription;
         this.barterStatus = barterStatus;
         this.barterDateUploaded = barterDateUploaded;
+        this.barterUnit = barterUnit;
     }
 
     public String getBarterUserId() {
@@ -44,14 +44,6 @@ public class BarterModel implements Serializable {
 
     public void setBarterUserId(String barterUserId) {
         this.barterUserId = barterUserId;
-    }
-
-    public String getBarterCustomerId() {
-        return barterCustomerId;
-    }
-
-    public void setBarterCustomerId(String barterCustomerId) {
-        this.barterCustomerId = barterCustomerId;
     }
 
     public String getBarterId() {
@@ -124,5 +116,13 @@ public class BarterModel implements Serializable {
 
     public void setBarterDateUploaded(Timestamp barterDateUploaded) {
         this.barterDateUploaded = barterDateUploaded;
+    }
+
+    public String getBarterUnit() {
+        return barterUnit;
+    }
+
+    public void setBarterUnit(String barterUnit) {
+        this.barterUnit = barterUnit;
     }
 }

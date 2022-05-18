@@ -25,6 +25,7 @@ import com.example.agribiz_v100.agrovit.AgrovitMainActivity;
 import com.example.agribiz_v100.customer.BarterGoodsActivity;
 import com.example.agribiz_v100.customer.EditProfile;
 import com.example.agribiz_v100.services.AuthManagement;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -86,11 +87,16 @@ public class FarmerProfile extends Fragment {
             alert.setMessage("Do you want to logout?");
             alert.setNegativeButton("No", null);
             alert.setPositiveButton("Yes", (dialog, which) -> {
-                AuthManagement.logoutAccount();
-                Intent i = new Intent(getContext(), LoginActivity.class);
-                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(i);
-                getActivity().finishAffinity();
+                AuthManagement.logoutAccount(getActivity()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Intent i = new Intent(getContext(), LoginActivity.class);
+                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(i);
+                        getActivity().finishAffinity();
+                    }
+                });
+
             });
             alert.show();
         });
