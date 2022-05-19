@@ -41,7 +41,7 @@ public class ProfileManagement {
         DocumentReference imageProfile = db.collection("users").document(user.getUid());
         ProgressDialog progressDialog;
         progressDialog = new ProgressDialog(activity);
-        progressDialog.setMessage("Uploading Image, please wait!");
+        progressDialog.setMessage("Uploading image, please wait...");
         progressDialog.setCancelable(false);
         progressDialog.show();
         return StorageManagement.uploadImage("profile", imageURI, user.getUid())
@@ -81,9 +81,9 @@ public class ProfileManagement {
                                                 }
                                                 else{
                                                     AlertDialog.Builder alert = new AlertDialog.Builder(activity);
-                                                    alert.setTitle("Update Profile:");
+                                                    alert.setTitle("Update Profile");
                                                     alert.setMessage(task2.getException().getMessage());
-                                                    alert.setPositiveButton("Ok", null);
+                                                    alert.setPositiveButton("Okay", null);
                                                     alert.show();
                                                     progressDialog.dismiss();
                                                 }
@@ -92,9 +92,9 @@ public class ProfileManagement {
                                     } else {
                                         //AuthValidation.failedToast(activity, task.getException().getMessage()).show();
                                         AlertDialog.Builder alert = new AlertDialog.Builder(activity);
-                                        alert.setTitle("Update Profile:");
+                                        alert.setTitle("Update Profile");
                                         alert.setMessage(task1.getException().getMessage());
-                                        alert.setPositiveButton("Ok", null);
+                                        alert.setPositiveButton("Okay", null);
                                         alert.show();
                                         progressDialog.dismiss();
                                     }
@@ -103,9 +103,9 @@ public class ProfileManagement {
                         } else {
                             //AuthValidation.failedToast(activity, "Failed to update profile").show();
                             AlertDialog.Builder alert = new AlertDialog.Builder(activity);
-                            alert.setTitle("Update Profile:");
+                            alert.setTitle("Update Profile");
                             alert.setMessage(task.getException().getMessage());
-                            alert.setPositiveButton("Ok", null);
+                            alert.setPositiveButton("Okay", null);
                             alert.show();
                             progressDialog.dismiss();
                         }

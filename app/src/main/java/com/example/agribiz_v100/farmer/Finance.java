@@ -135,10 +135,10 @@ public class Finance extends Fragment {
                             expensesAdapter.notifyDataSetChanged();
                         } else {
                             AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
-                            alert.setTitle("Failed getting Expenses:");
+                            alert.setTitle("Failed to load expenses");
                             alert.setMessage(task.getException().getLocalizedMessage());
                             alert.setCancelable(false);
-                            alert.setPositiveButton("Ok", null);
+                            alert.setPositiveButton("Okay", null);
                             alert.show();
                         }
                     }
@@ -247,15 +247,15 @@ public class Finance extends Fragment {
                 public void onClick(View v) {
 //                    Toast.makeText(getActivity(), "Removing", Toast.LENGTH_SHORT).show();
                     AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
-                    alert.setTitle("Remove Expense:");
-                    alert.setMessage("Are you sure to remove this Expense?");
+                    alert.setTitle("Remove Expense");
+                    alert.setMessage("Are you sure you want to remove this expense?");
                     alert.setCancelable(false);
                     alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             ProgressDialog progressDialog;
                             progressDialog = new ProgressDialog(getContext());
-                            progressDialog.setMessage("Removing Expense, please wait!");
+                            progressDialog.setMessage("Removing expense, please wait...");
                             progressDialog.setCancelable(false);
                             progressDialog.show();
                             FinanceManagement.deleteExpense(getActivity(),list.get(position)).addOnSuccessListener(new OnSuccessListener<Void>() {

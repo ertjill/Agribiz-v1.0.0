@@ -36,7 +36,7 @@ public class OrderManagement {
     public static Task<Void> createOrder(Activity activity, List<BasketProductModel> items, Object location){
         ProgressDialog progressDialog;
         progressDialog = new ProgressDialog(activity);
-        progressDialog.setMessage("Processing your Order, please wait!");
+        progressDialog.setMessage("Processing your order, please wait...");
         progressDialog.setCancelable(false);
         progressDialog.show();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -58,7 +58,7 @@ public class OrderManagement {
                             stocks.add(i ,Integer.parseInt(snapshot.get("productStocks").toString()));
                             sold.add((Integer.parseInt(snapshot.get("productSold").toString())+ item.getProductBasketQuantity()));
                             if(stocks.get(i) < item.getProductBasketQuantity()){
-                                throw new FirebaseFirestoreException("Insufficient Product Stocks",
+                                throw new FirebaseFirestoreException("Insufficient product stocks",
                                         FirebaseFirestoreException.Code.ABORTED);
                             }
                             DocumentSnapshot userSnapshot = transaction.get(userDocRef);
@@ -107,7 +107,7 @@ public class OrderManagement {
     public static Task<Object> receivedOrder(Activity activity, OrderProductModel order){
         ProgressDialog progressDialog;
         progressDialog = new ProgressDialog(activity);
-        progressDialog.setMessage("Completing your Order, please wait!");
+        progressDialog.setMessage("Completing your order, please wait...");
         progressDialog.setCancelable(false);
         progressDialog.show();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -128,16 +128,16 @@ public class OrderManagement {
             @Override
             public void onSuccess(Object o) {
                 progressDialog.dismiss();
-                AuthValidation.successToast(activity, "Order Received").show();
+                AuthValidation.successToast(activity, "Order received").show();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 AlertDialog.Builder alert = new AlertDialog.Builder(activity);
-                alert.setTitle("Failed to Receive Order:");
+                alert.setTitle("Failed to receive order");
                 alert.setMessage(e.getLocalizedMessage());
                 alert.setCancelable(false);
-                alert.setPositiveButton("Ok", null);
+                alert.setPositiveButton("Okay", null);
                 alert.show();
             }
         });
@@ -145,7 +145,7 @@ public class OrderManagement {
     public static Task<Void> cancelOrder(Activity activity,OrderProductModel order){
         ProgressDialog progressDialog;
         progressDialog = new ProgressDialog(activity);
-        progressDialog.setMessage("Cancelling Order, please wait!");
+        progressDialog.setMessage("Cancelling order, please wait...");
         progressDialog.setCancelable(false);
         progressDialog.show();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -183,7 +183,7 @@ public class OrderManagement {
     public static Task<Void> updateOrderStatus(Activity activity, String customerId, String orderId, String status){
         ProgressDialog progressDialog;
         progressDialog = new ProgressDialog(activity);
-        progressDialog.setMessage("Tagging Order as "+ status +", please wait!");
+        progressDialog.setMessage("Tagging order as "+ status +", please wait...");
         progressDialog.setCancelable(false);
         progressDialog.show();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -197,7 +197,7 @@ public class OrderManagement {
                     transaction.update(prodDocRef,"orderStatus",status);
                     return null;
                 } else {
-                    throw new FirebaseFirestoreException("Cannot Tag Order as "+status,
+                    throw new FirebaseFirestoreException("Cannot tag order as "+status,
                             FirebaseFirestoreException.Code.ABORTED);
                 }
             }
@@ -206,13 +206,13 @@ public class OrderManagement {
             public void onComplete(@NonNull Task<Void> task) {
                 progressDialog.dismiss();
                 if(task.isSuccessful()){
-                    AuthValidation.successToast(activity,"Successfully Tag as "+status).show();
+                    AuthValidation.successToast(activity,"Successfully tagged as "+status).show();
                 }else{
                     AlertDialog.Builder alert = new AlertDialog.Builder(activity);
-                    alert.setTitle("Failed!");
+                    alert.setTitle("Failed");
                     alert.setMessage(task.getException().getLocalizedMessage());
                     alert.setCancelable(false);
-                    alert.setPositiveButton("Ok",null);
+                    alert.setPositiveButton("Okay",null);
                     alert.show();
                 }
             }

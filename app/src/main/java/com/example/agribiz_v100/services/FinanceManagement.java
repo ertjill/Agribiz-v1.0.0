@@ -26,7 +26,7 @@ public class FinanceManagement {
     public static Task<Void> addExpenses(Activity activity, ExpenseModel expenseModel) {
         ProgressDialog progressDialog;
         progressDialog = new ProgressDialog(activity);
-        progressDialog.setMessage("Uploading Image, please wait!");
+        progressDialog.setMessage("Adding expense, please wait...");
         progressDialog.setCancelable(false);
         progressDialog.show();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -50,7 +50,7 @@ public class FinanceManagement {
                     public void onSuccess(Void aVoid) {
 //                        Log.d(TAG, "Transaction success!");
                         progressDialog.dismiss();
-                        AuthValidation.successToast(activity, "Expenses Added").show();
+                        AuthValidation.successToast(activity, "Expenses added").show();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -59,10 +59,10 @@ public class FinanceManagement {
 //                        Log.w(TAG, "Transaction failure.", e);
                         progressDialog.dismiss();
                         AlertDialog.Builder alert = new AlertDialog.Builder(activity);
-                        alert.setTitle("Failed to Add Expenses:");
+                        alert.setTitle("Failed to add expenses");
                         alert.setMessage(e.getLocalizedMessage());
                         alert.setCancelable(false);
-                        alert.setPositiveButton("Ok", null);
+                        alert.setPositiveButton("Okay", null);
                         alert.show();
                     }
                 });
@@ -100,14 +100,14 @@ public class FinanceManagement {
                 }).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        AuthValidation.successToast(activity, "Expenses Removed").show();
+                        AuthValidation.successToast(activity, "Expense removed").show();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         AlertDialog.Builder alert = new AlertDialog.Builder(activity);
-                        alert.setTitle("Failed to Remove Expenses:");
+                        alert.setTitle("Failed to remove expenses");
                         alert.setMessage(e.getLocalizedMessage());
                         alert.setCancelable(false);
                         alert.setPositiveButton("Ok", null);
@@ -131,7 +131,7 @@ public class FinanceManagement {
     public static Task<Object> updateExpense(Activity activity, ExpenseModel expenseModel,double previousExpense){
         ProgressDialog progressDialog;
         progressDialog = new ProgressDialog(activity);
-        progressDialog.setMessage("Updating Expense, please wait!");
+        progressDialog.setMessage("Updating expense, please wait...");
         progressDialog.setCancelable(false);
         progressDialog.show();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -154,17 +154,17 @@ public class FinanceManagement {
             @Override
             public void onSuccess(Object o) {
                 progressDialog.dismiss();
-                AuthValidation.successToast(activity,"Updated Expense Successfully.").show();
+                AuthValidation.successToast(activity,"Successfully updated expense").show();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 progressDialog.dismiss();
                 AlertDialog.Builder alert = new AlertDialog.Builder(activity);
-                alert.setTitle("Failed to Update Expenses:");
+                alert.setTitle("Failed to update expenses:");
                 alert.setMessage(e.getLocalizedMessage());
                 alert.setCancelable(false);
-                alert.setPositiveButton("Ok", null);
+                alert.setPositiveButton("Okay", null);
                 alert.show();
             }
         });

@@ -245,7 +245,7 @@ public class ViewAllProductsActivity extends AppCompatActivity {
                                         .get((documentSnapshots.size() - 1));
 
                             } else {
-                                Toast.makeText(getApplicationContext(), "No Products to load.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "No products to be displayed", Toast.LENGTH_SHORT).show();
                             }
                             if (productItems.size() > 0) {
                                 no_product_ll.setVisibility(View.GONE);
@@ -276,7 +276,7 @@ public class ViewAllProductsActivity extends AppCompatActivity {
                                         .get((documentSnapshots.size() - 1));
 
                             } else {
-                                Toast.makeText(getApplicationContext(), "No Products to load.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "No products to be displayed", Toast.LENGTH_SHORT).show();
                             }
                             if (productItems.size() > 0) {
                                 no_product_ll.setVisibility(View.GONE);
@@ -296,7 +296,7 @@ public class ViewAllProductsActivity extends AppCompatActivity {
                             AlertDialog.Builder alert = new AlertDialog.Builder(ViewAllProductsActivity.this);
                             alert.setTitle("Alert");
                             alert.setMessage(e.getMessage());
-                            alert.setPositiveButton("Ok", null);
+                            alert.setPositiveButton("Okay", null);
                             alert.show();
                             isLoading = false;
                             swipeRefreshLayout.setRefreshing(false);

@@ -36,7 +36,7 @@ public class ProductManagement {
     public static Task<Void> rateProduct(Activity activity, OrderProductModel order, String feedback) {
         ProgressDialog progressDialog;
         progressDialog = new ProgressDialog(activity);
-        progressDialog.setMessage("Rating Product, please wait!");
+        progressDialog.setMessage("Rating product, please wait...");
         progressDialog.setCancelable(false);
         progressDialog.show();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -81,7 +81,7 @@ public class ProductManagement {
 
                     return null;
                 } else {
-                    throw new FirebaseFirestoreException("Rated already",
+                    throw new FirebaseFirestoreException("Rate was made already",
                             FirebaseFirestoreException.Code.ABORTED);
                 }
             }

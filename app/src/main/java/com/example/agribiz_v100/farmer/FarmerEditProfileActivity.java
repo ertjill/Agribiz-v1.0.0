@@ -245,7 +245,7 @@ public class FarmerEditProfileActivity extends AppCompatActivity {
             else {
                 ProgressDialog progressDialog;
                 progressDialog = new ProgressDialog(FarmerEditProfileActivity.this);
-                progressDialog.setMessage("Updating password, please wait!");
+                progressDialog.setMessage("Updating password, please wait...");
                 progressDialog.setCancelable(false);
                 progressDialog.show();
                 user.updatePassword(newPassword).addOnCompleteListener(new OnCompleteListener<Void>() {

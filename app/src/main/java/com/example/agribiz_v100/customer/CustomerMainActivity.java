@@ -159,7 +159,7 @@ public class CustomerMainActivity extends AppCompatActivity implements Serializa
     @Override
     public void getProducts(SparseArray<ProductItem> products, SparseArray<ProductItem> topProducst) {
         this.topProducts = topProducst;
-        Log.d(TAG,topProducst.size()+" procts...");
+        Log.d(TAG,topProducst.size()+" products...");
 
     }
 

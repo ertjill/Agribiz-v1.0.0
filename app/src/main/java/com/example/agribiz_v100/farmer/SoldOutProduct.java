@@ -174,8 +174,8 @@ public class SoldOutProduct extends Fragment {
                 @Override
                 public void onClick(View view) {
                     AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
-                    alert.setTitle("Deleter Product");
-                    alert.setMessage("Are you sure to delete dis product?");
+                    alert.setTitle("Delete Product");
+                    alert.setMessage("Are you sure you want to delete dis product?");
                     alert.setNegativeButton("No", null);
                     alert.setPositiveButton("Yes", (dialog, which) -> {
                         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -186,13 +186,13 @@ public class SoldOutProduct extends Fragment {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
                                         if (task.isSuccessful()) {
-                                            AuthValidation.successToast(getContext(),"Successfully deleted a product").show();
+                                            AuthValidation.successToast(getContext(),"Successfully deleted product").show();
                                             productItems.remove(position);
                                             notifyDataSetChanged();
                                         } else {
                                             task.getException().getStackTrace();
                                             AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
-                                            alert.setTitle("Delete Product:");
+                                            alert.setTitle("Delete Product");
                                             alert.setMessage(task.getException().getMessage());
                                             alert.setPositiveButton("Yes", null);
                                             alert.show();

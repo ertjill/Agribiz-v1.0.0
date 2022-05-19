@@ -46,7 +46,7 @@ public class BarterManagement {
                     transaction.set(bartersDocRef, bm);
 
                 } else {
-                    throw new FirebaseFirestoreException("Barter items exceeds limit, Complete present barters first.", FirebaseFirestoreException.Code.ABORTED);
+                    throw new FirebaseFirestoreException("Barter items exceeds limit, complete present barters first.", FirebaseFirestoreException.Code.ABORTED);
                 }
 
                 return null;

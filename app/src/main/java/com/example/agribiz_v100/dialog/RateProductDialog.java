@@ -108,7 +108,7 @@ public class RateProductDialog {
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void unused) {
-                                AuthValidation.successToast(activity,"Rating Submitted" ).show();
+                                AuthValidation.successToast(activity,"Rate submitted" ).show();
                                 dialog.dismiss();
                             }
                         }).addOnFailureListener(new OnFailureListener() {

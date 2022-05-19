@@ -124,7 +124,7 @@ public class OrdersFragment extends Fragment {
             public void onEvent(@Nullable QuerySnapshot value,
                                 @Nullable FirebaseFirestoreException e) {
                 if (e != null) {
-                    Log.w(TAG, "Listen failed.", e);
+                    Log.w(TAG, "Listen failed", e);
                     return;
                 }
 
@@ -269,7 +269,7 @@ public class OrdersFragment extends Fragment {
                     if (status.equals("pending")) {
                         //CANCEL
                         AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
-                        alert.setTitle("Cancel Order:");
+                        alert.setTitle("Cancel Order");
                         alert.setMessage("Do you really want to cancel this order?");
                         alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
@@ -278,14 +278,14 @@ public class OrdersFragment extends Fragment {
                                             @Override
                                             public void onSuccess(Void result) {
                                                 Log.d(TAG, "Transaction success: ");
-                                                AuthValidation.successToast(getContext(), "Order Cancelled").show();
+                                                AuthValidation.successToast(getContext(), "Order cancelled").show();
                                             }
                                         })
                                         .addOnFailureListener(new OnFailureListener() {
                                             @Override
                                             public void onFailure(@NonNull Exception e) {
                                                 Log.w(TAG, "Transaction failure.", e);
-                                                AuthValidation.failedToast(getContext(), "Failed Cancel Order").show();
+                                                AuthValidation.failedToast(getContext(), "Failed to cancel order").show();
                                             }
                                         });
                             }
@@ -296,8 +296,8 @@ public class OrdersFragment extends Fragment {
                     } else if (status.equals("shipped")) {
                         //RECEIVED
                         AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
-                        alert.setTitle("Order Received:");
-                        alert.setMessage("Click confirm to Received. \nOnce you confirmed it cannot be undone.");
+                        alert.setTitle("Order Received");
+                        alert.setMessage("Click confirm to received order. \nOnce you confirmed requested order it cannot be undone.");
                         alert.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -471,7 +471,7 @@ public class OrdersFragment extends Fragment {
                 public void onClick(View v) {
                     //CANCEL
                     AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
-                    alert.setTitle("Cancel Order:");
+                    alert.setTitle("Cancel Order");
                     alert.setMessage("Do you really want to cancel this order?");
                     alert.setCancelable(false);
                     alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -480,8 +480,8 @@ public class OrdersFragment extends Fragment {
                             OrderManagement.cancelOrder(getActivity(), ordersList.get(position)).addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void result) {
-                                            Log.d(TAG, "Transaction success: ");
-                                            AuthValidation.successToast(getContext(), "Order Cancelled").show();
+                                            Log.d(TAG, "Transaction success ");
+                                            AuthValidation.successToast(getContext(), "Order cancelled").show();
                                             getOrders();
                                         }
                                     })
@@ -490,10 +490,10 @@ public class OrdersFragment extends Fragment {
                                         public void onFailure(@NonNull Exception e) {
                                             Log.w(TAG, "Transaction failure.", e);
                                             AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
-                                            alert.setTitle("Failed!");
+                                            alert.setTitle("Failed");
                                             alert.setMessage(e.getLocalizedMessage());
                                             alert.setCancelable(false);
-                                            alert.setPositiveButton("Ok", null);
+                                            alert.setPositiveButton("Okay", null);
                                             alert.show();
                                         }
                                     });

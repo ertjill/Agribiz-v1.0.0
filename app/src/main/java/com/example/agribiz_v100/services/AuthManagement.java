@@ -98,9 +98,9 @@ public class AuthManagement {
                 public void onVerificationFailed(@NonNull FirebaseException e) {
                     Log.d(TAG, "On verification failed", e);
                     AlertDialog.Builder alert = new AlertDialog.Builder(activity);
-                    alert.setTitle("Verify Phone Number:");
+                    alert.setTitle("Verify Phone Number");
                     alert.setMessage(e.getMessage());
-                    alert.setPositiveButton("Ok", null);
+                    alert.setPositiveButton("Okay", null);
                     alert.show();
                 }
             };
@@ -168,7 +168,7 @@ public class AuthManagement {
                                                         AlertDialog.Builder alert = new AlertDialog.Builder(activity);
                                                         alert.setTitle("Invalid Credential");
                                                         alert.setMessage(task.getException().getLocalizedMessage());
-                                                        alert.setPositiveButton("OK", null);
+                                                        alert.setPositiveButton("Okay", null);
                                                         alert.show();
                                                     }
                                                 }
@@ -196,7 +196,7 @@ public class AuthManagement {
                     AlertDialog.Builder alert = new AlertDialog.Builder(activity);
                     alert.setTitle("Invalid OTP Code");
                     alert.setMessage(task1.getException().getLocalizedMessage());
-                    alert.setPositiveButton("OK", null);
+                    alert.setPositiveButton("Okay", null);
                     alert.show();
                 }
             }
@@ -218,7 +218,7 @@ public class AuthManagement {
         // Holds a task that returns AuthResult, which is a FirebaseAuth object
         ProgressDialog progressDialog;
         progressDialog = new ProgressDialog(activity);
-        progressDialog.setMessage("Logging in, please wait!");
+        progressDialog.setMessage("Logging in, please wait...");
         progressDialog.setCancelable(false);
         progressDialog.show();
         return mAuth.signInWithEmailAndPassword(email, password)
@@ -242,7 +242,7 @@ public class AuthManagement {
         FirebaseUser user = mAuth.getCurrentUser();
         ProgressDialog progressDialog;
         progressDialog = new ProgressDialog(activity);
-        progressDialog.setMessage("Updating Username, please wait!");
+        progressDialog.setMessage("Updating username, please wait...");
         progressDialog.setCancelable(false);
         progressDialog.show();
         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
@@ -281,7 +281,7 @@ public class AuthManagement {
     public Task<Void> updateEmail(String email) {
         ProgressDialog progressDialog;
         progressDialog = new ProgressDialog(activity);
-        progressDialog.setMessage("Updating Email, please wait!");
+        progressDialog.setMessage("Updating email, please wait...");
         progressDialog.setCancelable(false);
         progressDialog.show();
         return mAuth.getCurrentUser().updateEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -303,7 +303,7 @@ public class AuthManagement {
     public Task<Void> updatePhoneNumber(String code) {
         ProgressDialog progressDialog;
         progressDialog = new ProgressDialog(activity);
-        progressDialog.setMessage("Updating Phone Number, please wait!");
+        progressDialog.setMessage("Updating phone number, please wait...");
         progressDialog.setCancelable(false);
         progressDialog.show();
         Log.d("PhoneNumber", "Verifying " + code);
@@ -326,9 +326,9 @@ public class AuthManagement {
                                                 AuthValidation.successToast(activity, "Successfully updated phone number");
                                             } else {
                                                 AlertDialog.Builder alert = new AlertDialog.Builder(activity);
-                                                alert.setTitle("Update Phone Number:");
+                                                alert.setTitle("Update Phone Number");
                                                 alert.setMessage(task1.getException().getMessage());
-                                                alert.setPositiveButton("Ok", null);
+                                                alert.setPositiveButton("Okay", null);
                                                 alert.show();
                                             }
                                         }
@@ -337,9 +337,9 @@ public class AuthManagement {
                         else
                         {
                             AlertDialog.Builder alert = new AlertDialog.Builder(activity);
-                            alert.setTitle("Update Phone Number:");
+                            alert.setTitle("Update Phone Number");
                             alert.setMessage(task.getException().getMessage());
-                            alert.setPositiveButton("Ok", null);
+                            alert.setPositiveButton("Okay", null);
                             alert.show();
                         }
                         progressDialog.dismiss();
@@ -363,9 +363,9 @@ public class AuthManagement {
             @Override
             public void onFailure(@NonNull Exception e) {
                 AlertDialog.Builder alert = new AlertDialog.Builder(activity);
-                alert.setTitle("Logging Out:");
+                alert.setTitle("Logging Out");
                 alert.setMessage(e.getLocalizedMessage());
-                alert.setPositiveButton("Ok", null);
+                alert.setPositiveButton("Okay", null);
                 alert.show();
             }
         });

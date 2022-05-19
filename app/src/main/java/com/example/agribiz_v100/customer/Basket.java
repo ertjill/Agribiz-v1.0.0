@@ -183,15 +183,15 @@ public class Basket extends Fragment {
                 }
             }
             AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
-            alert.setTitle("Make an Order");
+            alert.setTitle("Create Order");
             if (location == null) {
-                alert.setMessage("Select or select address!");
+                alert.setMessage("Select select address");
                 alert.setPositiveButton("Ok",null);
             } else if(items.size()<=0){
-                alert.setMessage("Select a Product to Checkout!");
+                alert.setMessage("Select a product to checkout");
                 alert.setPositiveButton("Ok",null);
             }else {
-                alert.setMessage("Are you sure to proceed this order with " + items.size() + " number of Items : \n" + itemNames + "=====================\nTotal = ₱ " + total);
+                alert.setMessage("Are you sure you want to proceed this order with " + items.size() + " number of Items : \n" + itemNames + "=====================\nTotal = ₱ " + total);
                 alert.setCancelable(false);
                 alert.setPositiveButton("Proceed", new DialogInterface.OnClickListener() {
                     @Override
@@ -199,7 +199,7 @@ public class Basket extends Fragment {
                         if (items.size() > 0 && location != null) {
                             ProgressDialog progressDialog;
                             progressDialog = new ProgressDialog(getContext());
-                            progressDialog.setMessage("Processing your Order, please wait!");
+                            progressDialog.setMessage("Processing your order, please wait...");
                             progressDialog.setCancelable(false);
                             progressDialog.show();
                             OrderManagement.createOrder(getActivity(), items, location)
@@ -207,18 +207,18 @@ public class Basket extends Fragment {
                                         @Override
                                         public void onSuccess(Void aVoid) {
                                             progressDialog.dismiss();
-                                            Log.d(TAG, "Transaction success!");
-                                            AuthValidation.successToast(getContext(), "Order made Successfully").show();
+                                            Log.d(TAG, "Transaction success");
+                                            AuthValidation.successToast(getContext(), "Order placed successfully").show();
                                             displayBasketItem();
                                         }
                                     })
                                     .addOnFailureListener(new OnFailureListener() {
                                         @Override
                                         public void onFailure(@NonNull Exception e) {
-                                            Log.w(TAG, "Transaction failure.", e);
+                                            Log.w(TAG, "Transaction failure", e);
                                             progressDialog.dismiss();
                                             AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
-                                            alert.setTitle("Failed to make an Order:");
+                                            alert.setTitle("Failed to make an order:");
                                             alert.setMessage(e.getLocalizedMessage());
                                             alert.setCancelable(false);
                                             alert.setPositiveButton("Ok", null);

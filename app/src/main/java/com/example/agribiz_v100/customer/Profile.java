@@ -139,7 +139,7 @@ public class Profile extends Fragment {
             public void onClick(View v) {
                 AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
                 alert.setTitle("Logging out");
-                alert.setMessage("Do you want to Logout?");
+                alert.setMessage("Do you want to logout?");
                 alert.setNegativeButton("No", null);
                 alert.setPositiveButton("Yes", (dialog, which) -> {
                     AuthManagement.logoutAccount(getActivity()).addOnSuccessListener(new OnSuccessListener<Void>() {

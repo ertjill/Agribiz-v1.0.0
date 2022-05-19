@@ -58,7 +58,7 @@ public class BasketManagement {
                     transaction.set(basketProdRef, basketProductModel);
 
                 } else {
-                    throw new FirebaseFirestoreException("Insufficient Products Stocks ",
+                    throw new FirebaseFirestoreException("Insufficient product stocks ",
                             FirebaseFirestoreException.Code.ABORTED);
                 }
                 return null;
@@ -77,9 +77,9 @@ public class BasketManagement {
                 progressDialog.dismiss();
                 Log.w(TAG, "Transaction failure.", e);
                 AlertDialog.Builder alert = new AlertDialog.Builder(activity);
-                alert.setTitle("Adding Product to Basket:");
+                alert.setTitle("Adding Product to Basket");
                 alert.setMessage(e.getMessage());
-                alert.setPositiveButton("Ok", null);
+                alert.setPositiveButton("Okay", null);
                 alert.show();
             }
         });

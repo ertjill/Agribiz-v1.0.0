@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="28dp"
             android:fontFamily="@font/montserrat_regular"
-            android:text="No Orders Added Yet"
+            android:text="No completed orders yet"
             android:textColor="#5E381932"
             android:textFontWeight="400"
             android:textSize="14sp" />
