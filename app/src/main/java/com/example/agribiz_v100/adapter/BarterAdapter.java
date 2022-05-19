@@ -3,6 +3,7 @@ package com.example.agribiz_v100.adapter;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -95,30 +96,30 @@ public class BarterAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder alert = new AlertDialog.Builder(context);
-                alert.setTitle("Remove Bartered Item");
-                alert.setMessage("Are you sure to remoce this bartered item?");
+                alert.setTitle("Remove Item");
+                alert.setMessage("Are you sure you want to remove this item?");
                 alert.setCancelable(false);
                 alert.setNegativeButton("No",null);
                 alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         BarterManagement.removeBarteredItem(barterItems.get(pos).getBarterId())
-                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void unused) {
-                                        AuthValidation.successToast(context,"Bartered item removed").show();
-                                    }
-                                }).addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        AlertDialog.Builder alert = new AlertDialog.Builder(context);
-                                        alert.setTitle("Fail to remove bartered item");
-                                        alert.setMessage(e.getLocalizedMessage());
-                                        alert.setCancelable(false);
-                                        alert.setPositiveButton("Ok",null);
-                                        alert.show();
-                                    }
-                                });
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                AuthValidation.successToast(context,"Barter item removed").show();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                AlertDialog.Builder alert = new AlertDialog.Builder(context);
+                                alert.setTitle("Fail to remove barter item");
+                                alert.setMessage(e.getLocalizedMessage());
+                                alert.setCancelable(false);
+                                alert.setPositiveButton("Okay",null);
+                                alert.show();
+                            }
+                        });
                     }
                 });
                 alert.show();
