@@ -68,9 +68,9 @@
                 android:id="@+id/barterCondition_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
                 android:fontFamily="@font/montserrat_regular"
                 android:text="@string/item_condition"
-                android:layout_marginTop="4dp"
                 android:textColor="@color/brown"
                 android:textSize="12sp" />
 
@@ -93,59 +93,59 @@
                 android:text="Qty: "
                 android:textColor="@color/brown"
                 android:textSize="12sp" />
-
         </LinearLayout>
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/bottom_rl"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
+        android:layout_height="wrap_content">
 
         <LinearLayout
+            android:id="@+id/ll_from"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_toStartOf="@+id/remove_btn"
-            android:orientation="vertical"
-            android:layout_centerVertical="true">
+            android:orientation="horizontal">
 
-            <RelativeLayout
-                android:id="@+id/from_rl"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/location_image_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:src="@drawable/ic_baseline_location_on_24"
+                app:tint="@color/army_green" />
 
-                <ImageView
-                    android:id="@+id/location_image_iv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:src="@drawable/ic_baseline_location_on_24"
-                    app:tint="@color/army_green" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_semibold"
+                android:text="From"
+                android:textColor="@color/brown"
+                android:textSize="18sp" />
+        </LinearLayout>
+    </RelativeLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_toEndOf="@+id/location_image_iv"
-                    android:fontFamily="@font/montserrat_semibold"
-                    android:text="From"
-                    android:textColor="@color/brown"
-                    android:textSize="16sp" />
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
-            </RelativeLayout>
+        <LinearLayout
+            android:id="@+id/address_ll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/address_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/from_rl"
+                android:layout_marginStart="5dp"
                 android:layout_marginLeft="24dp"
                 android:fontFamily="@font/montserrat_regular"
                 android:text="Order From: Address "
                 android:textColor="@color/brown"
                 android:textFontWeight="500"
-                android:textSize="10sp" />
+                android:textSize="12sp" />
         </LinearLayout>
 
         <Button
@@ -153,8 +153,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
+            android:layout_marginStart="20dp"
+            android:layout_toEndOf="@id/address_ll"
             android:backgroundTint="@color/red"
             android:fontFamily="@font/montserrat_bold"
             android:text="Remove"
@@ -164,5 +164,4 @@
             android:visibility="visible"
             app:cornerRadius="24dp" />
     </RelativeLayout>
-
 </LinearLayout>

@@ -81,11 +81,11 @@ public class BarterAdapter extends BaseAdapter {
                         String name = documentSnapshot.getString("userDisplayName");
                         String address =name.substring(0,name.length()-2)  + " | "
                                 + documentSnapshot.getString("userPhoneNumber") + "\n"
-                                + map.get("userSpecificAddress")+"\n"+
-                                map.get("userBarangay")+", "+
-                                map.get("userMunicipality")+", "+
-                                map.get("userProvince")+", "+
-                                map.get("userRegion")+", "+
+                                + map.get("userSpecificAddress") + ", " +
+                                map.get("userBarangay") + ", "+
+                                map.get("userMunicipality") + ", "+
+                                map.get("userProvince") + "\n" +
+                                map.get("userRegion") + ", " +
                                 map.get("userZipCode");
                         address_tv.setText(address);
                     }
