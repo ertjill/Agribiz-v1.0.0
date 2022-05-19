@@ -111,12 +111,16 @@
         <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/layout/activity_barter_goods.xml" value="0.25" />
         <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/layout/activity_barter_product.xml" value="0.25" />
         <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/layout/activity_buy_now.xml" value="0.25" />
+        <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/layout/activity_customer_main.xml" value="0.1718683197947841" />
         <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/layout/activity_edit_profile.xml" value="0.25" />
+        <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/layout/activity_farmer_edit_profile.xml" value="0.1718683197947841" />
         <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/layout/activity_farmer_main.xml" value="0.1" />
         <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/layout/activity_farmer_messages.xml" value="0.209375" />
         <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/layout/activity_login.xml" value="0.209375" />
+        <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/layout/activity_main.xml" value="0.1718683197947841" />
         <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/layout/activity_messages.xml" value="0.1953125" />
         <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/layout/activity_my_addresses.xml" value="0.18" />
+        <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/layout/activity_orders.xml" value="0.1718683197947841" />
         <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/layout/activity_pending_view.xml" value="0.16" />
         <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/layout/activity_product_view.xml" value="0.22" />
         <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/layout/activity_reset_password.xml" value="0.2" />
@@ -138,6 +142,7 @@
         <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/layout/donate_farmer_list.xml" value="0.25" />
         <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/layout/enter_verification_code_dialog.xml" value="0.23076923076923078" />
         <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/layout/failed_toast.xml" value="0.209375" />
+        <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/layout/farm_agr_order_item_layout.xml" value="0.1718683197947841" />
         <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/layout/farmer_add_barter_dialog.xml" value="0.25" />
         <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/layout/farmer_add_expenses_dialog.xml" value="0.209375" />
         <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/layout/farmer_add_new_product_dialog.xml" value="0.25" />
@@ -158,6 +163,7 @@
         <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/layout/fragment_barter_sent.xml" value="0.209375" />
         <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/layout/fragment_barter_swap.xml" value="0.18" />
         <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/layout/fragment_basket.xml" value="0.25" />
+        <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/layout/fragment_completed_order.xml" value="0.1718683197947841" />
         <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/layout/fragment_customer_addresses.xml" value="0.209375" />
         <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/layout/fragment_donate.xml" value="0.2" />
         <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/layout/fragment_farmer_profile.xml" value="0.22" />
@@ -170,8 +176,12 @@
         <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/layout/fragment_search.xml" value="0.209375" />
         <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/layout/fragment_second.xml" value="0.209375" />
         <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/layout/fragment_shipment.xml" value="0.33" />
+        <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/layout/fragment_shipping.xml" value="0.1718683197947841" />
         <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/layout/fragment_sold_out_product.xml" value="0.1" />
         <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/layout/fragment_store.xml" value="0.12" />
+        <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/layout/fragment_to_prepare.xml" value="0.1718683197947841" />
+        <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/layout/fragment_to_ship.xml" value="0.1718683197947841" />
+        <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/layout/orders_layout_item.xml" value="0.1718683197947841" />
         <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/layout/product_item_card.xml" value="0.15989583333333332" />
         <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/layout/success_toast.xml" value="0.33" />
         <entry key="..\:/Java Projects/Agribiz-v1.0.0/app/src/main/res/layout/test.xml" value="0.209375" />
