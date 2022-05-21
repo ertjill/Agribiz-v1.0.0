@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/transparent"
+    android:padding="10dp">
+
+   <androidx.cardview.widget.CardView
+       android:id="@+id/image_card"
+       android:layout_width="40dp"
+       android:layout_height="40dp"
+       app:cardCornerRadius="20dp">
+       <ImageView
+           android:id="@+id/profile_iv"
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:scaleType="centerCrop"
+           android:src="@mipmap/agribiz_icon_logo"/>
+   </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/show_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@id/image_card"
+        android:background="@drawable/left_message_backgroud"
+        android:fontFamily="@font/montserrat_regular"
+        android:lineHeight="21sp"
+        android:padding="10dp"
+        android:text="Hello, Agribiz"
+        android:textColor="@color/brown"
+        android:textSize="15sp" />
+
+</RelativeLayout>

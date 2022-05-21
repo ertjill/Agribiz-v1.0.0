@@ -10,10 +10,12 @@ import androidx.viewpager2.widget.ViewPager2;
 import android.os.Bundle;
 
 import com.example.agribiz_v100.R;
+import com.example.agribiz_v100.customer.BarterBrowserFragment;
+import com.example.agribiz_v100.customer.BarterFragment;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.tabs.TabLayout;
 
-public class BarterProductActivity extends AppCompatActivity {
+public class BarterItemActivity extends AppCompatActivity {
 
     MaterialToolbar topAppBar;
     TabLayout barter_tab;
@@ -26,7 +28,7 @@ public class BarterProductActivity extends AppCompatActivity {
 
         references();
 
-        BarterProductActivity.BarterProductFragmentAdapter barterProductsPager = new BarterProductFragmentAdapter(this);
+        BarterItemActivity.BarterProductFragmentAdapter barterProductsPager = new BarterProductFragmentAdapter(this);
         barter_product_pager.setAdapter(barterProductsPager);
 
         barter_product_pager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
@@ -71,15 +73,17 @@ public class BarterProductActivity extends AppCompatActivity {
         @NonNull
         @Override
         public Fragment createFragment(int position) {
-            if (position == 0) {
-                return new BarterAddItem();
-            } else if (position == 1){
-                return new BarterRequests();
-            } else if (position == 2){
-                return new BarterSwap();
-            }
-            else {
-                return new BarterCompleted();
+            switch (position) {
+                case 0:
+                    return new BarterAddItem();
+                case 1:
+                    return new BarterRequests("Request", "Pending");
+                case 2:
+                    return new BarterRequests("Swapping", "Swapping");
+                case 3:
+                    return new BarterRequests("Completed", "Completed");
+                default:
+                    return null;
             }
         }
 

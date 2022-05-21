@@ -39,7 +39,7 @@
         android:outlineSpotShadowColor="@color/black"
         app:tabIconTint="@color/army_green"
         app:tabIndicatorColor="@color/army_green"
-        app:tabMode="fixed"
+        app:tabMode="scrollable"
         app:tabSelectedTextColor="@color/army_green"
         app:tabTextAppearance="@style/CustomBarterTabText"
         app:tabTextColor="@color/brown">
@@ -52,12 +52,17 @@
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sent Barters" />
+            android:text="Request" />
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Received Barters" />
+            android:text="Swapping" />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Completed" />
 
     </com.google.android.material.tabs.TabLayout>
 
@@ -65,6 +70,6 @@
         android:id="@+id/barter_goods_pager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_weight="1" />
 
 </LinearLayout>

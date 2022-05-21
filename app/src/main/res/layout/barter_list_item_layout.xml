@@ -1,221 +1,238 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/highlight_back"
-    android:orientation="vertical"
-    android:padding="10dp">
-    <RelativeLayout
-        android:id="@+id/top_rl"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <androidx.cardview.widget.CardView
-            android:id="@+id/image_card_cv"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            app:cardCornerRadius="20dp">
-            <ImageView
-                android:id="@+id/cutomer_image_iv"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                android:src="@mipmap/agribiz_icon_logo"/>
-        </androidx.cardview.widget.CardView>
-
-        <TextView
-            android:id="@+id/user_name"
-            android:layout_width="120dp"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:layout_toEndOf="@+id/image_card_cv"
-            android:fontFamily="@font/montserrat_bold"
-            android:lines="1"
-            android:singleLine="true"
-            android:text="User Name"
-            android:textColor="@color/brown"
-            android:textSize="15sp" />
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/barterStatus_chip"
-            style="@style/Widget.MaterialComponents.Chip.Action"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="5dp"
-            android:fontFamily="@font/montserrat_semibold"
-            android:padding="5dp"
-            android:text="Pending"
-            android:textAllCaps="true"
-            android:textColor="@color/white"
-            app:chipBackgroundColor="@color/army_green"
-            app:chipCornerRadius="20dp"
-            app:chipMinHeight="15dp"
-            app:ensureMinTouchTargetSize="false" />
-
-    </RelativeLayout>
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp">
-
-        <ImageView
-            android:id="@+id/barterImage_iv"
-            android:layout_width="95dp"
-            android:layout_height="95dp"
-            android:layout_centerVertical="true"
-            android:scaleType="centerCrop"
-            android:src="@drawable/display_dummy" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="12dp"
-            android:layout_toStartOf="@+id/delete_ll"
-            android:layout_toEndOf="@+id/barterImage_iv"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/product_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:fontFamily="@font/montserrat_bold"
-                android:text="Fresh Tomato"
-                android:textColor="@color/brown"
-                android:textSize="15sp" />
-
-            <TextView
-                android:id="@+id/barterCondition_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:fontFamily="@font/montserrat_regular"
-                android:text="@string/item_condition"
-                android:textColor="@color/brown"
-                android:textSize="12sp" />
-
-            <TextView
-                android:id="@+id/barterDesc_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:fontFamily="@font/montserrat_regular"
-                android:text="Description: "
-                android:textColor="@color/brown"
-                android:textSize="12sp" />
-
-            <TextView
-                android:id="@+id/barterQuantity_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:fontFamily="@font/montserrat_regular"
-                android:text="Qty: "
-                android:textColor="@color/brown"
-                android:textSize="12sp" />
-
-        </LinearLayout>
-        <RelativeLayout
-            android:id="@+id/delete_ll"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_alignParentEnd="true">
-
-            <ImageView
-                android:id="@+id/delete_ib"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_bi_chat_fill"
-                app:tint="@color/yellow_orange" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:fontFamily="@font/montserrat_semibold"
-                android:text="Chat"
-                android:textColor="@color/army_green"
-                android:textSize="10sp" />
-        </RelativeLayout>
-    </RelativeLayout>
+android:paddingTop="15dp"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:background="@color/highlight_back"
+        android:orientation="vertical"
+        android:padding="10dp">
 
 
         <RelativeLayout
+            android:id="@+id/top_rl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <ImageView
-                android:id="@+id/location_image_iv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:src="@drawable/ic_baseline_location_on_24"
-                app:tint="@color/army_green" />
+            <androidx.cardview.widget.CardView
+                android:id="@+id/image_card_cv"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                app:cardCornerRadius="20dp">
+
+                <ImageView
+                    android:id="@+id/user_image_iv"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@mipmap/agribiz_icon_logo" />
+            </androidx.cardview.widget.CardView>
 
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/user_name"
+                android:layout_width="120dp"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_toEndOf="@+id/location_image_iv"
-                android:fontFamily="@font/montserrat_semibold"
-                android:text="From"
+                android:layout_marginLeft="10dp"
+                android:layout_toEndOf="@+id/image_card_cv"
+                android:fontFamily="@font/montserrat_bold"
+                android:lines="1"
+                android:singleLine="true"
+                android:text="User Name"
                 android:textColor="@color/brown"
-                android:textSize="16sp" />
+                android:textSize="15sp" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/barterStatus_chip"
+                style="@style/Widget.MaterialComponents.Chip.Action"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="5dp"
+                android:fontFamily="@font/montserrat_semibold"
+                android:padding="5dp"
+                android:text="Pending"
+                android:textAllCaps="true"
+                android:textColor="@color/white"
+                app:chipBackgroundColor="@color/army_green"
+                app:chipCornerRadius="20dp"
+                app:chipMinHeight="15dp"
+                app:ensureMinTouchTargetSize="false" />
 
         </RelativeLayout>
-        <TextView
-            android:id="@+id/address_tv"
+
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="24dp"
-            android:fontFamily="@font/montserrat_regular"
-            android:textFontWeight="500"
-            android:text="Order From: Address "
-            android:textColor="@color/brown"
-            android:textSize="10sp" />
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/barterImage_iv"
+                android:layout_width="95dp"
+                android:layout_height="95dp"
+                android:layout_centerVertical="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/display_dummy" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="12dp"
+                android:layout_toStartOf="@+id/delete_ll"
+                android:layout_toEndOf="@+id/barterImage_iv"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/item_name_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:fontFamily="@font/montserrat_bold"
+                    android:text="Fresh Tomato"
+                    android:textColor="@color/brown"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/barterCondition_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:text="@string/item_condition"
+                    android:textColor="@color/brown"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/barterDesc_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:text="Description: "
+                    android:textColor="@color/brown"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/barterQuantity_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:text="Qty: "
+                    android:textColor="@color/brown"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/delete_ll"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true">
+
+                <ImageView
+                    android:id="@+id/delete_ib"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_bi_chat_fill"
+                    app:tint="@color/yellow_orange" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:text="Chat"
+                    android:textColor="@color/army_green"
+                    android:textSize="10sp" />
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/location_image_iv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_baseline_location_on_24"
+                    app:tint="@color/army_green" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toEndOf="@+id/location_image_iv"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:text="From"
+                    android:textColor="@color/brown"
+                    android:textSize="16sp" />
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/address_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="24dp"
+                android:fontFamily="@font/montserrat_regular"
+                android:text="Order From: Address "
+                android:textColor="@color/brown"
+                android:textFontWeight="500"
+                android:textSize="10sp" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:gravity="end"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/cancel_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_toStartOf="@+id/swap_btn"
+                android:backgroundTint="@color/grey_font"
+                android:fontFamily="@font/montserrat_bold"
+                android:text="Cancel"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                android:visibility="visible"
+                app:cornerRadius="24dp" />
+
+            <Button
+                android:id="@+id/swap_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:backgroundTint="@color/yellow_orange"
+                android:fontFamily="@font/montserrat_bold"
+                android:text="Swap"
+                android:textAllCaps="false"
+                android:textColor="@color/army_green"
+                android:textSize="12sp"
+                android:visibility="visible"
+                app:cornerRadius="24dp" />
+        </RelativeLayout>
     </LinearLayout>
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <Button
-            android:id="@+id/cancel_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
-            android:layout_toStartOf="@+id/swap_btn"
-            android:backgroundTint="@color/grey_font"
-            android:fontFamily="@font/montserrat_bold"
-            android:text="Cancel"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:textSize="12sp"
-            android:visibility="visible"
-            app:cornerRadius="24dp" />
-
-        <Button
-            android:id="@+id/swap_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:backgroundTint="@color/yellow_orange"
-            android:fontFamily="@font/montserrat_bold"
-            android:text="Swap"
-            android:textAllCaps="false"
-            android:textColor="@color/army_green"
-            android:textSize="12sp"
-            android:visibility="visible"
-            app:cornerRadius="24dp" />
-    </RelativeLayout>
 </LinearLayout>

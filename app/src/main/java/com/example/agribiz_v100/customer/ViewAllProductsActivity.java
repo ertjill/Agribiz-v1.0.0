@@ -94,7 +94,8 @@ public class ViewAllProductsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "onCreate ViewAllProductsActivity");
+//        Log.d(TAG, "onCreate ViewAllProductsActivity");
+
         setContentView(R.layout.activity_view_all_products);
         firestore = FirebaseFirestore.getInstance();
         no_product_ll = findViewById(R.id.no_product_ll);
@@ -140,6 +141,7 @@ public class ViewAllProductsActivity extends AppCompatActivity {
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
+
         productItems = new SparseArray<>();
         viewAll_rv = findViewById(R.id.viewAll_rv);
         viewAll_rv.setHasFixedSize(true);

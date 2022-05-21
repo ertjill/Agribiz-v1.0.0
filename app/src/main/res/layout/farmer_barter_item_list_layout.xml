@@ -3,165 +3,174 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/highlight_back"
-    android:orientation="vertical"
-    android:padding="10dp">
+    android:paddingTop="15dp"
+    android:orientation="vertical">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:orientation="horizontal">
+        android:background="@color/highlight_back"
+        android:orientation="vertical"
+        android:padding="10dp">
 
-        <ImageView
-            android:id="@+id/barterImage_iv"
-            android:layout_width="95dp"
-            android:layout_height="95dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/display_dummy" />
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="12dp"
-            android:layout_toEndOf="@+id/barterImage_iv"
-            android:orientation="vertical">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/barterName_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:fontFamily="@font/montserrat_bold"
-                    android:lines="1"
-                    android:maxLength="15"
-                    android:singleLine="true"
-                    android:text="Item Name"
-                    android:textColor="@color/brown"
-                    android:textSize="15sp" />
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/barterStatus_chip"
-                    style="@style/Widget.MaterialComponents.Chip.Action"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginStart="5dp"
-                    android:layout_toEndOf="@+id/barterName_tv"
-                    android:fontFamily="@font/montserrat_semibold"
-                    android:padding="5dp"
-                    android:text="Open"
-                    android:textAllCaps="true"
-                    android:textColor="@color/white"
-                    app:chipBackgroundColor="@color/army_green"
-                    app:chipCornerRadius="20dp"
-                    app:chipMinHeight="15dp"
-                    app:ensureMinTouchTargetSize="false" />
-            </RelativeLayout>
-
-            <TextView
-                android:id="@+id/barterCondition_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:fontFamily="@font/montserrat_regular"
-                android:text="@string/item_condition"
-                android:textColor="@color/brown"
-                android:textSize="12sp" />
-
-            <TextView
-                android:id="@+id/barterDesc_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:fontFamily="@font/montserrat_regular"
-                android:text="Description: "
-                android:textColor="@color/brown"
-                android:textSize="12sp" />
-
-            <TextView
-                android:id="@+id/barterQuantity_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:fontFamily="@font/montserrat_regular"
-                android:text="Qty: "
-                android:textColor="@color/brown"
-                android:textSize="12sp" />
-        </LinearLayout>
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/bottom_rl"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <LinearLayout
-            android:id="@+id/ll_from"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/location_image_iv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:src="@drawable/ic_baseline_location_on_24"
-                app:tint="@color/army_green" />
+                android:id="@+id/barterImage_iv"
+                android:layout_width="95dp"
+                android:layout_height="95dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/display_dummy" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/montserrat_semibold"
-                android:text="From"
-                android:textColor="@color/brown"
-                android:textSize="18sp" />
-        </LinearLayout>
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-        <LinearLayout
-            android:id="@+id/address_ll"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/address_tv"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_marginLeft="24dp"
-                android:fontFamily="@font/montserrat_regular"
-                android:text="Order From: Address "
-                android:textColor="@color/brown"
-                android:textFontWeight="500"
-                android:textSize="12sp" />
-        </LinearLayout>
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="12dp"
+                android:layout_toEndOf="@+id/barterImage_iv"
+                android:orientation="vertical">
 
-        <Button
-            android:id="@+id/remove_btn"
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/barterName_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:fontFamily="@font/montserrat_bold"
+                        android:lines="1"
+                        android:maxLength="15"
+                        android:singleLine="true"
+                        android:text="Item Name"
+                        android:textColor="@color/brown"
+                        android:textSize="15sp" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/barterStatus_chip"
+                        style="@style/Widget.MaterialComponents.Chip.Action"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="5dp"
+                        android:layout_toEndOf="@+id/barterName_tv"
+                        android:fontFamily="@font/montserrat_semibold"
+                        android:padding="5dp"
+                        android:text="Open"
+                        android:textAllCaps="true"
+                        android:textColor="@color/white"
+                        app:chipBackgroundColor="@color/army_green"
+                        app:chipCornerRadius="20dp"
+                        app:chipMinHeight="15dp"
+                        app:ensureMinTouchTargetSize="false" />
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/barterCondition_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:text="@string/item_condition"
+                    android:textColor="@color/brown"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/barterDesc_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:text="Description: "
+                    android:textColor="@color/brown"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/barterQuantity_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:text="Qty: "
+                    android:textColor="@color/brown"
+                    android:textSize="12sp" />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/bottom_rl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/ll_from"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/location_image_iv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:src="@drawable/ic_baseline_location_on_24"
+                    app:tint="@color/army_green" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:text="From"
+                    android:textColor="@color/brown"
+                    android:textSize="18sp" />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_marginStart="20dp"
-            android:layout_toEndOf="@id/address_ll"
-            android:backgroundTint="@color/red"
-            android:fontFamily="@font/montserrat_bold"
-            android:text="Remove"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:textSize="12sp"
-            android:visibility="visible"
-            app:cornerRadius="24dp" />
-    </RelativeLayout>
+            >
+
+            <LinearLayout
+                android:id="@+id/address_ll"
+                android:layout_width="match_parent"
+                android:layout_toStartOf="@+id/remove_btn"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/address_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginLeft="24dp"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:text="Order From: Address "
+                    android:textColor="@color/brown"
+                    android:textFontWeight="500"
+                    android:textSize="11sp" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/remove_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="10dp"
+                android:backgroundTint="@color/red"
+                android:fontFamily="@font/montserrat_bold"
+                android:text="Remove"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                android:visibility="visible"
+                app:cornerRadius="24dp" />
+        </RelativeLayout>
+    </LinearLayout>
 </LinearLayout>

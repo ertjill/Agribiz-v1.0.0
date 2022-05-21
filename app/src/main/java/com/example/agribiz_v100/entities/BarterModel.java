@@ -18,13 +18,14 @@ public class BarterModel implements Serializable {
     private String barterStatus;
     private Timestamp barterDateUploaded;
     private String barterUnit;
+    private String barterMatchId;
 
 
     public BarterModel() {
 
     }
 
-    public BarterModel(String barterUserId, String barterType, String barterCustomerId, String barterId, List<String> barterImage, String barterName, String barterCondition, int barterQuantity, String barterDescription, String barterStatus, Timestamp barterDateUploaded, String barterUnit) {
+    public BarterModel(String barterUserId, String barterType, String barterId, List<String> barterImage, String barterName, String barterCondition, int barterQuantity, String barterDescription, String barterStatus, Timestamp barterDateUploaded, String barterUnit, String barterMatchId) {
         this.barterUserId = barterUserId;
         this.barterType = barterType;
         this.barterId = barterId;
@@ -36,6 +37,15 @@ public class BarterModel implements Serializable {
         this.barterStatus = barterStatus;
         this.barterDateUploaded = barterDateUploaded;
         this.barterUnit = barterUnit;
+        this.barterMatchId = barterMatchId;
+    }
+
+    public String getBarterMatchId() {
+        return barterMatchId;
+    }
+
+    public void setBarterMatchId(String barterMatchId) {
+        this.barterMatchId = barterMatchId;
     }
 
     public String getBarterUserId() {

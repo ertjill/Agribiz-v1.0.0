@@ -3,23 +3,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="8dp"
     tools:context=".customer.BarterBrowserFragment">
 
-    <ListView
-        android:id="@+id/customer_barter_browser"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/open_barter_rv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="@null"
-        android:visibility="gone"/>
+        android:layout_marginTop="20dp">
+
+    </androidx.recyclerview.widget.RecyclerView>
 
     <LinearLayout
         android:id="@+id/no_product_ll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:layout_centerInParent="true"
         android:layout_marginTop="51dp"
-        android:gravity="center_horizontal"
-        android:visibility="visible">
+        android:visibility="gone"
+        android:gravity="center_horizontal">
 
         <ImageView
             android:layout_width="181dp"

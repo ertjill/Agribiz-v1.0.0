@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.agribiz_v100.LoginActivity;
+import com.example.agribiz_v100.MessagesActivity;
 import com.example.agribiz_v100.OrdersActivity;
 import com.example.agribiz_v100.R;
 import com.example.agribiz_v100.services.AuthManagement;

@@ -35,6 +35,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.agribiz_v100.BarteredItemViewActivity;
+import com.example.agribiz_v100.ChatActivity;
 import com.example.agribiz_v100.FirebaseHelper;
 import com.example.agribiz_v100.R;
 import com.example.agribiz_v100.entities.ProductModel;
@@ -49,6 +51,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -76,6 +79,7 @@ public class Store extends Fragment {
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     Bundle bundle;
     List<ProductModel> itemLike;
+    ListenerRegistration listenerRegistration;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,6 +95,11 @@ public class Store extends Fragment {
 
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        listenerRegistration.remove();
+    }
 
     @Override
     public void onStart() {
@@ -102,7 +111,7 @@ public class Store extends Fragment {
     public void onResume() {
         super.onResume();
         Log.d(TAG, "Store is resuming...");
-        productGridAdapter.notifyDataSetChanged();
+
     }
 
     @Override
@@ -216,7 +225,7 @@ public class Store extends Fragment {
 
     public void setupFarmerHubs() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("users")
+        listenerRegistration = db.collection("users")
                 .whereNotEqualTo("userType", "customer")
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
@@ -243,6 +252,15 @@ public class Store extends Fragment {
                             farmers.setText(document.getData().get("userDisplayName").toString().substring(0,document.getData().get("userDisplayName").toString().length()-2));
                             farmers.setOnClickListener(v1 -> {
                                 Toast.makeText(getContext(), document.getData().get("userDisplayName").toString(), Toast.LENGTH_SHORT).show();
+                            });
+                            v.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Log.d("ids",document.getString("userID"));
+                                    Intent intent = new Intent(getContext(), ChatActivity.class);
+                                    intent.putExtra("userId", document.getString("userID"));
+                                    startActivity(intent);
+                                }
                             });
                             farmersHub_ll.addView(v);
                             Log.d("FirebaseHelper", document.getData().get("userDisplayName").toString());
@@ -317,12 +335,7 @@ public class Store extends Fragment {
                                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                         if (task.isSuccessful()) {
                                             DocumentSnapshot doc = task.getResult();
-                                            if (doc.exists()) {
-//                                                item.setProductFarmImage(doc.getData().get("userImage").toString());
-//                                                item.setProductFarmName(doc.getData().get("userDisplayName").toString());
-                                            } else {
-                                                Log.d(TAG, "No such document");
-                                            }
+
                                             topProducts.append(i[0]++, item);
                                             productGridAdapter.notifyDataSetChanged();
                                             Log.d(TAG, topProducts.size() + " : topProductsItems size");
@@ -333,7 +346,7 @@ public class Store extends Fragment {
                                     }
                                 });
                             }
-
+                            productGridAdapter.notifyDataSetChanged();
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }

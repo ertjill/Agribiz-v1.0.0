@@ -29,7 +29,13 @@ public class BarterGoodsActivity extends AppCompatActivity {
 
         BarterGoodsActivity.BarterPagerAdapter bpa = new BarterPagerAdapter(this);
         barter_goods_pager.setAdapter(bpa);
-
+        barter_goods_pager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                barterGoods_tab.getTabAt(position).select();
+            }
+        });
         barterGoods_tab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -64,18 +70,23 @@ public class BarterGoodsActivity extends AppCompatActivity {
         @NonNull
         @Override
         public Fragment createFragment(int position) {
-            if (position == 0) {
-                return new BarterBrowserFragment();
-            } else if (position == 1) {
-                return new BarterSentFragment();
-            } else {
-                return new BarterReceivedFragment();
+            switch (position) {
+                case 0:
+                    return new BarterBrowserFragment();
+                case 1:
+                    return new BarterFragment("Request", "Pending");
+                case 2:
+                    return new BarterFragment("Swapping", "Swapping");
+                case 3:
+                    return new BarterFragment("Completed", "Completed");
+                default:
+                    return null;
             }
         }
 
         @Override
         public int getItemCount() {
-            return 3;
+            return 4;
         }
     }
 }

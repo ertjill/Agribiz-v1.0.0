@@ -25,6 +25,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.agribiz_v100.ChatActivity;
 import com.example.agribiz_v100.R;
 import com.example.agribiz_v100.entities.ProductModel;
 import com.example.agribiz_v100.entities.UserModel;
@@ -47,10 +48,11 @@ public class ProductView extends AppCompatActivity {
 
     private static final String TAG = "ProductView";
     ProductModel farmerProductItem;
+
     ImageView product_image_iv;
     ImageView hub_profile_image;
     LinearLayout rating_ll;
-    TextView productName, productPrice, productSold, hubName, productStocks, productLocation, add_to_basket_tv, buy_now_tv;
+    TextView productName, productPrice, productSold, hubName, productStocks, productLocation, add_to_basket_tv, buy_now_tv, chat_tv;
     MaterialToolbar topAppBar;
     Dialog addProductToBasket, buyNow;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -74,6 +76,8 @@ public class ProductView extends AppCompatActivity {
         topAppBar = findViewById(R.id.topAppBar);
         imageSlider = findViewById(R.id.imageSlider);
         imageViewPagerAdapter = new ImageViewPagerAdapter();
+        chat_tv = findViewById(R.id.chat_tv);
+
 
         topAppBar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,6 +85,7 @@ public class ProductView extends AppCompatActivity {
                 finish();
             }
         });
+
         MenuItem menuItem = topAppBar.getMenu().findItem(R.id.basket_menu);
         if (itemsCount == 0) {
             menuItem.setActionView(null);
@@ -95,7 +100,6 @@ public class ProductView extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.basket_menu:
-
                         break;
                 }
                 return true;
@@ -255,7 +259,16 @@ public class ProductView extends AppCompatActivity {
         rating_ll = findViewById(R.id.rating_ll);
 
         if (getIntent().getExtras() != null) {
+
             farmerProductItem = getIntent().getParcelableExtra("item");
+            chat_tv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(ProductView.this, ChatActivity.class);
+                    intent.putExtra("userId", farmerProductItem.getProductUserId());
+                    startActivity(intent);
+                }
+            });
 //            user = getIntent().getParcelableExtra("user");
             productName.setText(farmerProductItem.getProductName() + " ( per " + farmerProductItem.getProductQuantity() + " " + farmerProductItem.getProductUnit() + " )");
             productPrice.setText("Php " + farmerProductItem.getProductPrice());
@@ -301,6 +314,7 @@ public class ProductView extends AppCompatActivity {
                             Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                             userModel.setUserDisplayName(document.get("userDisplayName").toString());
                             hubName.setText(userModel.getUserDisplayName().substring(0,userModel.getUserDisplayName().length()-2));
+
                         } else {
                             Log.d(TAG, "No such document");
                         }

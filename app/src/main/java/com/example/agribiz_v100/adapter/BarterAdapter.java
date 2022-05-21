@@ -25,6 +25,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.chip.Chip;
 import com.google.firebase.firestore.DocumentSnapshot;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,7 +34,6 @@ public class BarterAdapter extends BaseAdapter {
     List<BarterModel> barterItems;
     Context context;
     LayoutInflater inflater;
-
     public BarterAdapter(Context context, List<BarterModel> barterItems) {
         this.barterItems = barterItems;
         this.context = context;
@@ -72,22 +72,47 @@ public class BarterAdapter extends BaseAdapter {
                 .load(barterItems.get(pos).getBarterImage() != null && !barterItems.get(pos).getBarterImage().isEmpty() ? barterItems.get(pos).getBarterImage().get(0) : "")
                 .into(barterImage_iv);
 
-        barterStatus_chip.setText(barterItems.get(pos).getBarterStatus());
+        if (barterItems.get(pos).getBarterStatus().equals("Pending")) {
+            remove_btn.setText("Cancel");
+            remove_btn.setBackgroundColor(Color.parseColor("#C4C4C4"));
+        }
+        else if(barterItems.get(pos).getBarterStatus().equals("Swapping")){
+            remove_btn.setText("Swapped");
+            remove_btn.setBackgroundColor(Color.parseColor("#F2B705"));
+        }
 
-        ProfileManagement.getUserProfile(barterItems.get(pos).getBarterUserId())
+        barterStatus_chip.setText(barterItems.get(pos).getBarterStatus());
+        String userId = barterItems.get(pos).getBarterUserId();
+        ProfileManagement.getUserProfile(userId)
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        Map<String, String> map = (Map<String, String>) documentSnapshot.get("userLocation");
                         String name = documentSnapshot.getString("userDisplayName");
-                        String address =name.substring(0,name.length()-2)  + " | "
-                                + documentSnapshot.getString("userPhoneNumber") + "\n"
-                                + map.get("userSpecificAddress") + ", " +
-                                map.get("userBarangay") + ", "+
-                                map.get("userMunicipality") + ", "+
-                                map.get("userProvince") + "\n" +
-                                map.get("userRegion") + ", " +
-                                map.get("userZipCode");
+                        String address = "";
+                        Map<String, String> map = new HashMap<>();
+                        if (name.charAt(name.length() - 1) == 'c') {
+                            List<Object> loc = (List<Object>) documentSnapshot.getData().get("userLocation");
+                            map = (Map<String, String>) loc.get(0);
+                            address = name.substring(0, name.length() - 2) + " | "
+                                    + documentSnapshot.getString("userPhoneNumber") + "\n"
+                                    + map.get("userSpecificAddress") + ", " +
+                                    map.get("userBarangay") + ", " +
+                                    map.get("userMunicipality") + ", " +
+                                    map.get("userProvince") + "\n" +
+                                    map.get("userRegion") + ", " +
+                                    map.get("userZipCode");
+                        } else {
+                            map = (Map<String, String>) documentSnapshot.get("userLocation");
+                            address = name.substring(0, name.length() - 2) + " | "
+                                    + documentSnapshot.getString("userPhoneNumber") + "\n"
+                                    + map.get("userSpecificAddress") + ", " +
+                                    map.get("userBarangay") + ", " +
+                                    map.get("userMunicipality") + ", " +
+                                    map.get("userProvince") + "\n" +
+                                    map.get("userRegion") + ", " +
+                                    map.get("userZipCode");
+                        }
+
                         address_tv.setText(address);
                     }
                 });
@@ -95,40 +120,54 @@ public class BarterAdapter extends BaseAdapter {
         remove_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder alert = new AlertDialog.Builder(context);
-                alert.setTitle("Remove Item");
-                alert.setMessage("Are you sure you want to remove this item?");
-                alert.setCancelable(false);
-                alert.setNegativeButton("No",null);
-                alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        BarterManagement.removeBarteredItem(barterItems.get(pos).getBarterId())
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void unused) {
-                                AuthValidation.successToast(context,"Barter item removed").show();
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                AlertDialog.Builder alert = new AlertDialog.Builder(context);
-                                alert.setTitle("Fail to remove barter item");
-                                alert.setMessage(e.getLocalizedMessage());
-                                alert.setCancelable(false);
-                                alert.setPositiveButton("Okay",null);
-                                alert.show();
-                            }
-                        });
-                    }
-                });
-                alert.show();
+                if (barterItems.get(pos).getBarterType().equals("c")&&barterItems.get(pos).getBarterStatus().equals("Pending")) {
+                    AlertDialog.Builder alert = new AlertDialog.Builder(context);
+                    alert.setTitle("Cancel Barter Request");
+                    alert.setMessage("Are you sure to cancel this request?");
+                    alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            BarterManagement.cancelProposedBarter(context, barterItems.get(pos));
+                        }
+                    });
+                    alert.setNegativeButton("No", null);
+                    alert.show();
+                } else {
+                    AlertDialog.Builder alert = new AlertDialog.Builder(context);
+                    alert.setTitle("Remove Item");
+                    alert.setMessage("Are you sure you want to remove this item?");
+                    alert.setCancelable(false);
+                    alert.setNegativeButton("No", null);
+                    alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            BarterManagement.removeBarteredItem(barterItems.get(pos))
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void unused) {
+                                            AuthValidation.successToast(context, "Barter item removed").show();
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            AlertDialog.Builder alert = new AlertDialog.Builder(context);
+                                            alert.setTitle("Fail to remove barter item");
+                                            alert.setMessage(e.getLocalizedMessage());
+                                            alert.setCancelable(false);
+                                            alert.setPositiveButton("Okay", null);
+                                            alert.show();
+                                        }
+                                    });
+                        }
+                    });
+                    alert.show();
+                }
             }
         });
 
         String name = barterItems.get(pos).getBarterName();
         String condition = "Item condition: " + barterItems.get(pos).getBarterCondition();
-        String quantity = "Quantity: " + barterItems.get(pos).getBarterQuantity() +" "+barterItems.get(pos).getBarterUnit();
+        String quantity = "Quantity: " + barterItems.get(pos).getBarterQuantity() + " " + barterItems.get(pos).getBarterUnit();
         String desc = "Description: " + barterItems.get(pos).getBarterDescription();
 
         barterName_tv.setText(name);

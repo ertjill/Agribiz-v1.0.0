@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.agribiz_v100.LoginActivity;
+import com.example.agribiz_v100.MessagesActivity;
 import com.example.agribiz_v100.OrdersActivity;
 import com.example.agribiz_v100.R;
 import com.example.agribiz_v100.agrovit.AgrovitMainActivity;
@@ -74,11 +75,11 @@ public class FarmerProfile extends Fragment {
         });
 
         farmerMessages_tv.setOnClickListener(v -> {
-            startActivity(new Intent(getActivity(), FarmerMessagesActivity.class));
+            startActivity(new Intent(getActivity(), MessagesActivity.class));
         });
 
         farmerBarter_tv.setOnClickListener(v -> {
-            startActivity(new Intent(getActivity(), BarterProductActivity.class));
+            startActivity(new Intent(getActivity(), BarterItemActivity.class));
         });
 
         logout_card.setOnClickListener(vi->{

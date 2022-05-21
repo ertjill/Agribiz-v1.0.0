@@ -19,6 +19,12 @@
         android:theme="@style/Theme.Agribizv100"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".ChatActivity"
+            android:exported="false" />
+        <activity
+            android:name=".BarteredItemViewActivity"
+            android:exported="false" />
+        <activity
             android:name=".PendingViewActivity"
             android:exported="false" />
         <activity
@@ -64,16 +70,13 @@
             android:name=".customer.MyAddressesActivity"
             android:exported="false" /> <!-- Barters -->
         <activity
-            android:name=".farmer.BarterProductActivity"
+            android:name=".farmer.BarterItemActivity"
             android:exported="false" />
         <activity
             android:name=".customer.BarterGoodsActivity"
             android:exported="false" /> <!-- Messages -->
         <activity
-            android:name=".customer.MessagesActivity"
-            android:exported="false" />
-        <activity
-            android:name=".farmer.FarmerMessagesActivity"
+            android:name=".MessagesActivity"
             android:exported="false" /> <!-- Products -->
         <activity
             android:name=".customer.ProductView"

@@ -111,8 +111,7 @@ public class AddProductDialog {
         categories = new ArrayList<>();
         unit=new ArrayList<>();
 
-        AppManagement.getSettings()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        AppManagement.getSettings().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         if(task.isSuccessful()){
@@ -510,14 +509,13 @@ public class AddProductDialog {
                             add_image_btn.setVisibility(View.GONE);
                         }
                     }
-                } else {
                 }
             }
         });
+
         selectFromCamera = fragment.registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
             @Override
             public void onActivityResult(ActivityResult result) {
-
                 if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
                     Bitmap imBtm = (Bitmap) result.getData().getExtras().get("data");
                     ByteArrayOutputStream byts = new ByteArrayOutputStream();
@@ -538,6 +536,7 @@ public class AddProductDialog {
             }
         });
     }
+
 
     public void reset() {
 
@@ -604,11 +603,13 @@ public class AddProductDialog {
         intent.setType("image/*");
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         intent.setAction(Intent.ACTION_GET_CONTENT);
+
         if (intent.resolveActivity(activity.getApplicationContext().getPackageManager()) != null) {
             selectFromGallery.launch(Intent.createChooser(intent, "Select Image(s)"));
         } else {
             AuthValidation.failedToast(activity.getBaseContext(), "Unable to use gallery").show();
         }
+
     }
 
     public class ImageViewPagerAdapter extends RecyclerView.Adapter<AddProductDialog.ImageViewPagerAdapter.SlideViewHolder> {
@@ -667,10 +668,6 @@ public class AddProductDialog {
     public interface AddProductDialogCallback {
         void addOnDocumentAddedListener(boolean isAdded);
     }
-
-//    public interface AddUploadProgressListener{
-//        void
-//    }
 
     public interface AddProductImageCallBack{
         void addOnImageSizeListener(int imagesSize);

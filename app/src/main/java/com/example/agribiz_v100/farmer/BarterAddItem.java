@@ -54,6 +54,7 @@ public class BarterAddItem extends Fragment {
 
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     ListenerRegistration registration;
+    List<String> id;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -64,7 +65,7 @@ public class BarterAddItem extends Fragment {
         add_barter_ib = view.findViewById(R.id.add_barter_ib);
         farmer_barter_lv = view.findViewById(R.id.farmer_barter_lv);
         no_barter_product_ll = view.findViewById(R.id.no_barter_product_ll);
-
+        id = new ArrayList<>();
         barterItems = new ArrayList<>();
         barterAdapter = new BarterAdapter(getContext(), barterItems);
         addBarterDialog.buildDialog();
@@ -88,76 +89,21 @@ public class BarterAddItem extends Fragment {
         displayBarterItems();
     }
 
-    //int i = 0;
     public void displayBarterItems() {
         registration = BarterManagement.getBarteredItems(user.getUid(), "Open")
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                         barterItems.clear();
+                        id.clear();
                         if (!value.isEmpty())
                             for (DocumentSnapshot ds : value) {
                                 barterItems.add(ds.toObject(BarterModel.class));
-
+                                id.add(ds.getId());
                             }
                         barterAdapter.notifyDataSetChanged();
                     }
                 });
     }
 
-//    public class BarterAdapter extends BaseAdapter {
-//
-//        List<BarterModel> barterItems;
-//        Context context;
-//        LayoutInflater inflater;
-//        public BarterAdapter(Context context,List<BarterModel> barterItems) {
-//            this.barterItems=barterItems;
-//            this.context = context;
-//            inflater = LayoutInflater.from(context);
-//        }
-//
-//        @Override
-//        public int getCount() {
-//            return barterItems.size();
-//        }
-//
-//        @Override
-//        public Object getItem(int i) {
-//            return null;
-//        }
-//
-//        @Override
-//        public long getItemId(int i) {
-//            return 0;
-//        }
-//
-//        @Override
-//        public View getView(int pos, View view, ViewGroup viewGroup) {
-//
-//            if (inflater == null) {
-//                inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//            }
-//
-//            if (view == null) {
-//                view = inflater.inflate(R.layout.barter_product_list, null);
-//            }
-//
-//            TextView barterName_tv = view.findViewById(R.id.barterName_tv);
-//            TextView barterCondition_tv = view.findViewById(R.id.barterCondition_tv);
-//            TextView barterQuantity_tv = view.findViewById(R.id.barterQuantity_tv);
-//            TextView barterDesc_tv = view.findViewById(R.id.barterDesc_tv);
-//
-//            String name = barterItems.get(pos).getBarterName();
-//            String condition = "Item condition: " + barterItems.get(pos).getBarterCondition();
-//            String quantity = "Quantity: " + barterItems.get(pos).getBarterQuantity();
-//            String desc = "Description: " + barterItems.get(pos).getBarterDescription();
-//
-//            barterName_tv.setText(name);
-//            barterCondition_tv.setText(condition);
-//            barterQuantity_tv.setText(quantity);
-//            barterDesc_tv.setText(desc);
-//
-//            return view;
-//        }
-//    }
 }

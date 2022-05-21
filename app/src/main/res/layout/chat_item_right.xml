@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="10dp">
+
+    <RelativeLayout
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true">
+
+        <!--        <androidx.cardview.widget.CardView-->
+        <!--            android:id="@+id/image_card"-->
+        <!--            android:layout_width="40dp"-->
+        <!--            android:layout_height="40dp"-->
+        <!--            android:layout_margin="5dp"-->
+        <!--            android:visibility="invisible"-->
+        <!--            app:cardCornerRadius="20dp">-->
+
+        <!--            <ImageView-->
+        <!--                android:id="@+id/profile_iv"-->
+        <!--                android:layout_width="match_parent"-->
+        <!--                android:layout_height="match_parent"-->
+        <!--                android:src="@mipmap/agribiz_icon_logo" />-->
+        <!--        </androidx.cardview.widget.CardView>-->
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/show_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:background="@drawable/right_message_background"
+                android:fontFamily="@font/montserrat_regular"
+                android:lineHeight="21sp"
+                android:padding="10dp"
+                android:text="Hello, Agribiz"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/show_message"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="6dp"
+                android:fontFamily="@font/montserrat_regular"
+                android:gravity="bottom"
+                android:text="SENT"
+                android:textColor="@color/cancel"
+                android:textFontWeight="600"
+                android:textSize="8sp" />
+        </RelativeLayout>
+
+
+    </RelativeLayout>
+
+</RelativeLayout>
