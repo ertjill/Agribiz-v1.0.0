@@ -38,6 +38,7 @@ import com.example.agribiz_v100.entities.ProductModel;
 import com.example.agribiz_v100.entities.UserModel;
 import com.example.agribiz_v100.services.BasketManagement;
 import com.example.agribiz_v100.services.NotificationManagement;
+import com.example.agribiz_v100.services.ProfileManagement;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -54,6 +55,7 @@ import com.google.firebase.storage.StorageReference;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public class ProductView extends AppCompatActivity {
 
@@ -75,7 +77,7 @@ public class ProductView extends AppCompatActivity {
     List<String> images;
     BasketManagement basketManagement;
     UserModel userModel;
-
+    MenuItem menuItem;
 
 
     public void basketClick() {
@@ -91,13 +93,33 @@ public class ProductView extends AppCompatActivity {
 
     }
 
+    public void getNoBasketItems() {
+        itemsCount = 0;
+        BasketManagement.getBaskitItems(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                if (!queryDocumentSnapshots.isEmpty()) {
+                    for (DocumentSnapshot ds : queryDocumentSnapshots) {
+                        itemsCount += 1;
+                    }
+                    if (itemsCount == 0) {
+                        menuItem.setActionView(null);
+                    } else {
+                        menuItem.setActionView(R.layout.badge);
+                        View vi = menuItem.getActionView();
+                        itemCounter = vi.findViewById(R.id.badge_tv);
+                        itemCounter.setText(String.valueOf(itemsCount));
+                    }
+                }
+            }
+        });
+    }
+
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_view);
-//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-//                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         basketManagement = new BasketManagement(this);
         topAppBar = findViewById(R.id.topAppBar);
         imageSlider = findViewById(R.id.imageSlider);
@@ -112,7 +134,7 @@ public class ProductView extends AppCompatActivity {
             }
         });
 
-        MenuItem menuItem = topAppBar.getMenu().findItem(R.id.basket_menu);
+        menuItem = topAppBar.getMenu().findItem(R.id.basket_menu);
         menuItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -120,41 +142,13 @@ public class ProductView extends AppCompatActivity {
                 cm.setChatSenderUserId("M7DoQujvc3XHsqA9mowKM2Ws0sc2");
                 cm.setChatDate(new Timestamp(new Date()));
                 cm.setChatMessage("Hello, this is jack the one who bought alot of item from you. May I ask how");
-                NotificationManagement.getNewMessageNotification(ProductView.this,cm,1);
+                NotificationManagement.getNewMessageNotification(ProductView.this, cm, 1);
                 return false;
             }
         });
-        BasketManagement.getBaskitItems(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                if(!queryDocumentSnapshots.isEmpty()){
-                    for(DocumentSnapshot ds:queryDocumentSnapshots){
-                        itemsCount+=1;
-                    }
-                    if (itemsCount == 0) {
-                        menuItem.setActionView(null);
-                    } else {
-                        menuItem.setActionView(R.layout.badge);
-                        View vi = menuItem.getActionView();
-                        itemCounter = vi.findViewById(R.id.badge_tv);
-                        itemCounter.setText(String.valueOf(itemsCount));
-                    }
-                }
-            }
-        });
+        //add basket number of items
+        getNoBasketItems();
 
-
-        topAppBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.basket_menu:
-//                        basketClick();
-                        break;
-                }
-                return true;
-            }
-        });
         userModel = new UserModel();
 
         addProductToBasket = new Dialog(this);
@@ -189,43 +183,9 @@ public class ProductView extends AppCompatActivity {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
                                         addProductToBasket.dismiss();
+                                        getNoBasketItems();
                                     }
                                 });
-//                        DocumentReference docRef = db.collection("products").document(farmerProductItem.getProductId());
-//                        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//                            @Override
-//                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                                if (task.isSuccessful()) {
-//                                    DocumentSnapshot document = task.getResult();
-//                                    if (document.exists()) {
-//                                        Timestamp productDateAdded = new Timestamp(new Date());
-//                                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-//                                        BasketProductModel basketProductModel = document.toObject(BasketProductModel.class);
-//                                        basketProductModel.setProductBasketQuantity(Integer.parseInt(product_quantity_tv.getText().toString()));
-//                                        basketProductModel.setProductDateAdded(productDateAdded);
-//                                        basketManagement.addToBasket(basketProductModel);
-//                                        addProductToBasket.dismiss();
-//                                    } else {
-//                                        Log.d(TAG, "No such document");
-//                                        addProductToBasket.dismiss();
-//                                    }
-//                                } else {
-//                                    Log.d(TAG, "get failed with ", task.getException());
-//                                    addProductToBasket.dismiss();
-//                                }
-//                            }
-//                        });
-                        //Map<String, Object> product = (Map<String, Object>) farmerProductItem;
-//                        Timestamp productDateAdded = new Timestamp(new Date());
-//                        product.put("productBasketQuantity", Integer.parseInt(product_quantity_tv.getText().toString()));
-//                        product.put("productDateAdded",productDateAdded);
-//                        String hubId = product.get("productUserId").toString();
-//                        String productId = product.get("productId").toString();
-//                        Log.d(TAG, product.get("productBasketQuantity").toString() + " " + user.getUid());
-//                        firebaseHelper.addProductToBasket(product, productId, user.getUid(), hubId);
-//                        CustomerMainActivity cm = (CustomerMainActivity)
-//                        basketManagement.addToBasket(product);
-//                        addProductToBasket.dismiss();
                     }
                 });
                 minus_tv.setOnClickListener(new View.OnClickListener() {
@@ -329,20 +289,31 @@ public class ProductView extends AppCompatActivity {
                     .into(product_image_iv);
             images = farmerProductItem.getProductImage();
             imageSlider.setAdapter(imageViewPagerAdapter);
-            // Create a storage reference from our app
-            FirebaseStorage storage = FirebaseStorage.getInstance();
-            StorageReference storageRef = storage.getReference();
-            // Get reference to the file
-            StorageReference forestRef = storageRef.child("profile/" + "272229741_475164050669220_5648552245273002941_n.png");
-            forestRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                @Override
-                public void onSuccess(Uri uri) {
-                    Glide.with(getApplicationContext())
-                            .load(uri.toString())
-                            .into(hub_profile_image);
 
+            //get product user(farmer/agrovit) profile info
+            ProfileManagement.getUserProfile(farmerProductItem.getProductUserId()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    Glide.with(getApplicationContext())
+                            .load(documentSnapshot.getString("userImage"))
+                            .into(hub_profile_image);
+                    productLocation.setText(((Map<String,String>)documentSnapshot.getData().get("userLocation")).get("userMunicipality"));
                 }
             });
+            // Create a storage reference from our app
+//            FirebaseStorage storage = FirebaseStorage.getInstance();
+//            StorageReference storageRef = storage.getReference();
+            // Get reference to the file
+//            StorageReference forestRef = storageRef.child("profile/" + "272229741_475164050669220_5648552245273002941_n.png");
+//            forestRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+//                @Override
+//                public void onSuccess(Uri uri) {
+//                    Glide.with(getApplicationContext())
+//                            .load(uri.toString())
+//                            .into(hub_profile_image);
+//
+//                }
+//            });
             for (int i = 0; i < 5; i++) {
                 ImageView start = new ImageView(this);
 
