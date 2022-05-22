@@ -19,6 +19,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.Transaction;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -93,19 +94,9 @@ public class ProductManagement {
         });
 
 
-//        .addOnSuccessListener(new OnSuccessListener<Double>() {
-//            @Override
-//            public void onSuccess(Double result) {
-//                Log.d(TAG, "Transaction success: " + result);
-//            }
-//        })
-//                .addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        Log.w(TAG, "Transaction failure.", e);
-//                    }
-//                });
     }
+
+
 
     public static Task<Void> addProduct(ProductModel product) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -215,6 +206,11 @@ public class ProductManagement {
             return db.collection("products").orderBy("productDateUploaded", Query.Direction.DESCENDING).startAfter(last).limit(8);
         }
 
+    }
+
+    public static Task<QuerySnapshot> getProductByUser(String userId){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        return db.collection("products").whereEqualTo("productUserId",userId).get();
     }
 
     public static Query searchProducts(DocumentSnapshot last, String search) {

@@ -150,7 +150,7 @@ public class AuthManagement {
                                         if (task11.isSuccessful()) {
                                             Log.d(TAG, "User profile updated");
                                             user.setUserID(fuser.getUid());
-                                            user.setUserIsActive(true);
+                                            user.setUserStatus("active");
 
                                             if (fuser.getPhotoUrl() != null)
                                                 user.setUserImage(fuser.getPhotoUrl().toString());

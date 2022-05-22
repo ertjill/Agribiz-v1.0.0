@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingTop="10dp"
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/whitebackground_roundedcorner"
+        android:backgroundTint="@color/highlight_back"
+        android:padding="8dp">
+
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/farmer_image_cv"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerVertical="true"
+            app:cardCornerRadius="30dp">
+
+            <ImageView
+                android:id="@+id/farmer_image_iv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/agribiz_icon_logo" />
+
+        </androidx.cardview.widget.CardView>
+
+        <RelativeLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toStartOf="@+id/donate_btn"
+            android:layout_toEndOf="@+id/farmer_image_cv">
+
+            <TextView
+                android:id="@+id/farmer_display_name_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:fontFamily="@font/montserrat_semibold"
+                android:text="FarmersHub"
+                android:textColor="@color/brown"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/user_info_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/farmer_display_name_tv"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:fontFamily="@font/montserrat_regular"
+                android:text="farmers info"
+                android:textColor="@color/brown"
+                android:textSize="9sp" />
+
+        </RelativeLayout>
+
+
+        <Button
+            android:id="@+id/donate_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:backgroundTint="@color/yellow_orange"
+            android:fontFamily="@font/montserrat_semibold"
+            android:text="Donate"
+            android:textAllCaps="false"
+            android:textColor="@color/army_green"
+            android:textSize="12dp"
+            app:cornerRadius="24dp" />
+    </RelativeLayout>
+</RelativeLayout>

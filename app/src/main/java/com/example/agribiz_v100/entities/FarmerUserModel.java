@@ -3,12 +3,11 @@ package com.example.agribiz_v100.entities;
 import java.io.Serializable;
 import java.util.List;
 
-public class UserModel implements Serializable {
-
+public class FarmerUserModel implements Serializable {
     private String userEmail;
     private String userID;
     private String userImage;
-    private List<LocationModel> userLocation;
+    private LocationModel userLocation;
     private String userDisplayName;
     private String userFirstName;
     private String userLastName;
@@ -25,10 +24,10 @@ public class UserModel implements Serializable {
         this.userStatus = userStatus;
     }
 
-    public UserModel() {
+    public FarmerUserModel() {
     }
 
-    public UserModel(String userEmail, String userID, String userImage, List<LocationModel> userLocation, String userDisplayName, String userFirstName, String userLastName, String userMiddleName, String userPhoneNumber, boolean userIsActive, String userType, String userStatus) {
+    public FarmerUserModel(String userEmail, String userID, String userImage, LocationModel userLocation, String userDisplayName, String userFirstName, String userLastName, String userMiddleName, String userPhoneNumber, boolean userIsActive, String userType, String userStatus) {
         this.userEmail = userEmail;
         this.userID = userID;
         this.userImage = userImage;
@@ -66,11 +65,11 @@ public class UserModel implements Serializable {
         this.userImage = userImage;
     }
 
-    public List<LocationModel> getUserLocation() {
+    public LocationModel getUserLocation() {
         return userLocation;
     }
 
-    public void setUserLocation(List<LocationModel> userLocation) {
+    public void setUserLocation(LocationModel userLocation) {
         this.userLocation = userLocation;
     }
 

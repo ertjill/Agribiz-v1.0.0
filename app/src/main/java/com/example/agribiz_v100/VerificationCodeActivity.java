@@ -101,7 +101,6 @@ public class VerificationCodeActivity extends AppCompatActivity {
 
         user.setUserDisplayName(userName + "-c");
         user.setUserEmail(userEmail);
-        user.setUserIsActive(true);
         user.setUserType("customer");
         user.setUserPhoneNumber(userPhoneNo);
         populatePhoneNumber.setText(userPhoneNo);

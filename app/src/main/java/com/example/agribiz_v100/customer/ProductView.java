@@ -38,6 +38,7 @@ import com.example.agribiz_v100.entities.ProductModel;
 import com.example.agribiz_v100.entities.UserModel;
 import com.example.agribiz_v100.services.BasketManagement;
 import com.example.agribiz_v100.services.NotificationManagement;
+import com.example.agribiz_v100.services.ProductManagement;
 import com.example.agribiz_v100.services.ProfileManagement;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -65,7 +66,7 @@ public class ProductView extends AppCompatActivity {
     ImageView product_image_iv;
     ImageView hub_profile_image;
     LinearLayout rating_ll;
-    TextView productName, productPrice, productSold, hubName, productStocks, productLocation, add_to_basket_tv, buy_now_tv, chat_tv;
+    TextView productName, productPrice, productSold, hubName, productStocks, productLocation,no_user_rated_tv, add_to_basket_tv,category_tv, buy_now_tv, chat_tv,product_descriptio_tv, count_product_tv;
     MaterialToolbar topAppBar;
     Dialog addProductToBasket, buyNow;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -125,14 +126,18 @@ public class ProductView extends AppCompatActivity {
         imageSlider = findViewById(R.id.imageSlider);
         imageViewPagerAdapter = new ImageViewPagerAdapter();
         chat_tv = findViewById(R.id.chat_tv);
-
-
+        count_product_tv = findViewById(R.id.count_product_tv);
+        product_descriptio_tv = findViewById(R.id.product_descriptio_tv);
+        category_tv = findViewById(R.id.category_tv);
+        no_user_rated_tv=findViewById(R.id.no_user_rated_tv);
         topAppBar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
+
+
 
         menuItem = topAppBar.getMenu().findItem(R.id.basket_menu);
         menuItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
@@ -279,11 +284,26 @@ public class ProductView extends AppCompatActivity {
                     startActivity(intent);
                 }
             });
+
+            ProductManagement.getProductByUser(farmerProductItem.getProductUserId()).addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                @Override
+                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                    int count = 0;
+                    for(DocumentSnapshot ds:queryDocumentSnapshots){
+                        count++;
+                    }
+                    count_product_tv.setText(count+" Products");
+                }
+            });
+
 //            user = getIntent().getParcelableExtra("user");
             productName.setText(farmerProductItem.getProductName() + " ( per " + farmerProductItem.getProductQuantity() + " " + farmerProductItem.getProductUnit() + " )");
             productPrice.setText("Php " + farmerProductItem.getProductPrice());
             productSold.setText(farmerProductItem.getProductSold() + " sold");
             productStocks.setText(farmerProductItem.getProductStocks() + "");
+            category_tv.setText(farmerProductItem.getProductCategory());
+            product_descriptio_tv.setText(farmerProductItem.getProductDescription());
+            no_user_rated_tv.setText(" | "+farmerProductItem.getProductNoCustomerRate());
             Glide.with(getApplicationContext())
                     .load(farmerProductItem.getProductImage().get(0))
                     .into(product_image_iv);

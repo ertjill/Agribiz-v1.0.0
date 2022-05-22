@@ -63,6 +63,15 @@
                 android:textColor="@color/brown"
                 android:textFontWeight="600"
                 android:textSize="18sp" />
+            <TextView
+                android:id="@+id/product_descriptio_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="24dp"
+                android:fontFamily="@font/montserrat_regular"
+                android:text="Fesh sweet tomato"
+                android:textColor="@color/brown"
+                android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/productPrice"
@@ -81,6 +90,8 @@
                 android:layout_marginLeft="24dp"
                 android:layout_marginRight="24dp">
 
+
+
                 <LinearLayout
                     android:id="@+id/rating_ll"
                     android:layout_width="wrap_content"
@@ -90,7 +101,19 @@
                     android:orientation="horizontal">
 
                 </LinearLayout>
-
+                <TextView
+                    android:id="@+id/no_user_rated_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_toEndOf="@+id/rating_ll"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="5dp"
+                    android:drawableStart="@drawable/ic_outline_supervisor_account_15"
+                    android:drawableTint="@color/brown"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:text=" | 100"
+                    android:textColor="@color/brown"
+                    android:textSize="10sp" />
                 <TextView
                     android:id="@+id/productSold"
                     android:layout_width="wrap_content"
@@ -148,6 +171,7 @@
                             android:textSize="10sp" />
 
                         <TextView
+                            android:id="@+id/count_product_tv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/montserrat_regular"
@@ -188,6 +212,32 @@
                         android:layout_width="110dp"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/montserrat_regular"
+                        android:text="Category"
+                        android:textColor="@color/brown"
+                        android:textFontWeight="400"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/category_tv"
+                        android:layout_width="110dp"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/montserrat_regular"
+                        android:text="Fruits"
+                        android:textColor="@color/brown"
+                        android:textFontWeight="600"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="9dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="110dp"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/montserrat_regular"
                         android:text="Stock"
                         android:textColor="@color/brown"
                         android:textFontWeight="400"
@@ -204,7 +254,6 @@
                         android:textSize="16sp" />
 
                 </LinearLayout>
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -222,7 +271,7 @@
 
                     <TextView
                         android:id="@+id/productLocation"
-                        android:layout_width="110dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/montserrat_regular"
                         android:text="Adlaon"
