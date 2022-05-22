@@ -15,6 +15,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -87,5 +88,10 @@ public class BasketManagement {
 
     public Task<Void> deleteFromBasket(String id) {
         return db.collection("basket").document(user.getUid()).collection("products").document(id).delete();
+    }
+
+    public static CollectionReference getBaskitItems(String userId){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        return db.collection("basket").document(userId).collection("products");
     }
 }

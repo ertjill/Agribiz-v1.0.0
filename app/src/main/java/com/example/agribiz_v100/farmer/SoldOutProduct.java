@@ -66,11 +66,10 @@ public class SoldOutProduct extends Fragment {
         farmerProductAdapter = new SoldOutProduct.FarmerProductAdapter(getContext());
 
         addProductDialog.buildDialog();
-
+        no_product_ll = view.findViewById(R.id.no_product_ll);
         farmer_product_lv = view.findViewById(R.id.farmer_product_lv);
         farmer_product_lv.setAdapter(farmerProductAdapter);
-
-        no_product_ll = view.findViewById(R.id.no_product_ll);
+        farmer_product_lv.setEmptyView(no_product_ll);
         addProductDialog.createListener(new AddProductDialog.AddProductDialogCallback() {
             @Override
             public void addOnDocumentAddedListener(boolean isAdded) {

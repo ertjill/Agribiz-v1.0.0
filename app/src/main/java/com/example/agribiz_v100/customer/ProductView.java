@@ -3,15 +3,20 @@ package com.example.agribiz_v100.customer;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,25 +28,31 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.agribiz_v100.ChatActivity;
 import com.example.agribiz_v100.R;
+import com.example.agribiz_v100.entities.ChatModel;
 import com.example.agribiz_v100.entities.ProductModel;
 import com.example.agribiz_v100.entities.UserModel;
 import com.example.agribiz_v100.services.BasketManagement;
+import com.example.agribiz_v100.services.NotificationManagement;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.Date;
 import java.util.List;
 
 public class ProductView extends AppCompatActivity {
@@ -65,6 +76,21 @@ public class ProductView extends AppCompatActivity {
     BasketManagement basketManagement;
     UserModel userModel;
 
+
+
+    public void basketClick() {
+        Toast.makeText(this, "Hahahaha", Toast.LENGTH_SHORT).show();
+        NotificationCompat.Builder notif = new NotificationCompat.Builder(this, "Ert")
+                .setSmallIcon(R.drawable.agribiz_logo_green)
+                .setContentTitle("First Notification")
+                .setContentText("I notify you so you know")
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(this);
+        notificationManagerCompat.notify(100, notif.build());
+
+    }
+
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,25 +113,49 @@ public class ProductView extends AppCompatActivity {
         });
 
         MenuItem menuItem = topAppBar.getMenu().findItem(R.id.basket_menu);
-        if (itemsCount == 0) {
-            menuItem.setActionView(null);
-        } else {
-            menuItem.setActionView(R.layout.badge);
-            View vi = menuItem.getActionView();
-            itemCounter = vi.findViewById(R.id.badge_tv);
-            itemCounter.setText(String.valueOf(itemsCount));
-        }
+        menuItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                ChatModel cm = new ChatModel();
+                cm.setChatSenderUserId("M7DoQujvc3XHsqA9mowKM2Ws0sc2");
+                cm.setChatDate(new Timestamp(new Date()));
+                cm.setChatMessage("Hello, this is jack the one who bought alot of item from you. May I ask how");
+                NotificationManagement.getNewMessageNotification(ProductView.this,cm,1);
+                return false;
+            }
+        });
+        BasketManagement.getBaskitItems(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                if(!queryDocumentSnapshots.isEmpty()){
+                    for(DocumentSnapshot ds:queryDocumentSnapshots){
+                        itemsCount+=1;
+                    }
+                    if (itemsCount == 0) {
+                        menuItem.setActionView(null);
+                    } else {
+                        menuItem.setActionView(R.layout.badge);
+                        View vi = menuItem.getActionView();
+                        itemCounter = vi.findViewById(R.id.badge_tv);
+                        itemCounter.setText(String.valueOf(itemsCount));
+                    }
+                }
+            }
+        });
+
+
         topAppBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.basket_menu:
+//                        basketClick();
                         break;
                 }
                 return true;
             }
         });
-        userModel =new UserModel();
+        userModel = new UserModel();
 
         addProductToBasket = new Dialog(this);
         addProductToBasket.setContentView(R.layout.add_to_basket_dialog);
@@ -134,7 +184,7 @@ public class ProductView extends AppCompatActivity {
                 add_basket_product_btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        basketManagement.addToBasket(farmerProductItem.getProductId(),Integer.parseInt(product_quantity_tv.getText().toString()))
+                        basketManagement.addToBasket(farmerProductItem.getProductId(), Integer.parseInt(product_quantity_tv.getText().toString()))
                                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
@@ -215,7 +265,7 @@ public class ProductView extends AppCompatActivity {
         buyNow.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         buyNow.setCancelable(false);
 
-        buy_now_tv.setOnClickListener(v->{
+        buy_now_tv.setOnClickListener(v -> {
             TextView increment = buyNow.findViewById(R.id.add_tv);
             TextView decrement = buyNow.findViewById(R.id.minus_tv);
             TextView prodQuantity = buyNow.findViewById(R.id.product_quantity_tv);
@@ -313,7 +363,7 @@ public class ProductView extends AppCompatActivity {
                         if (document.exists()) {
                             Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                             userModel.setUserDisplayName(document.get("userDisplayName").toString());
-                            hubName.setText(userModel.getUserDisplayName().substring(0,userModel.getUserDisplayName().length()-2));
+                            hubName.setText(userModel.getUserDisplayName().substring(0, userModel.getUserDisplayName().length() - 2));
 
                         } else {
                             Log.d(TAG, "No such document");
@@ -329,6 +379,7 @@ public class ProductView extends AppCompatActivity {
 
     public class ImageViewPagerAdapter extends RecyclerView.Adapter<ImageViewPagerAdapter.SlideViewHolder> {
         LayoutInflater layoutInflater;
+
         @NonNull
         @Override
         public ImageViewPagerAdapter.SlideViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -355,6 +406,7 @@ public class ProductView extends AppCompatActivity {
         public class SlideViewHolder extends RecyclerView.ViewHolder {
             ImageView product_image_iv;
             TextView indicator_tv;
+
             public SlideViewHolder(@NonNull View itemView) {
                 super(itemView);
                 product_image_iv = itemView.findViewById(R.id.product_image_iv);

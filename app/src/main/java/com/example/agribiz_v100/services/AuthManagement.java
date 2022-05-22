@@ -362,6 +362,7 @@ public class AuthManagement {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
+                FirebaseAuth.getInstance().signOut();
                 AlertDialog.Builder alert = new AlertDialog.Builder(activity);
                 alert.setTitle("Logging Out");
                 alert.setMessage(e.getLocalizedMessage());

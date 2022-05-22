@@ -109,26 +109,27 @@ public class AddProductDialog {
         this.fragment = fragment;
         arrayOfImages = new ArrayList<>();
         categories = new ArrayList<>();
-        unit=new ArrayList<>();
+        unit = new ArrayList<>();
 
         AppManagement.getSettings().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if(task.isSuccessful()){
-                             for(Object object:(List<Object>) (task.getResult().get("productCategory"))){
-                                 categories.add(object.toString());
-                             }
-                            for(Object object:(List<Object>) (task.getResult().get("units"))){
-                                unit.add(object.toString());
-                            }
-                        }else{
-                            Toast.makeText(activity, "Check Your Internet Connection", Toast.LENGTH_SHORT).show();
-                        }
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (Object object : (List<Object>) (task.getResult().get("productCategory"))) {
+                        categories.add(object.toString());
                     }
-                });
+                    for (Object object : (List<Object>) (task.getResult().get("units"))) {
+                        unit.add(object.toString());
+                    }
+                } else {
+                    Toast.makeText(activity, "Check Your Internet Connection", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
     }
-    public void createImageSizeListener(AddProductImageCallBack addProductImageCallBack){
+
+    public void createImageSizeListener(AddProductImageCallBack addProductImageCallBack) {
         this.addProductImageCallBack = addProductImageCallBack;
     }
 
@@ -147,7 +148,7 @@ public class AddProductDialog {
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.setCancelable(false);
 
-        count_done_tv =dialog.findViewById(R.id.count_done_tv);
+        count_done_tv = dialog.findViewById(R.id.count_done_tv);
         CircularProgressIndicator add_product_progress = dialog.findViewById(R.id.add_product_progress);
         ImageView product_image_iv = dialog.findViewById(R.id.product_image_iv);
         blank_photo_ll = dialog.findViewById(R.id.blank_photo_ll);
@@ -175,11 +176,10 @@ public class AddProductDialog {
         createImageSizeListener(new AddProductImageCallBack() {
             @Override
             public void addOnImageSizeListener(int imagesSize) {
-                if(imagesSize>0){
-                    flag[0]=true;
-                }
-                else
-                    flag[0]=false;
+                if (imagesSize > 0) {
+                    flag[0] = true;
+                } else
+                    flag[0] = false;
             }
         });
         productName_til.getEditText().addTextChangedListener(new TextWatcher() {
@@ -217,13 +217,12 @@ public class AddProductDialog {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(!ProductValidation.validateDesc(s.toString()).isEmpty()){
+                if (!ProductValidation.validateDesc(s.toString()).isEmpty()) {
                     productDescription_til.setError(ProductValidation.validateDesc(s.toString()));
-                    flag[2]=false;
-                }
-                else{
+                    flag[2] = false;
+                } else {
                     productDescription_til.setError(null);
-                    flag[2]=true;
+                    flag[2] = true;
                 }
             }
         });
@@ -240,10 +239,11 @@ public class AddProductDialog {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(!ProductValidation.validateCategory(s.toString()).isEmpty()){
+                if (!ProductValidation.validateCategory(s.toString()).isEmpty()) {
                     productCategory_til.setError(ProductValidation.validateCategory(s.toString()));
-                    flag[3] =false;
-                }{
+                    flag[3] = false;
+                }
+                {
                     productCategory_til.setError(null);
                     flag[3] = true;
                 }
@@ -262,12 +262,12 @@ public class AddProductDialog {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(!ProductValidation.validateStocks(s.toString()).isEmpty()){
+                if (!ProductValidation.validateStocks(s.toString()).isEmpty()) {
                     productStocks_til.setError(ProductValidation.validateStocks(s.toString()));
-                    flag[4] =false;
-                }else {
+                    flag[4] = false;
+                } else {
                     productStocks_til.setError(null);
-                    flag[4]=true;
+                    flag[4] = true;
                 }
             }
         });
@@ -284,14 +284,12 @@ public class AddProductDialog {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(!ProductValidation.validatePrice(s.toString()).isEmpty())
-                {
+                if (!ProductValidation.validatePrice(s.toString()).isEmpty()) {
                     productPrice_til.setError(ProductValidation.validatePrice(s.toString()));
-                    flag[5] =false;
-                }
-                else{
+                    flag[5] = false;
+                } else {
                     productPrice_til.setError(null);
-                    flag[5]=true;
+                    flag[5] = true;
                 }
             }
         });
@@ -308,13 +306,12 @@ public class AddProductDialog {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(!ProductValidation.validateQuantity(s.toString()).isEmpty()){
+                if (!ProductValidation.validateQuantity(s.toString()).isEmpty()) {
                     productQuantity_til.setError(ProductValidation.validateQuantity(s.toString()));
-                    flag[6]=false;
-                }
-                else{
+                    flag[6] = false;
+                } else {
                     productQuantity_til.setError(null);
-                    flag[6]=true;
+                    flag[6] = true;
                 }
             }
         });
@@ -331,12 +328,12 @@ public class AddProductDialog {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(!ProductValidation.validateUnit(s.toString()).isEmpty()){
+                if (!ProductValidation.validateUnit(s.toString()).isEmpty()) {
                     productUnit_til.setError(ProductValidation.validateUnit(s.toString()));
                     flag[7] = false;
-                }else{
+                } else {
                     productUnit_til.setError(null);
-                    flag[7] =true;
+                    flag[7] = true;
                 }
             }
         });
@@ -356,22 +353,22 @@ public class AddProductDialog {
             @Override
             public void onClick(View view) {
 
-                if (flag[0]&&flag[1]&&flag[2]&&flag[3]&&flag[4]&&flag[5]&&flag[6]&&flag[7]){
+                if (flag[0] && flag[1] && flag[2] && flag[3] && flag[4] && flag[5] && flag[6] && flag[7]) {
                     loder_rl.setVisibility(View.VISIBLE);
                     dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                             WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                ProductModel product = new ProductModel();
-                Date dateNow = new Date();
-                Log.d("date", dateNow.toString());
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("ddMMyyyyHHmmss");
-                Timestamp timestamp = new Timestamp(dateNow);
-                String productName = productName_til.getEditText().getText().toString();
-                String productDescription = productDescription_til.getEditText().getText().toString();
-                String productCategory = productCategory_til.getEditText().getText().toString();
-                String productStocks = productStocks_til.getEditText().getText().toString();
-                String productPrice = productPrice_til.getEditText().getText().toString();
-                String productQuantity = productQuantity_til.getEditText().getText().toString();
-                String productUnit = productUnit_til.getEditText().getText().toString();
+                    ProductModel product = new ProductModel();
+                    Date dateNow = new Date();
+                    Log.d("date", dateNow.toString());
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("ddMMyyyyHHmmss");
+                    Timestamp timestamp = new Timestamp(dateNow);
+                    String productName = productName_til.getEditText().getText().toString();
+                    String productDescription = productDescription_til.getEditText().getText().toString();
+                    String productCategory = productCategory_til.getEditText().getText().toString();
+                    String productStocks = productStocks_til.getEditText().getText().toString();
+                    String productPrice = productPrice_til.getEditText().getText().toString();
+                    String productQuantity = productQuantity_til.getEditText().getText().toString();
+                    String productUnit = productUnit_til.getEditText().getText().toString();
 
                     product.setProductId(user.getUid() + simpleDateFormat.format(dateNow));
                     product.setProductUserId(user.getUid());
@@ -406,13 +403,13 @@ public class AddProductDialog {
                                     Uri file = Uri.parse(arrayOfImages.get(i));
                                     StorageReference ref = storageRef.child("products").child(product.getProductId()).child(String.valueOf(i));
                                     int finalI = i;
-                                     StorageManagement.uploadProductImage(ref, file).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                                    StorageManagement.uploadProductImage(ref, file).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                                         @Override
                                         public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
                                             double progress = (100.0 * snapshot.getBytesTransferred()) / snapshot.getTotalByteCount();
                                             Log.d("tag", "Upload is " + progress + "% done");
-                                            add_product_progress.setProgressCompat( (int)progress,true);
-                                            count_done_tv.setText((int)progress+"");
+                                            add_product_progress.setProgressCompat((int) progress, true);
+                                            count_done_tv.setText((int) progress + "");
                                         }
                                     }).continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
                                         @Override
@@ -430,9 +427,9 @@ public class AddProductDialog {
                                                 String downloadUri = task1.getResult().toString();
                                                 Log.d("images", "uploaded : " + downloadUri);
                                                 product.getProductImage().add(downloadUri);
-                                                if (finalI == arrayOfImages.size()-1) {
+                                                if (finalI == arrayOfImages.size() - 1) {
                                                     AuthValidation.successToast(activity.getBaseContext(), "Successfully added product").show();
-                                                    FirebaseFirestore db =FirebaseFirestore.getInstance();
+                                                    FirebaseFirestore db = FirebaseFirestore.getInstance();
                                                     db.collection("products").document(product.getProductId()).update("productImage", product.getProductImage());
                                                     loder_rl.setVisibility(View.GONE);
                                                     reset();
@@ -441,7 +438,7 @@ public class AddProductDialog {
                                                     dismissDialog();
                                                 }
                                             } else {
-                                                AuthValidation.failedToast(activity.getBaseContext(),task1.getException().getMessage()).show();
+                                                AuthValidation.failedToast(activity.getBaseContext(), task1.getException().getMessage()).show();
                                             }
                                         }
                                     });
@@ -454,19 +451,17 @@ public class AddProductDialog {
                     });
 
 
-
-                }
-                else{
-                    AuthValidation.failedToast(activity.getBaseContext(),"Some are false").show();
+                } else {
+                    AuthValidation.failedToast(activity.getBaseContext(), "Some are false").show();
                     Log.d("flag",
-                            Boolean.toString(flag[0])+" : photo "+
-                            Boolean.toString(flag[1])+" : name "+
-                            Boolean.toString(flag[2])+" : desc "+
-                            Boolean.toString(flag[3])+" : cat "+
-                            Boolean.toString(flag[4])+" : stocks "+
-                            Boolean.toString(flag[5])+" : price "+
-                            Boolean.toString(flag[6])+" : quantity "+
-                            Boolean.toString(flag[7])+" : unit ");
+                            Boolean.toString(flag[0]) + " : photo " +
+                                    Boolean.toString(flag[1]) + " : name " +
+                                    Boolean.toString(flag[2]) + " : desc " +
+                                    Boolean.toString(flag[3]) + " : cat " +
+                                    Boolean.toString(flag[4]) + " : stocks " +
+                                    Boolean.toString(flag[5]) + " : price " +
+                                    Boolean.toString(flag[6]) + " : quantity " +
+                                    Boolean.toString(flag[7]) + " : unit ");
                 }
             }
         });
@@ -479,9 +474,15 @@ public class AddProductDialog {
                     if (result.getData().getClipData() != null) {
                         int i = result.getData().getClipData().getItemCount();
                         for (int n = 0; n < i; n++) {
-                            Uri imageUri = result.getData().getClipData().getItemAt(n).getUri();
-                            arrayOfImages.add(imageUri.toString());
-
+//                            Uri imageUri = result.getData().getClipData().getItemAt(n).getUri();
+//                            arrayOfImages.add(imageUri.toString());
+                            if (arrayOfImages.size() < 3) {
+                                Uri imageUri = result.getData().getClipData().getItemAt(n).getUri();
+                                arrayOfImages.add(n, imageUri.toString());
+                            } else {
+                                AuthValidation.failedToast(activity, "You reached the maximum upload.").show();
+                                break;
+                            }
                         }
                         Log.d("GL", "aDD mORE");
 
@@ -599,17 +600,20 @@ public class AddProductDialog {
     }
 
     public void addFromGallery() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-        intent.setAction(Intent.ACTION_GET_CONTENT);
+        if (arrayOfImages.size() < 3) {
+            Intent intent = new Intent();
+            intent.setType("image/*");
+            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+            intent.setAction(Intent.ACTION_GET_CONTENT);
 
-        if (intent.resolveActivity(activity.getApplicationContext().getPackageManager()) != null) {
-            selectFromGallery.launch(Intent.createChooser(intent, "Select Image(s)"));
+            if (intent.resolveActivity(activity.getApplicationContext().getPackageManager()) != null) {
+                selectFromGallery.launch(Intent.createChooser(intent, "Select Image(s)"));
+            } else {
+                AuthValidation.failedToast(activity.getBaseContext(), "Unable to use gallery").show();
+            }
         } else {
-            AuthValidation.failedToast(activity.getBaseContext(), "Unable to use gallery").show();
+            AuthValidation.failedToast(activity, "Upload photos must not exceed to 3 images.").show();
         }
-
     }
 
     public class ImageViewPagerAdapter extends RecyclerView.Adapter<AddProductDialog.ImageViewPagerAdapter.SlideViewHolder> {
@@ -669,7 +673,7 @@ public class AddProductDialog {
         void addOnDocumentAddedListener(boolean isAdded);
     }
 
-    public interface AddProductImageCallBack{
+    public interface AddProductImageCallBack {
         void addOnImageSizeListener(int imagesSize);
     }
 

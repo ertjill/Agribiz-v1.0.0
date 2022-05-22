@@ -130,7 +130,6 @@ public class Store extends Fragment {
             swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {
-                    Toast.makeText(getContext(), "Refreshing...", Toast.LENGTH_SHORT).show();
                     displayTopProducts();
                     swipeRefreshLayout.setRefreshing(false);
                 }
@@ -349,6 +348,7 @@ public class Store extends Fragment {
                             productGridAdapter.notifyDataSetChanged();
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
+                            productGridAdapter.notifyDataSetChanged();
                         }
                     }
                 });

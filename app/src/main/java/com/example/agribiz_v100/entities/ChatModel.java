@@ -12,6 +12,14 @@ public class ChatModel implements Serializable {
     Timestamp chatDate;
     boolean chatSeen = false;
 
+    public boolean isChatSeen() {
+        return chatSeen;
+    }
+
+    public void setChatSeen(boolean chatSeen) {
+        this.chatSeen = chatSeen;
+    }
+
     public ChatModel() {
 
     }

@@ -14,11 +14,14 @@ import android.widget.ImageButton;
 
 import com.example.agribiz_v100.adapter.MessageAdapter;
 import com.example.agribiz_v100.entities.ChatModel;
+import com.example.agribiz_v100.services.AuthManagement;
 import com.example.agribiz_v100.services.ChatManagement;
 import com.example.agribiz_v100.services.ProfileManagement;
 import com.example.agribiz_v100.validation.AuthValidation;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
@@ -83,6 +86,7 @@ public class ChatActivity extends AppCompatActivity {
 
                         chatModel.setChatId(user.getUid()+simpleDateFormat.format(dateNow));
                         chatModel.setChatMessage(msg);
+                        chatModel.setChatSeen(false);
                         chatModel.setChatSenderUserId(user.getUid());
                         chatModel.setChatDate(new Timestamp(dateNow));
                         chatModelList.add(chatModel);
@@ -91,15 +95,18 @@ public class ChatActivity extends AppCompatActivity {
                                     @Override
                                     public void onSuccess(Void unused) {
 //                                        AuthValidation.successToast(ChatActivity.this,"Message Sent").show();
-                                        send_ib.setEnabled(true);
                                         message_et.setText("");
-
                                     }
                                 }).addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
                                         Log.d("ids",e.getLocalizedMessage());
                                         e.getStackTrace();
+                                    }
+                                }).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        send_ib.setEnabled(true);
                                     }
                                 });
                     }
@@ -112,6 +119,8 @@ public class ChatActivity extends AppCompatActivity {
                     topAppBar.setTitle(name.substring(0,name.length()-2));
                 }
             });
+
+            ChatManagement.tagMessagesSeen(user.getUid(),anotherUserId);
 
         }
     }
@@ -127,6 +136,7 @@ public class ChatActivity extends AppCompatActivity {
                         chatModelList.add(ds.toObject(ChatModel.class));
                     }
                     messageAdapter.notifyDataSetChanged();
+                    msgRecyclerView.scrollToPosition(chatModelList.size()-1);
                 }
             }
         });
@@ -136,11 +146,13 @@ public class ChatActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         getMessages();
+        AuthManagement.setUserStatus(user.getUid(),"active");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         registration.remove();
+        AuthManagement.setUserStatus(user.getUid(),"inactive");
     }
 }

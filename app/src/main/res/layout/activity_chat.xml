@@ -45,13 +45,13 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@color/white"
-        android:padding="25dp">
+        android:padding="12dp">
 
         <EditText
             android:id="@+id/message_et"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="15dp"
+            android:layout_marginRight="10dp"
             android:layout_toStartOf="@+id/send_ib"
             android:background="@drawable/whitebackground_roundedcorner"
             android:backgroundTint="@color/highlight_back"

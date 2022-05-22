@@ -74,11 +74,11 @@ public class MyProduct extends Fragment {
         farmerProductAdapter = new FarmerProductAdapter(getContext());
 
         addProductDialog.buildDialog();
-
+        no_product_ll = view.findViewById(R.id.no_product_ll);
         farmer_product_lv = view.findViewById(R.id.farmer_product_lv);
         farmer_product_lv.setAdapter(farmerProductAdapter);
+        farmer_product_lv.setEmptyView(no_product_ll);
 
-        no_product_ll = view.findViewById(R.id.no_product_ll);
         add_product_ib.setOnClickListener(v -> {
             Log.d(TAG, "hELLO BTN");
             addProductDialog.showDialog();

@@ -315,7 +315,7 @@ public class AddBarterDialog {
                 Date dateNow = new Date();
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("ddMMyyyyHHmmss");
                 Timestamp timestamp = new Timestamp(dateNow);
-
+                
                 String userType = String.valueOf(user.getDisplayName().charAt(user.getDisplayName().length() - 1));
 
                 if (userType.equals("f")) {

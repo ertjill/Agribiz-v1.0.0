@@ -4,16 +4,16 @@ import java.io.Serializable;
 import java.util.List;
 
 public class ChatThreadUserModel implements Serializable {
-    private String userEmail;
-    private String userID;
-    private String userImage;
-    private String userDisplayName;
-    private String userFirstName;
-    private String userLastName;
-    private String userMiddleName;
-    private String userPhoneNumber;
-    private String userType;
-    private String userStatus;
+    private String userEmail="";
+    private String userID="";
+    private String userImage="";
+    private String userDisplayName="";
+    private String userFirstName="";
+    private String userLastName="";
+    private String userMiddleName="";
+    private String userPhoneNumber="";
+    private String userType="";
+    private String userStatus="";
 
     public String getUserStatus() {
         return userStatus;
