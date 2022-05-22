@@ -43,16 +43,18 @@
                 />
         </com.google.android.material.card.MaterialCardView>
     </RelativeLayout>
+
     <TextView
         android:id="@+id/farmer"
         android:layout_width="60dp"
-        android:layout_height="24dp"
+        android:layout_height="15dp"
         android:layout_below="@+id/top_rl"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="6dp"
+        android:gravity="center"
+        android:layout_marginTop="5dp"
         android:fontFamily="@font/montserrat_regular"
         android:lineHeight="12dp"
         android:maxLines="2"
+        android:layout_marginStart="-5dp"
         android:singleLine="true"
         android:text="Farmer Farmer"
         android:textColor="@color/brown"
