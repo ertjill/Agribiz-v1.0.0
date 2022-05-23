@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'com.google.gms.google-services'
 }
+apply plugin: 'kotlin-android'
 
 android {
     compileSdk 31
@@ -59,10 +60,14 @@ dependencies {
     // image upload api
     api 'com.theartofdev.edmodo:android-image-cropper:2.8.+'
     implementation 'com.squareup.picasso:picasso:2.5.2'
+    //paypal sdk
+    implementation 'com.paypal.checkout:android-sdk:0.2.0'
 
     //google map sdk
     implementation 'com.google.android.gms:play-services-maps:18.0.2'
 
     //
     implementation 'com.google.android.material:material:1.2.0-alpha02'
+    implementation "androidx.core:core-ktx:+"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }

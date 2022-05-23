@@ -19,6 +19,9 @@
         android:theme="@style/Theme.Agribizv100"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".customer.DonationActivity"
+            android:exported="false" />
+        <activity
             android:name=".ChatActivity"
             android:exported="false" />
         <activity
@@ -86,6 +89,11 @@
             android:alwaysRetainTaskState="true"
             android:exported="false"
             android:launchMode="singleInstance" /> <!-- Misc -->
+        <receiver
+            android:name = ".NotificationBroadcastReceiver"
+            android:enabled = "true"
+            android:exported = "true" >
+        </receiver><!--   Notification receiver     -->
         <activity
             android:name=".SplashActivity"
             android:exported="true">
@@ -101,6 +109,12 @@
         <activity
             android:name=".OnBoard"
             android:exported="true" /> <!-- APIs -->
+        <activity android:name="com.paypal.pyplcheckout.home.view.activities.PYPLInitiateCheckoutActivity"
+            android:exported="true"
+            />
+        <activity android:name="com.paypal.openid.RedirectUriReceiverActivity"
+            android:exported="true"
+            />
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />

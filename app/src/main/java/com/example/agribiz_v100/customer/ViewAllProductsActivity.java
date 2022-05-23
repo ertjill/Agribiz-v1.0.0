@@ -81,7 +81,6 @@ public class ViewAllProductsActivity extends AppCompatActivity {
     View ChildView;
     List<String> search;
     int RecyclerViewItemPosition;
-    private FirebaseFirestore firestore;
     ProductGridAdapter productGridAdapter;
     boolean isLoading = false;
     SwipeRefreshLayout swipeRefreshLayout;
@@ -97,7 +96,6 @@ public class ViewAllProductsActivity extends AppCompatActivity {
 //        Log.d(TAG, "onCreate ViewAllProductsActivity");
 
         setContentView(R.layout.activity_view_all_products);
-        firestore = FirebaseFirestore.getInstance();
         no_product_ll = findViewById(R.id.no_product_ll);
         swipeRefreshLayout = findViewById(R.id.refreshLayout);
         searchProduct_et = findViewById(R.id.searchProduct_et);

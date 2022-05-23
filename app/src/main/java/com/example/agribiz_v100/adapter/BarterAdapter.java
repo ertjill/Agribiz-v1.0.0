@@ -87,7 +87,8 @@ public class BarterAdapter extends BaseAdapter {
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        String name = documentSnapshot.getString("userDisplayName");
+                        String name = documentSnapshot.getString("" +
+                                "");
                         String address = "";
                         Map<String, String> map = new HashMap<>();
                         if (name.charAt(name.length() - 1) == 'c') {

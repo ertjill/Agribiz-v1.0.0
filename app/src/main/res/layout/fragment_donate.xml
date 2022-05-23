@@ -87,7 +87,6 @@
         android:layout_width="match_parent"
         android:layout_marginTop="15dp"
         android:layout_height="425dp"
-        android:divider="null"
         android:dividerHeight="1dp"/>
 
     <TextView

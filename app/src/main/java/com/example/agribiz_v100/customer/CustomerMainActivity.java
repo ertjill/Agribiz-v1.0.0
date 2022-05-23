@@ -3,6 +3,7 @@ package com.example.agribiz_v100.customer;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
@@ -14,6 +15,8 @@ import androidx.viewpager2.widget.ViewPager2;
 import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.PorterDuff;
 import android.os.Build;
@@ -26,16 +29,20 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.agribiz_v100.ChatActivity;
 import com.example.agribiz_v100.Firebase;
 import com.example.agribiz_v100.FirebaseHelper;
+import com.example.agribiz_v100.NotificationBroadcastReceiver;
 import com.example.agribiz_v100.OnBoard;
 import com.example.agribiz_v100.OnBoardSlide;
 import com.example.agribiz_v100.ProductItem;
 import com.example.agribiz_v100.R;
 import com.example.agribiz_v100.entities.ChatModel;
+import com.example.agribiz_v100.entities.ProductModel;
 import com.example.agribiz_v100.services.AuthManagement;
 import com.example.agribiz_v100.services.ChatManagement;
 import com.example.agribiz_v100.services.NotificationManagement;
+import com.example.agribiz_v100.services.ProductManagement;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -87,6 +94,35 @@ public class CustomerMainActivity extends AppCompatActivity implements Serializa
         Log.d(TAG, "onResume..." + basketProductItems.size());
     }
 
+    public void getNotifiedForNewProduct() {
+        ProductManagement.getProductsQuery().addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                if (value != null) {
+                    for (DocumentChange dc : value.getDocumentChanges()) {
+
+                        switch (dc.getType()) {
+                            case ADDED:
+                                Log.d(TAG, "New Chat: " + dc.getDocument().getData());
+                                ProductModel productModel = dc.getDocument().toObject(ProductModel.class);
+                                Intent intent = new Intent(CustomerMainActivity.this, ProductView.class);
+                                intent.putExtra("item",(Parcelable) productModel);
+                                NotificationManagement.newProductNotification(CustomerMainActivity.this, "New Product Added", dc.getDocument().getString("productName"),intent);
+                                break;
+                            case MODIFIED:
+                                Log.d(TAG, "Modified Chat: " + dc.getDocument().getData());
+                                break;
+                            case REMOVED:
+                                Log.d(TAG, "Removed Chat: " + dc.getDocument().getData());
+                                break;
+                        }
+
+                    }
+                }
+            }
+        });
+    }
+
     public SparseArray<ProductItem> getProduct(SparseArray<ProductItem> items) {
         Log.d(TAG, items.size() + "");
         return items;
@@ -132,13 +168,12 @@ public class CustomerMainActivity extends AppCompatActivity implements Serializa
         Log.d(TAG, "onPause...");
     }
 
-
-
     @SuppressLint("ResourceAsColor")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_main);
+        getNotifiedForNewProduct();
         NotificationManagement.createNotificationChannel(this);
         Log.d(TAG, "onCreate...");
         firebaseHelper = new FirebaseHelper(this);
@@ -194,7 +229,7 @@ public class CustomerMainActivity extends AppCompatActivity implements Serializa
                                 chats.addSnapshotListener(new EventListener<QuerySnapshot>() {
                                     @Override
                                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                                        if (value !=null) {
+                                        if (value != null) {
                                             for (DocumentChange dc : value.getDocumentChanges()) {
                                                 if (!dc.getDocument().getString("chatSenderUserId").equalsIgnoreCase(user.getUid()) && !dc.getDocument().getBoolean("chatSeen"))
                                                     switch (dc.getType()) {

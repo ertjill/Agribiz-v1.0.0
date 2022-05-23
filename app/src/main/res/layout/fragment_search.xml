@@ -10,8 +10,7 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/topAppBar_cl"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
+        android:layout_height="wrap_content">
 
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
@@ -25,18 +24,16 @@
                 android:layout_height="?attr/actionBarSize"
                 android:background="@color/white"
                 app:navigationIcon="@drawable/ic_outline_filter_alt_24"
-                app:title=""
-                app:titleTextColor="@color/brown" >
+                app:titleTextColor="@color/brown">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="All"
                     android:fontFamily="@font/montserrat_regular"
+                    android:text="All"
                     android:textColor="@color/brown"
-                    android:textSize="18sp"
                     android:textFontWeight="600"
-                    />
+                    android:textSize="18sp" />
 
             </com.google.android.material.appbar.MaterialToolbar>
 
@@ -44,6 +41,17 @@
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/filter_category_cg"
+        android:layout_width="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:padding="5dp"
+
+        android:layout_marginTop="5dp"
+        android:layout_below="@+id/searchProduct_et"
+        android:layout_height="wrap_content">
+
+    </com.google.android.material.chip.ChipGroup>
 
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/searchProduct_et"
@@ -66,105 +74,40 @@
         android:textColorHint="@color/army_green"
         android:textSize="16sp" />
 
-    <LinearLayout
-        android:id="@+id/typing_ll"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/searchProduct_et"
-        android:layout_marginTop="16dp"
-        android:orientation="vertical"
-        android:padding="10dp"
-        android:layout_marginLeft="10dp"
-        android:visibility="gone">
+<!--    <LinearLayout-->
+<!--        android:id="@+id/searching_ll"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_centerInParent="true"-->
+<!--        android:gravity="center"-->
+<!--        android:orientation="vertical"-->
+<!--        android:visibility="visible">-->
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/montserrat_bold"
-            android:text="Trending searches"
-            android:textColor="@color/brown"
-            android:textSize="18sp" />
+<!--        <ProgressBar-->
+<!--            android:layout_width="60dp"-->
+<!--            android:layout_height="60dp"-->
+<!--            android:indeterminate="true"-->
+<!--            android:indeterminateTint="@color/yellow_orange" />-->
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="10dp"-->
+<!--            android:fontFamily="@font/montserrat_semibold"-->
+<!--            android:text="Search A Product"-->
+<!--            android:textColor="@color/yellow_orange"-->
+<!--            android:textSize="18sp" />-->
 
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_baseline_trending_up_24" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:fontFamily="@font/montserrat_regular"
-                android:text="fresh tomato"
-                android:textColor="@color/brown"
-                android:textFontWeight="400"
-                android:textSize="13sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_baseline_trending_up_24" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:fontFamily="@font/montserrat_regular"
-                android:text="arbor acres boiler"
-                android:textColor="@color/brown"
-                android:textFontWeight="400"
-                android:textSize="13sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_baseline_trending_up_24" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:fontFamily="@font/montserrat_regular"
-                android:text="bmeg feeds"
-                android:textColor="@color/brown"
-                android:textFontWeight="400"
-                android:textSize="13sp" />
-        </LinearLayout>
-    </LinearLayout>
+<!--    </LinearLayout>-->
 
     <GridView
         android:id="@+id/viewAll_gv"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_below="@+id/searchProduct_et"
-        android:layout_marginLeft="17dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginRight="17dp"
+        android:layout_below="@+id/filter_category_cg"
+        android:layout_marginTop="5dp"
         android:numColumns="2"
-        android:padding="10dp"
+        android:padding="5dp"
         android:scrollbars="none"
         android:visibility="visible" />
 

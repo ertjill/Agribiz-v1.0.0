@@ -133,6 +133,9 @@ public class ProductView extends AppCompatActivity {
         topAppBar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClassName(getApplicationContext(), "com.example.agribiz_v100.customer.CustomerMainActivity");
+                startActivity(intent);
                 finish();
             }
         });
@@ -143,11 +146,11 @@ public class ProductView extends AppCompatActivity {
         menuItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                ChatModel cm = new ChatModel();
-                cm.setChatSenderUserId("M7DoQujvc3XHsqA9mowKM2Ws0sc2");
-                cm.setChatDate(new Timestamp(new Date()));
-                cm.setChatMessage("Hello, this is jack the one who bought alot of item from you. May I ask how");
-                NotificationManagement.getNewMessageNotification(ProductView.this, cm, 1);
+//                ChatModel cm = new ChatModel();
+//                cm.setChatSenderUserId("M7DoQujvc3XHsqA9mowKM2Ws0sc2");
+//                cm.setChatDate(new Timestamp(new Date()));
+//                cm.setChatMessage("Hello, this is jack the one who bought alot of item from you. May I ask how");
+//                NotificationManagement.getNewMessageNotification(ProductView.this, cm, 1);
                 return false;
             }
         });

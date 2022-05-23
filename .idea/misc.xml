@@ -43,6 +43,7 @@
         <entry key="..\:/Emerson Agribiz/app/src/main/res/layout/activity_bartered_item_view.xml" value="0.25" />
         <entry key="..\:/Emerson Agribiz/app/src/main/res/layout/activity_chat.xml" value="0.33" />
         <entry key="..\:/Emerson Agribiz/app/src/main/res/layout/activity_customer_main.xml" value="0.25" />
+        <entry key="..\:/Emerson Agribiz/app/src/main/res/layout/activity_donation.xml" value="0.11500641299700727" />
         <entry key="..\:/Emerson Agribiz/app/src/main/res/layout/activity_edit_profile.xml" value="0.15185185185185185" />
         <entry key="..\:/Emerson Agribiz/app/src/main/res/layout/activity_farmer_main.xml" value="0.24054054054054055" />
         <entry key="..\:/Emerson Agribiz/app/src/main/res/layout/activity_login.xml" value="0.25" />
@@ -50,6 +51,7 @@
         <entry key="..\:/Emerson Agribiz/app/src/main/res/layout/activity_messages.xml" value="0.25" />
         <entry key="..\:/Emerson Agribiz/app/src/main/res/layout/activity_my_addresses.xml" value="0.24722222222222223" />
         <entry key="..\:/Emerson Agribiz/app/src/main/res/layout/activity_orders.xml" value="0.5" />
+        <entry key="..\:/Emerson Agribiz/app/src/main/res/layout/activity_pay_pal.xml" value="0.21547669944420692" />
         <entry key="..\:/Emerson Agribiz/app/src/main/res/layout/activity_product_view.xml" value="0.5045454545454545" />
         <entry key="..\:/Emerson Agribiz/app/src/main/res/layout/activity_profile.xml" value="0.18468468468468469" />
         <entry key="..\:/Emerson Agribiz/app/src/main/res/layout/activity_signup.xml" value="0.33" />
@@ -89,7 +91,7 @@
         <entry key="..\:/Emerson Agribiz/app/src/main/res/layout/fragment_barter_sent.xml" value="0.22830269345874304" />
         <entry key="..\:/Emerson Agribiz/app/src/main/res/layout/fragment_basket.xml" value="0.33" />
         <entry key="..\:/Emerson Agribiz/app/src/main/res/layout/fragment_completed_order.xml" value="0.21666666666666667" />
-        <entry key="..\:/Emerson Agribiz/app/src/main/res/layout/fragment_donate.xml" value="0.25" />
+        <entry key="..\:/Emerson Agribiz/app/src/main/res/layout/fragment_donate.xml" value="0.18" />
         <entry key="..\:/Emerson Agribiz/app/src/main/res/layout/fragment_farmer_hub_card.xml" value="0.5" />
         <entry key="..\:/Emerson Agribiz/app/src/main/res/layout/fragment_farmer_hub_card2.xml" value="0.5" />
         <entry key="..\:/Emerson Agribiz/app/src/main/res/layout/fragment_farmer_profile.xml" value="0.23733333333333334" />

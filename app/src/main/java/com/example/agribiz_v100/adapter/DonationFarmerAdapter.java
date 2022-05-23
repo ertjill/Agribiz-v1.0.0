@@ -3,6 +3,7 @@ package com.example.agribiz_v100.adapter;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.agribiz_v100.R;
 import com.example.agribiz_v100.User;
+import com.example.agribiz_v100.customer.DonationActivity;
+import com.example.agribiz_v100.dialog.DonateFarmerDialog;
 import com.example.agribiz_v100.entities.ChatThreadUserModel;
 import com.example.agribiz_v100.entities.FarmerUserModel;
 import com.example.agribiz_v100.validation.AuthValidation;
@@ -61,7 +64,7 @@ public class DonationFarmerAdapter extends BaseAdapter {
                 userModels.get(position).getUserLocation().getUserMunicipality()+", "+
                 userModels.get(position).getUserLocation().getUserProvince()+", "+
                 userModels.get(position).getUserLocation().getUserZipCode();
-        user_info_tv.setText("");
+        user_info_tv.setText(info);
 
         donate_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,7 +77,9 @@ public class DonationFarmerAdapter extends BaseAdapter {
                 alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+
                         AuthValidation.successToast(context,"Donating").show();
+//                        context.startActivity(new Intent(context,DonationActivity.class));
                     }
                 });
                 alert.show();
