@@ -169,6 +169,7 @@
                 android:layout_marginEnd="10dp">
 
                 <ImageView
+                    android:id="@+id/chat_iv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_bi_chat_fill" />

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import com.bumptech.glide.Glide;
+import com.example.agribiz_v100.ChatActivity;
 import com.example.agribiz_v100.R;
 import com.example.agribiz_v100.entities.BarterModel;
 import com.example.agribiz_v100.services.BarterManagement;
@@ -24,6 +26,8 @@ import com.example.agribiz_v100.validation.AuthValidation;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.chip.Chip;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -68,11 +72,14 @@ public class NotOpenBarterAdapter extends BaseAdapter {
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        ImageView user_image_iv, barterImage_iv;
+        ImageView user_image_iv, barterImage_iv, chat_iv;
         Chip barterStatus_chip;
         TextView user_name, item_name_tv, barterCondition_tv, barterDesc_tv, barterQuantity_tv, address_tv;
+        ImageView user_image_iv1, barterImage_iv1;
+        TextView user_name1, item_name_tv1, barterCondition_tv1, barterDesc_tv1, barterQuantity_tv1, address_tv1;
         Button cancel_btn, swap_btn;
 
+        chat_iv = view.findViewById(R.id.chat_iv);
         user_image_iv = view.findViewById(R.id.user_image_iv);
         barterImage_iv = view.findViewById(R.id.barterImage_iv);
         barterStatus_chip = view.findViewById(R.id.barterStatus_chip);
@@ -84,6 +91,85 @@ public class NotOpenBarterAdapter extends BaseAdapter {
         address_tv = view.findViewById(R.id.address_tv);
         cancel_btn = view.findViewById(R.id.cancel_btn);
         swap_btn = view.findViewById(R.id.swap_btn);
+
+
+        user_image_iv1 = view.findViewById(R.id.user_image_iv1);
+        barterImage_iv1 = view.findViewById(R.id.barterImage_iv1);
+        user_name1 = view.findViewById(R.id.user_name1);
+        item_name_tv1 = view.findViewById(R.id.item_name_tv1);
+        barterCondition_tv1 = view.findViewById(R.id.barterCondition_tv1);
+        barterDesc_tv1 = view.findViewById(R.id.barterDesc_tv1);
+        barterQuantity_tv1 = view.findViewById(R.id.barterQuantity_tv1);
+        address_tv1 = view.findViewById(R.id.address_tv1);
+
+        BarterManagement.getTwoItemsBartered(barterItems.get(pos).getBarterMatchId()).addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for (DocumentSnapshot ds : queryDocumentSnapshots) {
+                    if (!ds.getString("barterType").equals(barterItems.get(pos).getBarterType())) {
+                        BarterModel bm = ds.toObject(BarterModel.class);
+                        Glide.with(context)
+                                .load(bm.getBarterImage().get(0))
+                                .into(barterImage_iv1);
+                        item_name_tv1.setText(barterItems.get(pos).getBarterName());
+                        barterCondition_tv1.setText("Item Condition: " + bm.getBarterCondition());
+                        barterDesc_tv1.setText("Description: " + bm.getBarterDescription());
+                        barterQuantity_tv1.setText("Quantity: " + bm.getBarterQuantity() + " " + bm.getBarterUnit());
+                        ProfileManagement.getUserProfile(bm.getBarterUserId()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                String name = documentSnapshot.getString("userDisplayName");
+                                String address = "";
+                                Map<String, String> map = new HashMap<>();
+                                if (name.charAt(name.length() - 1) == 'c') {
+                                    List<Object> loc = (List<Object>) documentSnapshot.getData().get("userLocation");
+                                    map = (Map<String, String>) loc.get(0);
+                                    address = name.substring(0, name.length() - 2) + " | "
+                                            + documentSnapshot.getString("userPhoneNumber") + "\n"
+                                            + map.get("userSpecificAddress") + ", " +
+                                            map.get("userBarangay") + ", " +
+                                            map.get("userMunicipality") + ", " +
+                                            map.get("userProvince") + "\n" +
+                                            map.get("userRegion") + ", " +
+                                            map.get("userZipCode");
+                                    user_name1.setText(name.substring(0, name.length() - 2));
+                                } else {
+                                    map = (Map<String, String>) documentSnapshot.get("userLocation");
+                                    address = name.substring(0, name.length() - 2) + " | "
+                                            + documentSnapshot.getString("userPhoneNumber") + "\n"
+                                            + map.get("userSpecificAddress") + ", " +
+                                            map.get("userBarangay") + ", " +
+                                            map.get("userMunicipality") + ", " +
+                                            map.get("userProvince") + "\n" +
+                                            map.get("userRegion") + ", " +
+                                            map.get("userZipCode");
+                                    user_name1.setText(name.substring(0, name.length() - 2));
+                                }
+
+
+                                Glide.with(context).load(documentSnapshot.getString("userImage"))
+                                        .into(user_image_iv1);
+
+                                address_tv1.setText(address);
+
+                            }
+                        });
+
+                        chat_iv.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Intent intent = new Intent(context, ChatActivity.class);
+                                intent.putExtra("userId", ds.getString("barterUserId"));
+                                context.startActivity(intent);
+
+                            }
+                        });
+
+                    }
+                }
+            }
+        });
+
 
         Glide.with(context)
                 .load(barterItems.get(pos).getBarterImage().get(0))
@@ -99,11 +185,10 @@ public class NotOpenBarterAdapter extends BaseAdapter {
             swap_btn.setVisibility(View.GONE);
         } else if (barterItems.get(pos).getBarterStatus().equals("Swapping") && barterItems.get(pos).getBarterType().equals("f")) {
             swap_btn.setVisibility(View.GONE);
-        }else if(barterItems.get(pos).getBarterStatus().equals("Swapping") && barterItems.get(pos).getBarterType().equals("c")){
+        } else if (barterItems.get(pos).getBarterStatus().equals("Swapping") && barterItems.get(pos).getBarterType().equals("c")) {
             swap_btn.setVisibility(View.VISIBLE);
             swap_btn.setText("Swapped");
-        }
-        else if(barterItems.get(pos).getBarterStatus().equals("Pending")&&barterItems.get(pos).getBarterType().equals("c")){
+        } else if (barterItems.get(pos).getBarterStatus().equals("Pending") && barterItems.get(pos).getBarterType().equals("c")) {
             swap_btn.setVisibility(View.GONE);
         }
 
@@ -202,8 +287,7 @@ public class NotOpenBarterAdapter extends BaseAdapter {
 
         });
         swap_btn.setOnClickListener(v -> {
-            if(barterItems.get(pos).getBarterStatus().equals("Pending"))
-            {
+            if (barterItems.get(pos).getBarterStatus().equals("Pending")) {
                 AlertDialog.Builder alert = new AlertDialog.Builder(context);
                 alert.setTitle("To Swap");
                 alert.setMessage("Are you sure to tag this request to swap?");
@@ -218,9 +302,9 @@ public class NotOpenBarterAdapter extends BaseAdapter {
                         db.collection("barters").whereEqualTo("barterMatchId", barterItems.get(pos).getBarterMatchId()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                             @Override
                             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                Log.d("hr","hihihihi inside onSucess");
+                                Log.d("hr", "hihihihi inside onSucess");
                                 for (DocumentSnapshot ds : queryDocumentSnapshots) {
-                                    Log.d("hr","hihihihi inside loop");
+                                    Log.d("hr", "hihihihi inside loop");
                                     if (ds.getString("barterType").equals("c"))
                                         BarterManagement.swapBarteredItem(context, barterItems.get(pos), ds.toObject(BarterModel.class));
                                 }
@@ -242,8 +326,7 @@ public class NotOpenBarterAdapter extends BaseAdapter {
                     }
                 });
                 alert.show();
-            }
-            else if(barterItems.get(pos).getBarterStatus().equals("Swapping") && barterItems.get(pos).getBarterType().equals("c")){
+            } else if (barterItems.get(pos).getBarterStatus().equals("Swapping") && barterItems.get(pos).getBarterType().equals("c")) {
                 AlertDialog.Builder alert = new AlertDialog.Builder(context);
                 alert.setTitle("Swapped");
                 alert.setMessage("Are you sure to tag this request as Swapped?");
@@ -259,9 +342,8 @@ public class NotOpenBarterAdapter extends BaseAdapter {
                             @Override
                             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                                 for (DocumentSnapshot ds : queryDocumentSnapshots) {
-                                    if (ds.getString("barterType").equals("f"))
-                                    {
-                                        BarterManagement.swappedBarteredItem(context,ds.toObject(BarterModel.class),barterItems.get(pos));
+                                    if (ds.getString("barterType").equals("f")) {
+                                        BarterManagement.swappedBarteredItem(context, ds.toObject(BarterModel.class), barterItems.get(pos));
                                     }
                                 }
                             }

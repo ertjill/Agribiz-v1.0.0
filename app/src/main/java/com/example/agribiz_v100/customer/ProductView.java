@@ -80,20 +80,6 @@ public class ProductView extends AppCompatActivity {
     UserModel userModel;
     MenuItem menuItem;
 
-
-    public void basketClick() {
-        Toast.makeText(this, "Hahahaha", Toast.LENGTH_SHORT).show();
-        NotificationCompat.Builder notif = new NotificationCompat.Builder(this, "Ert")
-                .setSmallIcon(R.drawable.agribiz_logo_green)
-                .setContentTitle("First Notification")
-                .setContentText("I notify you so you know")
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-
-        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(this);
-        notificationManagerCompat.notify(100, notif.build());
-
-    }
-
     public void getNoBasketItems() {
         itemsCount = 0;
         BasketManagement.getBaskitItems(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -130,6 +116,7 @@ public class ProductView extends AppCompatActivity {
         product_descriptio_tv = findViewById(R.id.product_descriptio_tv);
         category_tv = findViewById(R.id.category_tv);
         no_user_rated_tv=findViewById(R.id.no_user_rated_tv);
+
         topAppBar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -139,8 +126,6 @@ public class ProductView extends AppCompatActivity {
                 finish();
             }
         });
-
-
 
         menuItem = topAppBar.getMenu().findItem(R.id.basket_menu);
         menuItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
@@ -243,7 +228,10 @@ public class ProductView extends AppCompatActivity {
             close.setOnClickListener(v2 -> buyNow.dismiss());
 
             buy_now_btn.setOnClickListener(v3 -> {
+
                 Intent i = new Intent(this, BuyNowActivity.class);
+                i.putExtra("productId",farmerProductItem.getProductId());
+                i.putExtra("productBasketQuantity",Integer.parseInt(prodQuantity.getText().toString()));
                 startActivity(i);
             });
 

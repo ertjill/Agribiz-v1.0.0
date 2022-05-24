@@ -95,7 +95,7 @@ public class AgrovitMainActivity extends AppCompatActivity {
                 case 2:
                     return new Finance();
                 case 3:
-                    return new FarmerProfile();
+                    return new AgrovitProfileFragment();
                 default:
                     return null;
 

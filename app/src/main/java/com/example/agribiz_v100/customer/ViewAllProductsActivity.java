@@ -41,6 +41,7 @@ import com.bumptech.glide.Glide;
 import com.example.agribiz_v100.FirebaseHelper;
 import com.example.agribiz_v100.R;
 import com.example.agribiz_v100.services.ProductManagement;
+import com.example.agribiz_v100.services.ProfileManagement;
 import com.example.agribiz_v100.validation.AuthValidation;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -361,6 +362,15 @@ public class ViewAllProductsActivity extends AppCompatActivity {
             holder.productName.setText(productItems.get(position).getProductName());
             holder.productUnit.setText("(per " + productItems.get(position).getProductQuantity() + " " + productItems.get(position).getProductUnit() + ")");
             holder.productPrice.setText("Php " + productItems.get(position).getProductPrice());
+
+            ProfileManagement.getUserProfile(productItems.get(position).getProductUserId()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    if(documentSnapshot.exists())
+                        holder.product_location_tv.setText(((Map<String,String >)documentSnapshot.getData().get("userLocation")).get("userMunicipality"));
+                }
+            });
         }
 
         @Override
@@ -373,14 +383,14 @@ public class ViewAllProductsActivity extends AppCompatActivity {
             TextView productName;
             TextView productUnit;
             TextView productPrice;
-
+            TextView product_location_tv;
             public ViewHolder(@NonNull View itemView) {
                 super(itemView);
                 imageView = itemView.findViewById(R.id.product_iv);
                 productName = itemView.findViewById(R.id.product_name_tv);
                 productUnit = itemView.findViewById(R.id.productUnit_tv);
                 productPrice = itemView.findViewById(R.id.productPrice_tv);
-
+                product_location_tv = itemView.findViewById(R.id.product_location_tv);
 
             }
         }

@@ -87,34 +87,35 @@ public class BarterAdapter extends BaseAdapter {
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        String name = documentSnapshot.getString("" +
-                                "");
-                        String address = "";
-                        Map<String, String> map = new HashMap<>();
-                        if (name.charAt(name.length() - 1) == 'c') {
-                            List<Object> loc = (List<Object>) documentSnapshot.getData().get("userLocation");
-                            map = (Map<String, String>) loc.get(0);
-                            address = name.substring(0, name.length() - 2) + " | "
-                                    + documentSnapshot.getString("userPhoneNumber") + "\n"
-                                    + map.get("userSpecificAddress") + ", " +
-                                    map.get("userBarangay") + ", " +
-                                    map.get("userMunicipality") + ", " +
-                                    map.get("userProvince") + "\n" +
-                                    map.get("userRegion") + ", " +
-                                    map.get("userZipCode");
-                        } else {
-                            map = (Map<String, String>) documentSnapshot.get("userLocation");
-                            address = name.substring(0, name.length() - 2) + " | "
-                                    + documentSnapshot.getString("userPhoneNumber") + "\n"
-                                    + map.get("userSpecificAddress") + ", " +
-                                    map.get("userBarangay") + ", " +
-                                    map.get("userMunicipality") + ", " +
-                                    map.get("userProvince") + "\n" +
-                                    map.get("userRegion") + ", " +
-                                    map.get("userZipCode");
-                        }
+                       if(documentSnapshot.exists()){
+                            String name = documentSnapshot.getString("userDisplayName");
+                            String address = "";
+                            Map<String, String> map = new HashMap<>();
+                            if (name.charAt(name.length() - 1) == 'c') {
+                                List<Object> loc = (List<Object>) documentSnapshot.getData().get("userLocation");
+                                map = (Map<String, String>) loc.get(0);
+                                address = name.substring(0, name.length() - 2) + " | "
+                                        + documentSnapshot.getString("userPhoneNumber") + "\n"
+                                        + map.get("userSpecificAddress") + ", " +
+                                        map.get("userBarangay") + ", " +
+                                        map.get("userMunicipality") + ", " +
+                                        map.get("userProvince") + "\n" +
+                                        map.get("userRegion") + ", " +
+                                        map.get("userZipCode");
+                            } else {
+                                map = (Map<String, String>) documentSnapshot.get("userLocation");
+                                address = name.substring(0, name.length() - 2) + " | "
+                                        + documentSnapshot.getString("userPhoneNumber") + "\n"
+                                        + map.get("userSpecificAddress") + ", " +
+                                        map.get("userBarangay") + ", " +
+                                        map.get("userMunicipality") + ", " +
+                                        map.get("userProvince") + "\n" +
+                                        map.get("userRegion") + ", " +
+                                        map.get("userZipCode");
+                            }
 
-                        address_tv.setText(address);
+                            address_tv.setText(address);
+                        }
                     }
                 });
 

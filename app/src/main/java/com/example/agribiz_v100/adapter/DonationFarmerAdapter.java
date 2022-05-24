@@ -78,7 +78,7 @@ public class DonationFarmerAdapter extends BaseAdapter {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
-                        AuthValidation.successToast(context,"Donating").show();
+                        AuthValidation.failedToast(context,"Under development").show();
 //                        context.startActivity(new Intent(context,DonationActivity.class));
                     }
                 });

@@ -15,13 +15,12 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.Transaction;
 
 public class BarterManagement {
@@ -297,6 +296,11 @@ public class BarterManagement {
                 progressDialog.dismiss();
             }
         });
+    }
+
+    public static Task<QuerySnapshot> getTwoItemsBartered(String matchId){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        return db.collection("barters").whereEqualTo("barterMatchId",matchId).get();
     }
 
     public static Task<Void> cancelProposedBarter(Context context, BarterModel bm){

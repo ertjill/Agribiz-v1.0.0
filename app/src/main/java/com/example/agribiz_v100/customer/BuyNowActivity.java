@@ -22,11 +22,19 @@ public class BuyNowActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_buy_now);
 
+
+
         topAppBar = findViewById(R.id.topAppBar);
         purchase_tv = findViewById(R.id.purchase_tv);
 
         topAppBar.setNavigationOnClickListener(v -> finish());
+        if(getIntent().getExtras()!=null){
+            String productId = getIntent().getStringExtra("productId");
+            int productQuantity = getIntent().getIntExtra("productBasketQuantity",0);
 
+
+
+        }
         purchase_tv.setOnClickListener(v -> {
             Intent i = new Intent(this, PendingViewActivity.class);
             startActivity(i);

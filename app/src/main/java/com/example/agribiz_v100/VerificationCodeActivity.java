@@ -118,7 +118,7 @@ public class VerificationCodeActivity extends AppCompatActivity {
             } else {
                 ProgressDialog progressDialog;
                 progressDialog = new ProgressDialog(this);
-                progressDialog.setMessage("Creating account, please wait!");
+                progressDialog.setMessage("Creating account, please wait...");
                 progressDialog.setCancelable(false);
                 progressDialog.show();
                 verificationCode__nextBtn.setEnabled(false);

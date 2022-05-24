@@ -24,7 +24,8 @@ public class BrgyManagement {
         delegate = asyncResponse;
         brgyList = new ArrayList<>();
         brgyNames = new ArrayList<>();
-        brgy_url = "https://psgc.gitlab.io/api/municipalities/"+code+"/barangays/";
+//        "https://psgc.gitlab.io/api/cities-municipalities/012805000/barangays/"
+        brgy_url = "https://psgc.gitlab.io/api/cities-municipalities/"+code+"/barangays/";
         new MyBarangay().execute();
     }
 

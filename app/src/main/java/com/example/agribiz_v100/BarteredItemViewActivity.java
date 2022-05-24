@@ -197,7 +197,7 @@ public class BarteredItemViewActivity extends AppCompatActivity {
     List<String> units;
 
     ViewPager2 imageSlider1;
-    TextView count_done_tv;
+    TextView count_done_tv,top_tv;
     ImageView barter_image_iv;
     AutoCompleteTextView itemCondition_at;
     AutoCompleteTextView itemUnit_at;
@@ -207,7 +207,7 @@ public class BarteredItemViewActivity extends AppCompatActivity {
     LinearLayout blank_photo_ll;
     RelativeLayout loder_rl;
     TextInputLayout itemName_til, itemCondition_til, itemQuantity_til, description_til;
-    private static String[] itemCondition = {"New Harvest", "Excess Harvest - Excellent", "Excess Harvest - Great", "Excess Harvest - Good", " Excess Harvest - Okay"};
+    private static String[] itemCondition = {"Great", "Good", "Okay"};
 
     public interface AddBarterDialogCallback {
         void addUploadImagesListener(List<Integer> progress);
@@ -225,6 +225,8 @@ public class BarteredItemViewActivity extends AppCompatActivity {
         arrayOfImages = new ArrayList<>();
         units = new ArrayList<>();
         imageViewPagerAdapter1 = new ImageViewPagerAdapter1();
+        top_tv = proposeBarterDialog.findViewById(R.id.top_tv);
+        top_tv.setText("Propose Barter Item");
         AppManagement.getSettings()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override

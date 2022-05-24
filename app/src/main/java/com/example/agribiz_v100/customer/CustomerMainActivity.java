@@ -78,7 +78,6 @@ public class CustomerMainActivity extends AppCompatActivity implements Serializa
     Bundle bundle = new Bundle();
     FirebaseHelper firebaseHelper;
     int notifications = 0;
-
     @Override
     protected void onStart() {
         super.onStart();

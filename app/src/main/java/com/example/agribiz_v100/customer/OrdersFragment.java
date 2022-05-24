@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -26,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.agribiz_v100.ChatActivity;
 import com.example.agribiz_v100.R;
 import com.example.agribiz_v100.dialog.RateProductDialog;
 import com.example.agribiz_v100.entities.LocationModel;
@@ -172,8 +174,8 @@ public class OrdersFragment extends Fragment {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             convertView = inflater.inflate(R.layout.orders_layout_item, null);
-            TextView farmer_name_tv, status_tv, product_tv, price_tv, quantity_tv, order_tv, total_tv,desc_tv,address_tv;
-            ImageView product_image_iv,farmer_image_iv;
+            TextView rating_lbl_tv,farmer_name_tv, status_tv, product_tv, price_tv, quantity_tv, order_tv, total_tv, desc_tv, address_tv;
+            ImageView product_image_iv, farmer_image_iv;
 
             LinearLayout rating_ll = convertView.findViewById(R.id.rating_ll);
             Button receive_cancel_btn;
@@ -181,15 +183,23 @@ public class OrdersFragment extends Fragment {
             desc_tv.setText(ordersList.get(position).getProductDescription());
             address_tv = convertView.findViewById(R.id.address_tv);
             RelativeLayout chat_rl = convertView.findViewById(R.id.chat_rl);
-
-            address_tv.setText(((Map<String,String>)ordersList.get(position).getLocation()).get("userFullName")+" | "+
-                    ((Map<String,String>)ordersList.get(position).getLocation()).get("userPhoneNumber")+"\n"+
-                    ((Map<String,String>)ordersList.get(position).getLocation()).get("userSpecificAddress")+"\n"+
-                    ((Map<String,String>)ordersList.get(position).getLocation()).get("userBarangay")+", "+
-                    ((Map<String,String>)ordersList.get(position).getLocation()).get("userMunicipality")+", "+
-                    ((Map<String,String>)ordersList.get(position).getLocation()).get("userProvince")+", "+
-                    ((Map<String,String>)ordersList.get(position).getLocation()).get("userRegion")+", "+
-                    ((Map<String,String>)ordersList.get(position).getLocation()).get("userZipCode"));
+            rating_lbl_tv = convertView.findViewById(R.id.rating_lbl_tv);
+            ImageView chat_iv =convertView.findViewById(R.id.chat_iv);
+            if(!status.equals("completed")){
+                rating_lbl_tv.setText("Rating");
+            }
+            else
+            {
+                rating_lbl_tv.setText("Your Rating");
+            }
+            address_tv.setText(((Map<String, String>) ordersList.get(position).getLocation()).get("userFullName") + " | " +
+                    ((Map<String, String>) ordersList.get(position).getLocation()).get("userPhoneNumber") + "\n" +
+                    ((Map<String, String>) ordersList.get(position).getLocation()).get("userSpecificAddress") + "\n" +
+                    ((Map<String, String>) ordersList.get(position).getLocation()).get("userBarangay") + ", " +
+                    ((Map<String, String>) ordersList.get(position).getLocation()).get("userMunicipality") + ", " +
+                    ((Map<String, String>) ordersList.get(position).getLocation()).get("userProvince") + ", " +
+                    ((Map<String, String>) ordersList.get(position).getLocation()).get("userRegion") + ", " +
+                    ((Map<String, String>) ordersList.get(position).getLocation()).get("userZipCode"));
 
             product_image_iv = convertView.findViewById(R.id.product_image_iv);
             product_image_iv.setOnClickListener(new View.OnClickListener() {
@@ -198,16 +208,25 @@ public class OrdersFragment extends Fragment {
 
                 }
             });
-            farmer_image_iv=convertView.findViewById(R.id.farmer_image_iv);
+            farmer_image_iv = convertView.findViewById(R.id.farmer_image_iv);
             farmer_name_tv = convertView.findViewById(R.id.farmer_name_tv);
             ProfileManagement.getUserProfile(ordersList.get(position).getProductUserId()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
-
-                    Glide.with(getContext())
-                            .load(documentSnapshot.getString("userImage"))
-                            .into(farmer_image_iv);
-                    farmer_name_tv.setText(documentSnapshot.getString("userDisplayName").substring(0,documentSnapshot.getString("userDisplayName").length()-2));
+                    if (documentSnapshot.exists()) {
+                        Glide.with(getContext())
+                                .load(documentSnapshot.getString("userImage"))
+                                .into(farmer_image_iv);
+                        farmer_name_tv.setText(documentSnapshot.getString("userDisplayName").substring(0, documentSnapshot.getString("userDisplayName").length() - 2));
+                        chat_iv.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Intent i = new Intent(getContext(), ChatActivity.class);
+                                i.putExtra("userId",documentSnapshot.getId());
+                                startActivity(i);
+                            }
+                        });
+                    }
                 }
             });
             status_tv = convertView.findViewById(R.id.status_tv);
@@ -218,7 +237,6 @@ public class OrdersFragment extends Fragment {
             total_tv = convertView.findViewById(R.id.total_tv);
             receive_cancel_btn = convertView.findViewById(R.id.receive_cancel_btn);
             status_tv.setText(ordersList.get(position).getOrderStatus().toUpperCase(Locale.ROOT));
-
 
 
             for (int i = 0; i < 5; i++) {
@@ -347,19 +365,20 @@ public class OrdersFragment extends Fragment {
             TextView description_tv, status_tv, product_tv, price_tv, quantity_tv, order_tv, total_tv, address_tv;
             ImageView product_image_iv;
             LinearLayout rating_ll = convertView.findViewById(R.id.rating_ll);
-            TextView not_rated_tv =convertView.findViewById(R.id.not_rated_tv);
+            TextView not_rated_tv = convertView.findViewById(R.id.not_rated_tv);
             ImageView cutomer_image_iv = convertView.findViewById(R.id.cutomer_image_iv);
-            TextView customer_name_tv=convertView.findViewById(R.id.customer_name_tv);
-            address_tv=convertView.findViewById(R.id.address_tv);
+            TextView customer_name_tv = convertView.findViewById(R.id.customer_name_tv);
+            address_tv = convertView.findViewById(R.id.address_tv);
             RelativeLayout chat_rl = convertView.findViewById(R.id.chat_rl);
-            address_tv.setText(((Map<String,String>)ordersList.get(position).getLocation()).get("userFullName")+" | "+
-                    ((Map<String,String>)ordersList.get(position).getLocation()).get("userPhoneNumber")+"\n"+
-                    ((Map<String,String>)ordersList.get(position).getLocation()).get("userSpecificAddress")+"\n"+
-                    ((Map<String,String>)ordersList.get(position).getLocation()).get("userBarangay")+", "+
-                    ((Map<String,String>)ordersList.get(position).getLocation()).get("userMunicipality")+", "+
-                    ((Map<String,String>)ordersList.get(position).getLocation()).get("userProvince")+", "+
-                    ((Map<String,String>)ordersList.get(position).getLocation()).get("userRegion")+", "+
-                    ((Map<String,String>)ordersList.get(position).getLocation()).get("userZipCode"));
+            ImageView chat_iv = convertView.findViewById(R.id.chat_iv);
+            address_tv.setText(((Map<String, String>) ordersList.get(position).getLocation()).get("userFullName") + " | " +
+                    ((Map<String, String>) ordersList.get(position).getLocation()).get("userPhoneNumber") + "\n" +
+                    ((Map<String, String>) ordersList.get(position).getLocation()).get("userSpecificAddress") + "\n" +
+                    ((Map<String, String>) ordersList.get(position).getLocation()).get("userBarangay") + ", " +
+                    ((Map<String, String>) ordersList.get(position).getLocation()).get("userMunicipality") + ", " +
+                    ((Map<String, String>) ordersList.get(position).getLocation()).get("userProvince") + ", " +
+                    ((Map<String, String>) ordersList.get(position).getLocation()).get("userRegion") + ", " +
+                    ((Map<String, String>) ordersList.get(position).getLocation()).get("userZipCode"));
 
             ProfileManagement.getUserProfile(ordersList.get(position).getCustomerId())
                     .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -368,10 +387,17 @@ public class OrdersFragment extends Fragment {
                             Glide.with(getContext())
                                     .load(documentSnapshot.get("userImage").toString())
                                     .into(cutomer_image_iv);
-
+                            chat_iv.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    Intent i = new Intent(getContext(), ChatActivity.class);
+                                    i.putExtra("userId",documentSnapshot.getId());
+                                    startActivity(i);
+                                }
+                            });
                         }
                     });
-            customer_name_tv.setText(((Map<String,Object>)ordersList.get(position).getLocation()).get("userFullName").toString());
+            customer_name_tv.setText(((Map<String, Object>) ordersList.get(position).getLocation()).get("userFullName").toString());
             if (ordersList.get(position).isRated()) {
                 not_rated_tv.setVisibility(View.GONE);
                 for (int i = 0; i < 5; i++) {
@@ -385,8 +411,7 @@ public class OrdersFragment extends Fragment {
                         rating_ll.addView(star);
                     }
                 }
-            }
-            else
+            } else
                 not_rated_tv.setVisibility(View.VISIBLE);
             Button cancel_btn, prepared_shipped_btn;
             product_image_iv = convertView.findViewById(R.id.product_image_iv);

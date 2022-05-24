@@ -91,7 +91,7 @@ public class AddBarterDialog {
     RelativeLayout loder_rl;
     TextInputLayout itemName_til, itemCondition_til, itemQuantity_til, description_til;
 
-    private static String[] itemCondition = {"New Harvest", "Excess Harvest - Excellent", "Excess Harvest - Great", "Excess Harvest - Good", " Excess Harvest - Okay"};
+    private static String[] itemCondition = {"New Harvest", "Excellent", "Great", "Good", "Okay"};
     private String proposeBarterID;
 
     public void selectPhotoFromGallery() {

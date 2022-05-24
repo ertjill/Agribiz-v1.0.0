@@ -59,7 +59,6 @@ public class BarterBrowserFragment extends Fragment {
 
                 @Override
                 public boolean onSingleTapUp(MotionEvent motionEvent) {
-
                     return true;
                 }
 

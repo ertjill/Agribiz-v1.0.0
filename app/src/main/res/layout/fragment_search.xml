@@ -7,49 +7,103 @@
     android:background="@color/white"
     tools:context=".customer.ViewAllProductsActivity">
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/topAppBar_cl"
+<!--    <androidx.coordinatorlayout.widget.CoordinatorLayout-->
+<!--        android:id="@+id/topAppBar_cl"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content">-->
+
+<!--        <com.google.android.material.appbar.AppBarLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:background="@color/white">-->
+
+<!--            <com.google.android.material.appbar.MaterialToolbar-->
+<!--                android:id="@+id/topAppBar"-->
+<!--                style="@style/Widget.App.Toolbar"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="?attr/actionBarSize"-->
+<!--                android:background="@color/white"-->
+<!--                app:titleTextColor="@color/brown">-->
+<!--                -->
+
+<!--            </com.google.android.material.appbar.MaterialToolbar>-->
+
+<!--        </com.google.android.material.appbar.AppBarLayout>-->
+
+<!--    </androidx.coordinatorlayout.widget.CoordinatorLayout>-->
+    <RelativeLayout
+        android:id="@+id/top_rl"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp">
 
-        <com.google.android.material.appbar.AppBarLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white">
-
-            <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/topAppBar"
-                style="@style/Widget.App.Toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="@color/white"
-                app:navigationIcon="@drawable/ic_outline_filter_alt_24"
-                app:titleTextColor="@color/brown">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/montserrat_regular"
-                    android:text="All"
-                    android:textColor="@color/brown"
-                    android:textFontWeight="600"
-                    android:textSize="18sp" />
-
-            </com.google.android.material.appbar.MaterialToolbar>
-
-        </com.google.android.material.appbar.AppBarLayout>
-
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+        <ImageView
+            android:layout_width="119dp"
+            android:layout_height="57dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/agribiz_logo_green" />
+    </RelativeLayout>
 
     <com.google.android.material.chip.ChipGroup
         android:id="@+id/filter_category_cg"
-        android:layout_width="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:padding="5dp"
-
-        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/searchProduct_et"
-        android:layout_height="wrap_content">
+        android:paddingStart="15dp"
+        android:background="@color/highlight_back"
+        android:paddingEnd="15dp">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/all_chip"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="All" />
+
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/fruits_chip"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fruits" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/vegetables_chip"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Vegetables" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/livestocks_chips"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Livestocks" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/poultry_chips"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Poultry" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/animal_chip"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Animal Feeds" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/fertilizers_chip"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fertilizers" />
 
     </com.google.android.material.chip.ChipGroup>
 
@@ -57,7 +111,7 @@
         android:id="@+id/searchProduct_et"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/topAppBar_cl"
+        android:layout_below="@+id/top_rl"
         android:layout_marginLeft="17dp"
         android:layout_marginRight="17dp"
         android:background="@drawable/rectangle_green_border"
@@ -99,13 +153,26 @@
 <!--            android:textSize="18sp" />-->
 
 <!--    </LinearLayout>-->
-
+    <TextView
+        android:id="@+id/no_product_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/filter_category_cg"
+        android:alpha=".7"
+        android:fontFamily="@font/montserrat_medium"
+        android:text="Search a product..."
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="200dp"
+        android:textColor="@color/brown"
+        android:visibility="visible"
+        android:textSize="15sp" />
     <GridView
         android:id="@+id/viewAll_gv"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_below="@+id/filter_category_cg"
         android:layout_marginTop="5dp"
+        android:background="@color/highlight_back"
         android:numColumns="2"
         android:padding="5dp"
         android:scrollbars="none"

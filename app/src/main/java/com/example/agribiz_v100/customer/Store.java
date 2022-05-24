@@ -80,6 +80,7 @@ public class Store extends Fragment {
     Bundle bundle;
     List<ProductModel> itemLike;
     ListenerRegistration listenerRegistration;
+    ItemMayLikeAdapter itemMayLikeAdapter;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -117,16 +118,13 @@ public class Store extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        synchronized (this) {
-            Log.d(TAG, "Creating Store view...");
-        }
-        synchronized (this) {
+
             View view = inflater.inflate(R.layout.fragment_store, container, false);
             no_product_ll = view.findViewById(R.id.no_product_ll);
             top_products_ll=view.findViewById(R.id.top_products_ll);
             not_available1 = view.findViewById(R.id.not_available1);
             SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refreshLayout);
-
+        itemMayLikeAdapter = new ItemMayLikeAdapter(getContext(), itemLike);
             swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {
@@ -177,14 +175,13 @@ public class Store extends Fragment {
             displayTopProducts();
             setupItemsYouLike();
             return view;
-        }
+
     }
 
     private void setupItemsYouLike() {
-        ItemMayLikeAdapter itemMayLikeAdapter = new ItemMayLikeAdapter(getContext(), itemLike);
         item_may_like_lv.setAdapter(itemMayLikeAdapter);
         item_may_like_lv.setEmptyView(not_available1);
-        db.collection("orders").document(user.getUid()).collection("products")
+        db.collection("orders").whereEqualTo("customerId",user.getUid())
                 .orderBy("orderDate", Query.Direction.DESCENDING)
                 .limit(1)
                 .get()

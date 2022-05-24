@@ -117,6 +117,7 @@ public class Basket extends Fragment {
 
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -136,35 +137,7 @@ public class Basket extends Fragment {
         listAdd = new ArrayList<>();
         listLocation = new ArrayList<>();
 
-        DocumentReference docRef = db.collection("users").document(user.getUid());
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                        List<Object> loc = (List<Object>) document.getData().get("userLocation");
-                        for (Object l : loc) {
-                            Log.d(TAG, l.toString());
-                            Map<String, Object> adds = (Map<String, Object>) l;
-                            listAdd.add("Name: "+adds.get("userFullName").toString()+
-                                    "\nPhone Number: "+adds.get("userPhoneNumber").toString()+
-                                    "\nAddress: "+adds.get("userBarangay").toString()+", "+adds.get("userMunicipality").toString()+", "+adds.get("userProvince").toString()+
-                                    "\nSpecific Address: "+adds.get("userSpecificAddress").toString());
 
-                            listLocation.add(adds);
-                        }
-                        ArrayAdapter<String> addAdapter = new ArrayAdapter<String>(getContext(), R.layout.address_dropdown_item_layout, listAdd);
-                        address_act.setAdapter(addAdapter);
-                    } else {
-                        Log.d(TAG, "No such document");
-                    }
-                } else {
-                    Log.d(TAG, "get failed with ", task.getException());
-                }
-            }
-        });
         address_act.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -186,11 +159,11 @@ public class Basket extends Fragment {
             alert.setTitle("Create Order");
             if (location == null) {
                 alert.setMessage("Select select address");
-                alert.setPositiveButton("Ok",null);
-            } else if(items.size()<=0){
+                alert.setPositiveButton("Ok", null);
+            } else if (items.size() <= 0) {
                 alert.setMessage("Select a product to checkout");
-                alert.setPositiveButton("Ok",null);
-            }else {
+                alert.setPositiveButton("Ok", null);
+            } else {
                 alert.setMessage("Are you sure you want to proceed this order with " + items.size() + " number of Items : \n" + itemNames + "=====================\nTotal = ₱ " + total);
                 alert.setCancelable(false);
                 alert.setPositiveButton("Proceed", new DialogInterface.OnClickListener() {
@@ -268,6 +241,38 @@ public class Basket extends Fragment {
     public void onResume() {
         super.onResume();
         Log.d(TAG, "Resuming Basket...");
+        DocumentReference docRef = db.collection("users").document(user.getUid());
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        if (document.getData().get("userLocation") != null) {
+                            Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+
+                            List<Object> loc = (List<Object>) document.getData().get("userLocation");
+                            for (Object l : loc) {
+                                Log.d(TAG, l.toString());
+                                Map<String, Object> adds = (Map<String, Object>) l;
+                                listAdd.add("Name: " + adds.get("userFullName").toString() +
+                                        "\nPhone Number: " + adds.get("userPhoneNumber").toString() +
+                                        "\nAddress: " + adds.get("userBarangay").toString() + ", " + adds.get("userMunicipality").toString() + ", " + adds.get("userProvince").toString() +
+                                        "\nSpecific Address: " + adds.get("userSpecificAddress").toString());
+
+                                listLocation.add(adds);
+                            }
+                            ArrayAdapter<String> addAdapter = new ArrayAdapter<String>(getContext(), R.layout.address_dropdown_item_layout, listAdd);
+                            address_act.setAdapter(addAdapter);
+                        }
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
         displayBasketItem();
     }
 
@@ -329,7 +334,7 @@ public class Basket extends Fragment {
                 .orderBy("productDateAdded", Query.Direction.DESCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if(task.isSuccessful()){
+                        if (task.isSuccessful()) {
                             basketItems.clear();
                             basketListAdapter.notifyDataSetChanged();
 //                        if (value.isEmpty()) {
@@ -375,8 +380,7 @@ public class Basket extends Fragment {
                                             }
                                         });
                             }
-                        }
-                        else{
+                        } else {
 
                         }
                     }
@@ -644,16 +648,15 @@ public class Basket extends Fragment {
                                 @Override
                                 public void onClick(View v) {
 
-                                   String quantity = qty_et.getText().toString();
-                                    if(!ProductValidation.validateQuantity(quantity).equals("")){
+                                    String quantity = qty_et.getText().toString();
+                                    if (!ProductValidation.validateQuantity(quantity).equals("")) {
                                         AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
                                         alert.setTitle("Failed!");
                                         alert.setMessage(ProductValidation.validateQuantity(quantity));
                                         alert.setCancelable(false);
-                                        alert.setPositiveButton("Ok",null);
+                                        alert.setPositiveButton("Ok", null);
                                         alert.show();
-                                    }
-                                    else{
+                                    } else {
                                         ProgressDialog progressDialog;
                                         progressDialog = new ProgressDialog(getContext());
                                         progressDialog.setMessage("Updating Prduct Qty, please wait!");
@@ -666,8 +669,8 @@ public class Basket extends Fragment {
                                                     public Void apply(Transaction transaction) throws FirebaseFirestoreException {
                                                         DocumentSnapshot prodSnapshot = transaction.get(prodDocRef);
                                                         int stocks = Integer.parseInt(prodSnapshot.get("productStocks").toString());
-                                                        if (stocks >= Integer.parseInt(quantity) && Integer.parseInt(quantity)>0) {
-                                                            transaction.update(basketDocRef, "productBasketQuantity",Integer.parseInt(quantity) );
+                                                        if (stocks >= Integer.parseInt(quantity) && Integer.parseInt(quantity) > 0) {
+                                                            transaction.update(basketDocRef, "productBasketQuantity", Integer.parseInt(quantity));
                                                             return null;
                                                         } else {
                                                             throw new FirebaseFirestoreException("Product Stocks cannot handle Quantity",
@@ -680,7 +683,7 @@ public class Basket extends Fragment {
                                                         Log.d(TAG, "Transaction success: " + result);
                                                         dialog.dismiss();
                                                         progressDialog.dismiss();
-                                                        AuthValidation.successToast(getContext(),"Successfully Updated Quantity").show();
+                                                        AuthValidation.successToast(getContext(), "Successfully Updated Quantity").show();
                                                         displayBasketItem();
                                                     }
                                                 })
@@ -693,7 +696,7 @@ public class Basket extends Fragment {
                                                         alert.setTitle("Failed!");
                                                         alert.setMessage(e.getLocalizedMessage());
                                                         alert.setCancelable(false);
-                                                        alert.setPositiveButton("Ok",null);
+                                                        alert.setPositiveButton("Ok", null);
                                                         alert.show();
                                                     }
                                                 });

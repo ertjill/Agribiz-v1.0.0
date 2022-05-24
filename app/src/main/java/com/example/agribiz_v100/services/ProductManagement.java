@@ -69,7 +69,7 @@ public class ProductManagement {
 
                     Map<String, Object> rat = new HashMap<>();
                     transaction.update(ordDocRef, "productRating", order.getProductRating());
-                    transaction.update(ordDocRef,"rated",order.isRated());
+                    transaction.update(ordDocRef, "rated", order.isRated());
 
                     transaction.update(pocRef, "productNoCustomerRate", noUserRated);
                     transaction.update(pocRef, "productRating", rate);
@@ -96,7 +96,6 @@ public class ProductManagement {
 
 
     }
-
 
 
     public static Task<Void> addProduct(ProductModel product) {
@@ -209,9 +208,9 @@ public class ProductManagement {
 
     }
 
-    public static Task<QuerySnapshot> getProductByUser(String userId){
+    public static Task<QuerySnapshot> getProductByUser(String userId) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        return db.collection("products").whereEqualTo("productUserId",userId).get();
+        return db.collection("products").whereEqualTo("productUserId", userId).get();
     }
 
     public static Query searchProducts(DocumentSnapshot last, String search) {
@@ -236,12 +235,20 @@ public class ProductManagement {
 
     }
 
-    public static CollectionReference getProductsQuery(){
+    public static Task<QuerySnapshot> searchProductWithCategory(String cat) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        if (cat.equals("all"))
+            return db.collection("products").get();
+        else
+            return db.collection("products").whereEqualTo("productCategory",cat).get();
+    }
+
+    public static CollectionReference getProductsQuery() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         return db.collection("products");
     }
 
-    public static Task<DocumentSnapshot> getProduct(String productId){
+    public static Task<DocumentSnapshot> getProduct(String productId) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         return db.collection("products").document(productId).get();
     }

@@ -16,6 +16,7 @@ public class AssistanceModel implements Serializable {
     private Timestamp assistanceDateRequested;
 
     public AssistanceModel() {
+
     }
 
     public AssistanceModel(String assistanceUserID, String assistanceID, String assistanceType, String assistanceAmountEquipment, String assistanceDescription, String assistanceStatus, String assistanceRepayDate, Timestamp assistanceDateRequested) {
