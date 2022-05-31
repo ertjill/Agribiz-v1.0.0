@@ -145,6 +145,7 @@ public class AgrovitMainActivity extends AppCompatActivity {
                     }
                 });
     }
+
     @Override
     protected void onResume() {
         super.onResume();

@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.agribiz_v100.LoginActivity;
+import com.example.agribiz_v100.MessagesActivity;
 import com.example.agribiz_v100.R;
 import com.example.agribiz_v100.agrovit.AgrovitMainActivity;
 import com.example.agribiz_v100.customer.BarterGoodsActivity;
@@ -34,6 +35,7 @@ public class AgrovitProfileFragment extends Fragment {
     TextView displayName_tv, farmerMessages_tv,edit_profile_tv;
     ImageView displayImage_iv;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
     @Override
     public void onResume() {
         super.onResume();
@@ -82,6 +84,12 @@ public class AgrovitProfileFragment extends Fragment {
                 });
             });
             alert.show();
+        });
+        farmerMessages_tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(), MessagesActivity.class));
+            }
         });
 
         return view;

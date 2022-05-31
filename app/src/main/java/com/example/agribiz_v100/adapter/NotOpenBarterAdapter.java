@@ -111,7 +111,7 @@ public class NotOpenBarterAdapter extends BaseAdapter {
                         Glide.with(context)
                                 .load(bm.getBarterImage().get(0))
                                 .into(barterImage_iv1);
-                        item_name_tv1.setText(barterItems.get(pos).getBarterName());
+                        item_name_tv1.setText(bm.getBarterName());
                         barterCondition_tv1.setText("Item Condition: " + bm.getBarterCondition());
                         barterDesc_tv1.setText("Description: " + bm.getBarterDescription());
                         barterQuantity_tv1.setText("Quantity: " + bm.getBarterQuantity() + " " + bm.getBarterUnit());
